@@ -1,12 +1,12 @@
 {
   "name": "@adobe/aio-lib-console",
   "version": "1.0.0",
-  "homepage": "https://github.com/@adobe/aio-lib-console",
+  "homepage": "https://github.com/adobe/aio-lib-console",
   "license": "Apache-2.0",
   "main": "src/index.js",
-  "repository": "https://github.com/@adobe/aio-lib-console",
+  "repository": "https://github.com/adobe/aio-lib-console",
   "bugs": {
-    "url": "https://github.com/@adobe/aio-lib-console/issues"
+    "url": "https://github.com/adobe/aio-lib-console/issues"
   },
   "dependencies": {
     "@adobe/aio-lib-core-errors": "^3.0.0",
