@@ -14,6 +14,7 @@ const fetch = require('node-fetch')
 fetch.default = fetchMock
 
 const { codes } = require('../src/SDKErrors')
+const { reduceError } = require('../src/helpers')
 const sdk = require('../src')
 const fs = require('fs')
 const path = require('path')
@@ -341,16 +342,25 @@ test('createEnterpriseIntegration', async () => {
   await expect(sdkCall).resolves.toEqual({ id: 'integrationid' })
 
   // Fetch error
+  const swaggerError = {
+    response: {
+      status: '500',
+      statusText: 'Internal Server Error',
+      body: {
+        foo: 'bar'
+      }
+    }
+  }
   mockResponseWithMethod(
     entpEndpoint,
     'POST', {
-      throws: new Error('Forbidden Request')
+      throws: swaggerError
     })
 
   sdkCall = sdkClient.createEnterpriseIntegration('orgid', 'projectid', 'workspaceid', 'certificate', 'name', 'description')
   await expect(sdkCall).rejects.toEqual(
     new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({
-      messageValues: 'Error: Forbidden Request'
+      messageValues: reduceError(swaggerError)
     }))
 
   // Unsuccessful response
@@ -362,7 +372,7 @@ test('createEnterpriseIntegration', async () => {
   sdkCall = sdkClient.createEnterpriseIntegration('orgid', 'projectid', 'workspaceid', 'certificate', 'name', 'description')
   await expect(sdkCall).rejects.toEqual(
     new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({
-      messageValues: { res: new Response() }
+      messageValues: { response: new Response() }
     }))
 })
 
