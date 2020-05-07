@@ -583,7 +583,7 @@ class CoreConsoleAPI {
 
   /** @private */
   __createRequest (body = {}) {
-    console.log('ENV', this.env, APISERVER[this.env])
+    logger.debug('ENV', this.env, APISERVER[this.env])
     return {
       requestBody: body,
       serverVariables: {
