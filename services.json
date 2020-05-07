@@ -1,0 +1,628 @@
+[
+    {
+        "name": "Creative SDK",
+        "code": "CC SDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web",
+            "Android",
+            "iOS"
+        ],
+        "docsUrl": "https://www.adobe.io/apis/creativecloud/creativesdk/docs.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": true
+    },
+    {
+        "name": "Typekit Platform",
+        "code": "TypekitSDK",
+        "enabled": false,
+        "type": "adobeid",
+        "platformList": [
+            "Web",
+            "Android",
+            "iOS"
+        ],
+        "docsUrl": "https://www.adobe.io/apis/creativecloud/adobe-fonts/docs.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": true
+    },
+    {
+        "name": "Adobe Stock",
+        "code": "StockSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://www.adobe.io/apis/creativecloud/stock/docs/getting-started.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Creative Cloud Storage",
+        "code": "CCStorageSdk",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web",
+            "Android",
+            "iOS"
+        ],
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "CC Storage service",
+        "properties": null,
+        "requiresApproval": true
+    },
+    {
+        "name": "Visual search by Typekit",
+        "code": "TypekitVisualSearchSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web",
+            "Android",
+            "iOS"
+        ],
+        "docsUrl": "https://docs.typekit.io/#//visual_search",
+        "learnMoreUrl": null,
+        "description": "Typekit Visual Search",
+        "properties": null,
+        "requiresApproval": true
+    },
+    {
+        "name": "Photoshop API",
+        "code": "PhotoshopSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://adobedocs.github.io/photoshop-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Photoshop OAuth Service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Lightroom / Camera Raw API",
+        "code": "LightroomSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://adobedocs.github.io/lightroom-api-docs/",
+        "learnMoreUrl": null,
+        "description": "OAuth service for Lightroom",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Dimension Services",
+        "code": "DimensionSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://adobedocs.github.io/dimension-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Service definition of Dimension (OAuth)",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "View SDK",
+        "code": "ViewSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://www.adobe.com/go/dcviewsdk_home",
+        "learnMoreUrl": null,
+        "description": "View SDK OAuth",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Image Cutout - Creative Cloud Automation Services",
+        "code": "ImageCutoutSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Image Cutout OAuth account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Lightroom Services",
+        "code": "LightroomPartnersSDK",
+        "enabled": true,
+        "type": "adobeid",
+        "platformList": [
+            "Web"
+        ],
+        "docsUrl": "https://www.stage.adobe.io/apis/creativecloud/lightroom/docs.html",
+        "learnMoreUrl": null,
+        "description": "Lightroom Services Oauth account",
+        "properties": null,
+        "requiresApproval": true
+    },
+    {
+        "name": "Adobe Analytics service",
+        "code": "AdobeAnalyticsSDK",
+        "enabled": false,
+        "type": "analytics",
+        "platformList": [
+            "Web",
+            "Android",
+            "iOS"
+        ],
+        "docsUrl": "https://github.com/AdobeDocs/analytics-2.0-apis",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Task Queue Manager",
+        "code": "DvaQueueSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "DVA Queue service definition",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Lightroom / Camera Raw API",
+        "code": "LightroomSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/lightroom-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Service Account for Lightroom",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Journeys",
+        "code": "JourneysSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Voyager service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Adobe Analytics",
+        "code": "AdobeAnalyticsSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://github.com/AdobeDocs/analytics-2.0-apis",
+        "learnMoreUrl": null,
+        "description": "Adobe Analytics service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Adobe Stock",
+        "code": "StockSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.io/apis/creativecloud/stock/docs/getting-started.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Smart Content",
+        "code": "MCSmartContentServicesSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://helpx.adobe.com/experience-manager/kt/assets/using/smart-tags-technical-video-setup.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Photoshop API",
+        "code": "PhotoshopSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/photoshop-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Photoshop service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Privacy Service API",
+        "code": "McGdprSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.io/apis/cloudplatform/gdpr.html",
+        "learnMoreUrl": null,
+        "description": "GDPR Service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Automated Forms Conversion",
+        "code": "AutomatedFormsSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "http://adobe.com/go/learn_aemforms_conversionservice_io",
+        "learnMoreUrl": null,
+        "description": "Automated Forms Conversion service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Asset Compute",
+        "code": "AssetComputeSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Asset Compute service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "XD Cloud Extensibility (XDCE) API",
+        "code": "XDCloudExtensibilitySDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://app.swaggerhub.com/apis/xd-specs/xd-design-services/1.0.0-oas3#/Document/fetchspec",
+        "learnMoreUrl": null,
+        "description": "XDCE service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Experience Platform Launch API",
+        "code": "McDtmSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://developer.adobelaunch.com/api/",
+        "learnMoreUrl": null,
+        "description": "DTM Enterprise service",
+        "properties": {
+            "roles": [
+                {
+                    "id": 1032,
+                    "code": "ent_reactor",
+                    "name": ""
+                },
+                {
+                    "id": 1007,
+                    "code": "ent_reactor_admin",
+                    "name": "Admin"
+                },
+                {
+                    "id": 1010,
+                    "code": "ent_reactor_approver",
+                    "name": "Approver"
+                },
+                {
+                    "id": 1011,
+                    "code": "ent_reactor_publisher",
+                    "name": "Publisher"
+                },
+                {
+                    "id": 1013,
+                    "code": "ent_reactor_default",
+                    "name": null
+                },
+                {
+                    "id": 1008,
+                    "code": "ent_reactor_it_admin",
+                    "name": "IT Admin"
+                },
+                {
+                    "id": 1012,
+                    "code": "ent_reactor_extension_developer",
+                    "name": "Extension Developer"
+                },
+                {
+                    "id": 1009,
+                    "code": "ent_reactor_developer",
+                    "name": "Developer"
+                }
+            ]
+        },
+        "requiresApproval": false
+    },
+    {
+        "name": "InDesign Services - Creative Cloud Automation Services",
+        "code": "InDesignServicesSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "InDesign Services service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Image Cutout - Creative Cloud Automation Services",
+        "code": "ImageCutoutSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Image Cutout service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Content AI (Beta)",
+        "code": "Sensei Enterprise Beta (MAX 2018)",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Sensei Core (Beta) service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Services SDK",
+        "code": "DocCloudSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "http://www.adobe.com/go/dcsdk_landing",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Experience Platform API",
+        "code": "McDataServicesSdk",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.io/apis/experienceplatform/home.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": {
+            "licenseConfigs": [
+                {
+                    "id": "108375522",
+                    "name": "acpcanaryva7 - IO Integrations",
+                    "productId": "MHT6RVB0N3MR0NT12GPXPKYRH4",
+                    "description": "Auto generated delegation group"
+                },
+                {
+                    "id": "108158409",
+                    "name": "Adobe Cloud Platform",
+                    "productId": "MHT6RVB0N3MR0NT12GPXPKYRH4",
+                    "description": "Default configuration for Adobe Cloud Platform"
+                },
+                {
+                    "id": "123867548",
+                    "name": "IO Integrations",
+                    "productId": "MHT6RVB0N3MR0NT12GPXPKYRH4",
+                    "description": "Auto generated delegation group"
+                }
+            ]
+        },
+        "requiresApproval": false
+    },
+    {
+        "name": "Cloud Manager",
+        "code": "CloudManagerSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.com/go/aem_cloud_mgr_api_docs_en",
+        "learnMoreUrl": null,
+        "description": "Service account for Cloud Manager",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "User Management API",
+        "code": "UserMgmtSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobe-apiplatform.github.io/umapi-documentation/en/",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Lightroom / Camera Raw API - Creative Cloud Automation Services",
+        "code": "LightroomCCESDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/lightroom-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Lightroom CCE-AS service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Photoshop API - Creative Cloud Automation Services",
+        "code": "PhotoshopCCESDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/photoshop-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Photoshop CCE-AS service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "I/O Events",
+        "code": "CloudIntegrationSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.io/apis/experienceplatform/events/documentation.html",
+        "learnMoreUrl": null,
+        "description": "Cloud integration event service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Audience Manager API",
+        "code": "AudienceManagerCustomerSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://dmp-data.demdex.net/__docs",
+        "learnMoreUrl": null,
+        "description": "Audience Manager API Service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Dimension Services - Creative Cloud Automation Services",
+        "code": "DimensionCCESDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/dimension-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Dimension CCE-AS service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "AEM Brand Portal",
+        "code": "AEMBrandPortalSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "AEM Brand Portal Service",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "I/O Management API",
+        "code": "AdobeIOManagementAPISDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://www.adobe.io/apis/cloudplatform/console/docs.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Adobe Campaign",
+        "code": "CampaignSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://docs.campaign.adobe.com/doc/standard/en/api/ACS_API.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Dimension Services",
+        "code": "DimensionSDK",
+        "enabled": true,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://adobedocs.github.io/dimension-api-docs/",
+        "learnMoreUrl": null,
+        "description": "Service definition of Dimension",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Commerce Partner API",
+        "code": "CommercePartnersSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Channel Partners service account",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Adobe Target",
+        "code": "AdobeTargetSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": "https://marketing.adobe.com/resources/help/en_US/target/ov/c_how_atjs_works.html",
+        "learnMoreUrl": null,
+        "description": null,
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Places",
+        "code": "McPlacesSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Places service definition",
+        "properties": null,
+        "requiresApproval": false
+    },
+    {
+        "name": "Admin SDK - Insights API",
+        "code": "EnterpriseControlSDK",
+        "enabled": false,
+        "type": "entp",
+        "platformList": null,
+        "docsUrl": null,
+        "learnMoreUrl": null,
+        "description": "Enterprise Control service account",
+        "properties": null,
+        "requiresApproval": false
+    }
+]
