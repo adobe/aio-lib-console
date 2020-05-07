@@ -14,7 +14,7 @@ const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { level: process.env.LOG_LEVEL })
 const { reduceError } = require('./helpers')
 const { codes } = require('./SDKErrors')
-const fetch = require('node-fetch').default
+const fetch = require('cross-fetch').default
 const FormData = require('form-data')
 
 /**

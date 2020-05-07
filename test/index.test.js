@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 const fetchMock = require('fetch-mock').sandbox()
-const fetch = require('node-fetch')
+const fetch = require('cross-fetch')
 fetch.default = fetchMock
 
 const { codes } = require('../src/SDKErrors')
