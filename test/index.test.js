@@ -33,7 +33,7 @@ const endpointBaseURL = apiSpecJSON.servers[0].url
 
 // /////////////////////////////////////////////
 
-const createSwaggerOptions = (body = {}) => {
+const createSwaggerOptions = (body) => {
   return {
     requestBody: body,
     serverVariables: {
@@ -116,7 +116,7 @@ async function standardTest ({
 test('getProjectsForOrg', async () => {
   const sdkArgs = ['organizationId']
   const apiParameters = { orgId: 'organizationId' }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'projects.getProjectsByOrgId',
@@ -148,7 +148,7 @@ test('getWorkspacesForProject', async () => {
     orgId: 'organizationId',
     projectId: 'projectId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'projects.getWorkspacesByProjectId',
@@ -166,7 +166,7 @@ test('deleteProject', async () => {
     orgId: 'organizationId',
     projectId: 'projectId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'projects.deleteProject',
@@ -200,7 +200,7 @@ test('getProject', async () => {
     orgId: 'organizationId',
     projectId: 'projectId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'projects.getProjectById',
@@ -219,7 +219,7 @@ test('downloadWorkspaceJson', async () => {
     projectId: 'projectId',
     workspaceId: 'workspaceId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.downloadWorkspaceJSON',
@@ -273,7 +273,7 @@ test('getWorkspace', async () => {
     projectId: 'projectId',
     workspaceId: 'workspaceId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.getWorkspaceById',
@@ -292,7 +292,7 @@ test('deleteWorkspace', async () => {
     projectId: 'projectId',
     workspaceId: 'workspaceId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.deleteWorkspace',
@@ -311,7 +311,7 @@ test('getIntegrations', async () => {
     projectId: 'projectId',
     workspaceId: 'workspaceId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.getIntegrations',
@@ -420,7 +420,7 @@ test('getWorkspaceForIntegration', async () => {
     orgId: 'organizationId',
     integrationId: 'integrationId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.getProjectWorkspaceByIntegration',
@@ -438,7 +438,7 @@ test('getProjectForWorkspace', async () => {
     orgId: 'organizationId',
     workspaceId: 'workspaceId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.getProjectByWorkspace',
@@ -459,7 +459,7 @@ test('deleteIntegration', async () => {
     integrationType: 'integrationType',
     integrationId: 'integrationId'
   }
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'workspaces.deleteIntegration',
@@ -473,7 +473,7 @@ test('deleteIntegration', async () => {
 test('getOrganizations', async () => {
   const sdkArgs = []
   const apiParameters = {}
-  const apiOptions = createSwaggerOptions({})
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'Organizations.getOrganizations',
