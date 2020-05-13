@@ -3,7 +3,7 @@
  * @property title - Title
  * @property [who_created] - Creator name
  * @property description - Description
- * @property type - Type
+ * @property type - Type (default or jaeger)
  */
 declare type ProjectDetails = {
     name: string;
@@ -80,6 +80,13 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getProjectsForOrg(organizationId: string): Promise<Response>;
+    /**
+     * Create a new Firefly Project (from template) in an Organization
+     * @param organizationId - Organization ID
+     * @param projectDetails - Project details including name, title, who_created, description and type
+     * @returns the response
+     */
+    createFireflyProject(organizationId: string, projectDetails: ProjectDetails): Promise<Response>;
     /**
      * Create a new Project in an Organization
      * @param organizationId - Organization ID
