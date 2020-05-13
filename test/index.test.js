@@ -142,6 +142,21 @@ test('createProject', async () => {
   })
 })
 
+test('createFireflyProject', async () => {
+  const sdkArgs = ['organizationId', {}]
+  const apiParameters = { orgId: 'organizationId' }
+  const apiOptions = createSwaggerOptions({ type: 'jaeger' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'projects.createProject',
+    sdkFunctionName: 'createFireflyProject',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_CREATE_PROJECT
+  })
+})
+
 test('getWorkspacesForProject', async () => {
   const sdkArgs = ['organizationId', 'projectId']
   const apiParameters = {

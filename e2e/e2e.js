@@ -24,11 +24,12 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let projectId, workspaceId, orgId
+let fireflyProjectId, projectId, workspaceId, orgId
 
 const ts = new Date().getTime()
 
 const projectName = 'PN' + ts
+const fireflyProjectName = 'FPN' + ts
 const projectDescription = 'PDESC' + ts
 const modifiedProjectDescription = 'mod' + ts
 const workspaceName = 'WN' + ts
@@ -91,15 +92,30 @@ describe('organizations', () => {
 })
 
 describe('create, edit, get', () => {
+  test('test createFireflyProject API', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.createFireflyProject(orgId, { name: fireflyProjectName, title: 'E2ETestFireflyProjectTitle', description: projectDescription })
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(201)
+    expect(res.statusText).toBe('Created')
+    expect(typeof (res.body)).toBe('object')
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId']))
+    fireflyProjectId = res.body.projectId
+    console.log('Firefly Project created with Id: ' + fireflyProjectId)
+  })
+
   test('test createProject API', async () => {
     expect(orgId).toBeDefined()
 
-    const res = await sdkClient.createProject(orgId, { name: projectName, title: 'JaegerE2ETestProjectTitle', description: projectDescription, type: 'default' })
+    const projectType = 'default'
+    const res = await sdkClient.createProject(orgId, { name: projectName, title: 'E2ETestDefaultProjectTitle', description: projectDescription, type: projectType })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
     expect(typeof (res.body)).toBe('object')
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'projectType', 'workspaceId']))
+    expect(res.body.projectType).toEqual(projectType)
     projectId = res.body.projectId
     console.log('Project created with Id: ' + projectId)
   })
@@ -117,7 +133,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(projectId)
   })
 
-  test('test getProject API', async () => {
+  test('test getProject API (default type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -127,7 +143,22 @@ describe('create, edit, get', () => {
     expect(res.statusText).toBe('OK')
     expect(typeof (res.body)).toBe('object')
     expect(res.body.name).toEqual(projectName)
+    expect(res.body.appId).toBeFalsy()
     expect(res.body.id).toEqual(projectId)
+  })
+
+  test('test getProject API (firefly project type)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+
+    const res = await sdkClient.getProject(orgId, fireflyProjectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.name).toEqual(fireflyProjectName)
+    expect(res.body.appId).toBeTruthy()
+    expect(res.body.id).toEqual(fireflyProjectId)
   })
 
   test('test createWorkspace API', async () => {
@@ -384,12 +415,23 @@ describe('delete', () => {
     expect(res.statusText).toBe('OK')
   })
 
-  test('test deleteProject API', async () => {
+  test('test deleteProject API (default type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
     const res = await sdkClient.deleteProject(orgId, projectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+
+  test('test deleteProject API (firefly project template)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteProject(orgId, fireflyProjectId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')

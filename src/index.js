@@ -23,7 +23,7 @@ const FormData = require('form-data')
  * @property {string} title Title
  * @property {string} [who_created] Creator name
  * @property {string} description Description
- * @property {string} type Type
+ * @property {string} type Type (default or jaeger)
  */
 /**
  * @typedef {object} WorkspaceDetails
@@ -143,6 +143,18 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Create a new Firefly Project (from template) in an Organization
+   *
+   * @param {string} organizationId Organization ID
+   * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
+   * @returns {Promise<Response>} the response
+   */
+  createFireflyProject (organizationId, projectDetails) {
+    projectDetails.type = 'jaeger'
+    return this.createProject(organizationId, projectDetails)
+  }
+
+  /**
    * Create a new Project in an Organization
    *
    * @param {string} organizationId Organization ID
@@ -151,10 +163,11 @@ class CoreConsoleAPI {
    */
   createProject (organizationId, projectDetails) {
     const parameters = { orgId: organizationId }
-    const sdkDetails = { parameters }
+    const requestBody = projectDetails
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.createProject(parameters, this.__createRequest(projectDetails))
+      this.sdk.apis.projects.createProject(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
@@ -218,10 +231,11 @@ class CoreConsoleAPI {
    */
   editProject (organizationId, projectId, projectDetails) {
     const parameters = { orgId: organizationId, projectId }
-    const sdkDetails = { parameters }
+    const requestBody = projectDetails
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.editProject(parameters, this.__createRequest(projectDetails))
+      this.sdk.apis.projects.editProject(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
@@ -286,10 +300,11 @@ class CoreConsoleAPI {
    */
   createWorkspace (organizationId, projectId, workspaceDetails) {
     const parameters = { orgId: organizationId, projectId }
-    const sdkDetails = { parameters }
+    const requestBody = workspaceDetails
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.createWorkspace(parameters, this.__createRequest(workspaceDetails))
+      this.sdk.apis.workspaces.createWorkspace(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
@@ -310,10 +325,11 @@ class CoreConsoleAPI {
    */
   editWorkspace (organizationId, projectId, workspaceId, workspaceDetails) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
-    const sdkDetails = { parameters }
+    const requestBody = workspaceDetails
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.editWorkspace(parameters, this.__createRequest(workspaceDetails))
+      this.sdk.apis.workspaces.editWorkspace(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
@@ -454,10 +470,11 @@ class CoreConsoleAPI {
    */
   createAdobeIdIntegration (organizationId, projectId, workspaceId, integrationDetails) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
-    const sdkDetails = { parameters }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.createAdobeIdIntegration(parameters, this.__createRequest(integrationDetails))
+      this.sdk.apis.workspaces.createAdobeIdIntegration(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
@@ -480,10 +497,11 @@ class CoreConsoleAPI {
    */
   subscribeIntegrationToServices (organizationId, projectId, workspaceId, integrationType, integrationId, serviceInfo) {
     const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, integrationId }
-    const sdkDetails = { parameters }
+    const requestBody = serviceInfo
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.subscribeIntegrationToServices(parameters, this.__createRequest(serviceInfo))
+      this.sdk.apis.workspaces.subscribeIntegrationToServices(parameters, this.__createRequest(requestBody))
         .then(response => {
           resolve(response)
         })
