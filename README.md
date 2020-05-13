@@ -98,6 +98,7 @@ with valid values for apiKey and accessToken
 * [CoreConsoleAPI](#CoreConsoleAPI)
     * [.init(accessToken, apiKey, [env])](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
     * [.getProjectsForOrg(organizationId)](#CoreConsoleAPI+getProjectsForOrg) ⇒ <code>Promise.&lt;Response&gt;</code>
+    * [.createFireflyProject(organizationId, projectDetails)](#CoreConsoleAPI+createFireflyProject) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.createProject(organizationId, projectDetails)](#CoreConsoleAPI+createProject) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.getWorkspacesForProject(organizationId, projectId)](#CoreConsoleAPI+getWorkspacesForProject) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.deleteProject(organizationId, projectId)](#CoreConsoleAPI+deleteProject) ⇒ <code>Promise.&lt;Response&gt;</code>
@@ -142,6 +143,19 @@ Get all Projects in an Organization
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization ID |
+
+<a name="CoreConsoleAPI+createFireflyProject"></a>
+
+### coreConsoleAPI.createFireflyProject(organizationId, projectDetails) ⇒ <code>Promise.&lt;Response&gt;</code>
+Create a new Firefly Project (from template) in an Organization
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: <code>Promise.&lt;Response&gt;</code> - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization ID |
+| projectDetails | [<code>ProjectDetails</code>](#ProjectDetails) | Project details including name, title, who_created, description and type |
 
 <a name="CoreConsoleAPI+createProject"></a>
 
@@ -418,7 +432,7 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | title | <code>string</code> | Title |
 | [who_created] | <code>string</code> | Creator name |
 | description | <code>string</code> | Description |
-| type | <code>string</code> | Type |
+| type | <code>string</code> | Type (default or jaeger) |
 
 <a name="WorkspaceDetails"></a>
 
