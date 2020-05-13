@@ -13,7 +13,7 @@
     "@adobe/aio-lib-core-logging": "1.1.0",
     "cross-fetch": "^3.0.4",
     "form-data": "^3.0.0",
-    "swagger-client": "3.10.1"
+    "swagger-client": "3.9.6"
   },
   "deprecated": false,
   "description": "Adobe I/O Lib for the Developer Console",
