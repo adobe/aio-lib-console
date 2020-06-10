@@ -9,28 +9,14 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const fetchMock = require('fetch-mock').sandbox()
-const fetch = require('cross-fetch')
-fetch.default = fetchMock
-
 const { codes } = require('../src/SDKErrors')
-const { reduceError } = require('../src/helpers')
 const sdk = require('../src')
-const fs = require('fs')
-const path = require('path')
 
-/* global Response */ // for linter
 /* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect", "standardTest"] }] */
 // /////////////////////////////////////////////
 
 const gApiKey = 'test-apikey'
 const gAccessToken = 'test-token'
-const apiSpec = fs.readFileSync(path.join(__dirname, '../spec/api.json'))
-const apiSpecJSON = JSON.parse(apiSpec.toString())
-const endpointBaseURL = apiSpecJSON.servers[0].url
-  .replace(/\/+$/, '') // remove any trailing forward slashes, if any
-  .replace(/{APISERVER}/g, 'developers') // substitute for the right api server
-
 // /////////////////////////////////////////////
 
 const createSwaggerOptions = (body) => {
@@ -46,10 +32,6 @@ const createSdkClient = async (accessToken = gAccessToken, apiKey = gApiKey) => 
   return sdk.init(accessToken, apiKey)
 }
 
-const mockResponseWithMethod = (url, method, response) => {
-  fetchMock.reset()
-  fetchMock.mock((u, opts) => u === url && opts.method === method, response)
-}
 // /////////////////////////////////////////////
 
 beforeEach(() => {
@@ -338,57 +320,21 @@ test('getIntegrations', async () => {
 })
 
 test('createEnterpriseIntegration', async () => {
-  let sdkCall
-  const entpEndpoint = `${endpointBaseURL}/organizations/orgid/projects/projectid/workspaces/workspaceid/credentials/entp`
-  const sdkClient = await createSdkClient()
-  sdkClient.sdk.spec = { servers: [{ url: apiSpecJSON.servers[0].url }] }
-
-  mockResponseWithMethod(
-    entpEndpoint,
-    'POST',
-    {
-      body: {
-        id: 'integrationid'
-      }
-    })
-
-  // Success
-  sdkCall = sdkClient.createEnterpriseIntegration('orgid', 'projectid', 'workspaceid', 'certificate', 'name', 'description')
-  await expect(sdkCall).resolves.toEqual({ id: 'integrationid' })
-
-  // Fetch error
-  const swaggerError = {
-    response: {
-      status: '500',
-      statusText: 'Internal Server Error',
-      body: {
-        foo: 'bar'
-      }
-    }
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description']
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
   }
-  mockResponseWithMethod(
-    entpEndpoint,
-    'POST', {
-      throws: swaggerError
-    })
+  const apiOptions = createSwaggerOptions({ certificate: 'certificate', description: 'description', name: 'name' })
 
-  sdkCall = sdkClient.createEnterpriseIntegration('orgid', 'projectid', 'workspaceid', 'certificate', 'name', 'description')
-  await expect(sdkCall).rejects.toEqual(
-    new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({
-      messageValues: reduceError(swaggerError)
-    }))
-
-  // Unsuccessful response
-  mockResponseWithMethod(entpEndpoint,
-    'POST', {
-      status: 400
-    })
-
-  sdkCall = sdkClient.createEnterpriseIntegration('orgid', 'projectid', 'workspaceid', 'certificate', 'name', 'description')
-  await expect(sdkCall).rejects.toEqual(
-    new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({
-      messageValues: { response: new Response() }
-    }))
+  await standardTest({
+    fullyQualifiedApiName: 'workspaces.createEnterpriseIntegration',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_CREATE_ENTERPRISE_INTEGRATION
+  })
 })
 
 test('createAdobeIdIntegration', async () => {

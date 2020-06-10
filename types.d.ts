@@ -177,12 +177,12 @@ declare class CoreConsoleAPI {
      * @param organizationId - Organization ID
      * @param projectId - Project ID
      * @param workspaceId - Workspace ID
-     * @param certificate - Certificate
+     * @param certificate - A Readable stream with certificate content. eg: fs.createReadStream()
      * @param name - Integration name
      * @param description - Integration description
      * @returns the response
      */
-    createEnterpriseIntegration(organizationId: string, projectId: string, workspaceId: string, certificate: Buffer, name: string, description: string): Promise<Response>;
+    createEnterpriseIntegration(organizationId: string, projectId: string, workspaceId: string, certificate: any, name: string, description: string): Promise<Response>;
     /**
      * Create a new AdobeID Integration
      * @param organizationId - Organization ID

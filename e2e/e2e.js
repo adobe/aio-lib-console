@@ -10,9 +10,12 @@ governing permissions and limitations under the License.
 */
 
 const sdk = require('../src')
+const { codes } = require('../src/SDKErrors')
 const path = require('path')
 const services = require('../services.json')
 const cert = require('@adobe/aio-cli-plugin-certificate')
+const fs = require('fs')
+const tmp = require('tmp')
 
 // load .env values in the e2e folder, if any
 require('dotenv').config({ path: path.join(__dirname, '.env') })
@@ -24,7 +27,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, workspaceId, orgId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId
 
 const ts = new Date().getTime()
 
@@ -100,7 +103,9 @@ describe('create, edit, get', () => {
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
     expect(typeof (res.body)).toBe('object')
-    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId']))
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId', 'workspaces', 'projectType']))
+    expect(Array.isArray(res.body.workspaces)).toBe(true)
+    expect(res.body.workspaces[0].workspaceId).toBeDefined()
     fireflyProjectId = res.body.projectId
     console.log('Firefly Project created with Id: ' + fireflyProjectId)
   })
@@ -117,7 +122,9 @@ describe('create, edit, get', () => {
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'projectType', 'workspaceId']))
     expect(res.body.projectType).toEqual(projectType)
     projectId = res.body.projectId
+    defaultWorkspaceId = res.body.workspaceId
     console.log('Project created with Id: ' + projectId)
+    console.log('Default workspace was created with Id: ' + defaultWorkspaceId)
   })
 
   test('test editProject API', async () => {
@@ -161,6 +168,30 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(fireflyProjectId)
   })
 
+  test('test createWorkspace API - should fail because only one is allowed for a default project', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(defaultWorkspaceId).toBeDefined()
+
+    const res = sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
+    await expect(res).rejects.toEqual(
+      new codes.ERROR_CREATE_WORKSPACE({
+        messageValues: '400 - Bad Request ("Only one workspace allowed for project type default")'
+      }))
+  })
+
+  /*  This is required because "Only one workspace allowed for project type default" */
+  test('test deleteWorkspace API (to delete the default workspace)', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(defaultWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteWorkspace(orgId, projectId, defaultWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+
   test('test createWorkspace API', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -187,9 +218,8 @@ describe('create, edit, get', () => {
     expect(res.statusText).toBe('OK')
     expect(Array.isArray(res.body)).toBe(true)
     expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'title', 'description', 'id']))
-    expect(res.body[0].name).toEqual('Production')
-    expect(res.body[1].name).toEqual(workspaceName)
-    expect(res.body[1].id).toEqual(workspaceId)
+    expect(res.body[0].name).toEqual(workspaceName)
+    expect(res.body[0].id).toEqual(workspaceId)
   })
 
   test('test editWorkspace API', async () => {
@@ -241,11 +271,13 @@ describe('Enterprise integration tests', () => {
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const keyPair = cert.generate('aio-lib-console-e2e', 365 /* days */, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
-    const res = await sdkClient.createEnterpriseIntegration(orgId, projectId, workspaceId, keyPair.cert, integrationNameEntp, 'just a desc')
-    expect(typeof (res)).toBe('object')
-    expect(Object.keys(res)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
-    integrationId = res.id
+    const keyPair = cert.generate('aio-lib-console-e2e', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
+    const certFile = tmp.fileSync({ postfix: '.crt' })
+    fs.writeFileSync(certFile.fd, keyPair.cert)
+    const res = await sdkClient.createEnterpriseIntegration(orgId, projectId, workspaceId, fs.createReadStream(certFile.name), integrationNameEntp, 'just a desc')
+    expect(typeof (res.body)).toBe('object')
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
+    integrationId = res.body.id
     console.log('Entp integration created with Id: ', integrationId)
   })
 

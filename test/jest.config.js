@@ -30,7 +30,7 @@ module.exports = {
   setupFilesAfterEnv: [
     '<rootDir>/test/jest/jest.setup.js',
     // remove any of the lines below if you don't want to use any of the mocks
-    '<rootDir>/test/jest/jest.fetch.setup.js',
+    // '<rootDir>/test/jest/jest.fetch.setup.js',
     // '<rootDir>/test/jest/jest.fs.setup.js',
     '<rootDir>/test/jest/jest.swagger.setup.js',
     '<rootDir>/test/jest/jest.fixture.setup.js'

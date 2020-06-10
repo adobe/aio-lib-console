@@ -11,9 +11,8 @@
   "dependencies": {
     "@adobe/aio-lib-core-errors": "^3.0.0",
     "@adobe/aio-lib-core-logging": "1.1.0",
-    "cross-fetch": "^3.0.4",
     "form-data": "^3.0.0",
-    "swagger-client": "3.9.6"
+    "swagger-client": "^3.10.6"
   },
   "deprecated": false,
   "description": "Adobe I/O Lib for the Developer Console",
@@ -41,6 +40,7 @@
     "jsdoc-to-markdown": "^5.0.0",
     "openapi-schema-validator": "^3.0.3",
     "stdout-stderr": "^0.1.13",
+    "tmp": "^0.2.1",
     "tsd-jsdoc": "^2.4.0"
   },
   "scripts": {
