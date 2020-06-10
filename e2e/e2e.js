@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 const sdk = require('../src')
+const { codes } = require('../src/SDKErrors')
 const path = require('path')
 const services = require('../services.json')
 const cert = require('@adobe/aio-cli-plugin-certificate')
@@ -102,7 +103,9 @@ describe('create, edit, get', () => {
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
     expect(typeof (res.body)).toBe('object')
-    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId']))
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId', 'workspaces', 'projectType']))
+    expect(Array.isArray(res.body.workspaces)).toBe(true)
+    expect(res.body.workspaces[0].workspaceId).toBeDefined()
     fireflyProjectId = res.body.projectId
     console.log('Firefly Project created with Id: ' + fireflyProjectId)
   })
@@ -121,6 +124,7 @@ describe('create, edit, get', () => {
     projectId = res.body.projectId
     defaultWorkspaceId = res.body.workspaceId
     console.log('Project created with Id: ' + projectId)
+    console.log('Default workspace was created with Id: ' + defaultWorkspaceId)
   })
 
   test('test editProject API', async () => {
@@ -163,6 +167,19 @@ describe('create, edit, get', () => {
     expect(res.body.appId).toBeTruthy()
     expect(res.body.id).toEqual(fireflyProjectId)
   })
+
+  test('test createWorkspace API - should fail because only one is allowed for a default project', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(defaultWorkspaceId).toBeDefined()
+
+    const res = sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
+    await expect(res).rejects.toEqual(
+      new codes.ERROR_CREATE_WORKSPACE({
+        messageValues: '400 - Bad Request ("Only one workspace allowed for project type default")'
+      }))
+  })
+
   /*  This is required because "Only one workspace allowed for project type default" */
   test('test deleteWorkspace API (to delete the default workspace)', async () => {
     expect(orgId).toBeDefined()
@@ -254,7 +271,7 @@ describe('Enterprise integration tests', () => {
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const keyPair = cert.generate('aio-lib-console-e2e', 365 /* days */, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
+    const keyPair = cert.generate('aio-lib-console-e2e', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
     const certFile = tmp.fileSync({ postfix: '.crt' })
     fs.writeFileSync(certFile.fd, keyPair.cert)
     const res = await sdkClient.createEnterpriseIntegration(orgId, projectId, workspaceId, fs.createReadStream(certFile.name), integrationNameEntp, 'just a desc')
