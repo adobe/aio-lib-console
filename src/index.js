@@ -14,8 +14,6 @@ const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { level: process.env.LOG_LEVEL })
 const { reduceError } = require('./helpers')
 const { codes } = require('./SDKErrors')
-const fetch = require('cross-fetch').default
-const FormData = require('form-data')
 
 /**
  * @typedef {object} ProjectDetails
@@ -414,44 +412,20 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {Buffer} certificate Certificate
+   * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
    * @param {string} name Integration name
    * @param {string} description Integration description
    * @returns {Promise<Response>} the response
    */
   createEnterpriseIntegration (organizationId, projectId, workspaceId, certificate, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
-    const sdkDetails = { parameters }
+    const requestBody = { certificate, name, description }
+    const sdkDetails = { parameters, requestBody }
 
     return new Promise((resolve, reject) => {
-      // workaround due to swagger-client bug (see ACNA-716)
-      const formData = new FormData()
-      formData.append('name', name)
-      formData.append('description', description)
-      formData.append('certificate', certificate, {
-        contentType: 'application/x-x509-user-cert',
-        name: 'file',
-        filename: 'certificate_pub.crt'
-      })
-
-      const url = this.sdk.spec.servers[0].url
-        .replace(/\/+$/, '') // remove any trailing forward slashes, if any
-        .replace(/{APISERVER}/g, APISERVER[this.env]) // substitute for the right api server
-
-      fetch(`${url}/organizations/${organizationId}/projects/${projectId}/workspaces/${workspaceId}/credentials/entp`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'x-api-key': this.apiKey,
-          Authorization: this.accessToken
-        }
-      })
-        .then(res => {
-          if (res.ok) {
-            resolve(res.json())
-          } else {
-            reject(new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError({ response: res }) }))
-          }
+      this.sdk.apis.workspaces.createEnterpriseIntegration(parameters, this.__createRequest(requestBody))
+        .then(response => {
+          resolve(response)
         })
         .catch(err => {
           reject(new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) }))

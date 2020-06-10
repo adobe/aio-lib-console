@@ -321,7 +321,7 @@ Create a new Enterprise Integration
 | organizationId | <code>string</code> | Organization ID |
 | projectId | <code>string</code> | Project ID |
 | workspaceId | <code>string</code> | Workspace ID |
-| certificate | <code>Buffer</code> | Certificate |
+| certificate | <code>object</code> | A Readable stream with certificate content. eg: fs.createReadStream() |
 | name | <code>string</code> | Integration name |
 | description | <code>string</code> | Integration description |
 
