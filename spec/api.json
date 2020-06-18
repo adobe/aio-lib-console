@@ -10,7 +10,7 @@
         "name": "projects",
         "description": "APIs for I/O Console Projects"
       },
-      {
+      { 
         "name": "workspaces",
         "description": "APIs for I/O Console Workspaces"
       },
@@ -619,9 +619,9 @@
                             "releaseNotes": {
                               "type": "string"
                             },
-                            "whitelist": {
+                            "allowlist": {
                               "type": "object",
-                              "description": "list of whitelisted users & orgs",
+                              "description": "list of allowlisted users & orgs",
                               "properties": {
                                 "users": {
                                   "type": "array",
@@ -919,9 +919,9 @@
                         "releaseNotes": {
                           "type": "string"
                         },
-                        "whitelist": {
+                        "allowlist": {
                           "type": "object",
-                          "description": "list of whitelisted users & orgs",
+                          "description": "list of allowlisted users & orgs",
                           "properties": {
                             "users": {
                               "type": "array",
@@ -1139,9 +1139,9 @@
                             "releaseNotes": {
                               "type": "string"
                             },
-                            "whitelist": {
+                            "allowlist": {
                               "type": "object",
-                              "description": "list of whitelisted users & orgs",
+                              "description": "list of allowlisted users & orgs",
                               "properties": {
                                 "users": {
                                   "type": "array",
@@ -1534,9 +1534,9 @@
                           "releaseNotes": {
                             "type": "string"
                           },
-                          "whitelist": {
+                          "allowlist": {
                             "type": "object",
-                            "description": "list of whitelisted users & orgs",
+                            "description": "list of allowlisted users & orgs",
                             "properties": {
                               "users": {
                                 "type": "array",
@@ -1850,9 +1850,9 @@
                             "releaseNotes": {
                               "type": "string"
                             },
-                            "whitelist": {
+                            "allowlist": {
                               "type": "object",
-                              "description": "list of whitelisted users & orgs",
+                              "description": "list of allowlisted users & orgs",
                               "properties": {
                                 "users": {
                                   "type": "array",
@@ -2173,9 +2173,9 @@
                             "releaseNotes": {
                               "type": "string"
                             },
-                            "whitelist": {
+                            "allowlist": {
                               "type": "object",
-                              "description": "list of whitelisted users & orgs",
+                              "description": "list of allowlisted users & orgs",
                               "properties": {
                                 "users": {
                                   "type": "array",
