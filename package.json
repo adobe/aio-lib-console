@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@adobe/aio-lib-core-errors": "^3.0.0",
-    "@adobe/aio-lib-core-logging": "1.1.0",
+    "@adobe/aio-lib-core-logging": "^1.1.2",
     "form-data": "^3.0.0",
     "swagger-client": "^3.10.6"
   },
