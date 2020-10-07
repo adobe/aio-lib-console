@@ -232,5 +232,11 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getOrganizations(): Promise<Response>;
+    /**
+     * Get all Services available to an Organization
+     * @param organizationId - Organization ID
+     * @returns the response
+     */
+    getServicesForOrg(organizationId: string): Promise<Response>;
 }
 

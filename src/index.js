@@ -573,6 +573,26 @@ class CoreConsoleAPI {
     })
   }
 
+  /**
+   * Get all Services available to an Organization
+   *
+   * @param {string} organizationId Organization ID
+   * @returns {Promise<Response>} the response
+   */
+  getServicesForOrg (organizationId) {
+    const sdkDetails = {}
+    const params = { orgId: organizationId }
+    return new Promise((resolve, reject) => {
+      this.sdk.apis.Organizations.getServicesForOrg(params, this.__createRequest())
+        .then(response => {
+          resolve(response)
+        })
+        .catch(err => {
+          reject(new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) }))
+        })
+    })
+  }
+
   /** @private */
   __createRequest (body) {
     logger.debug(`ENV ${this.env} ${APISERVER[this.env]}`)
