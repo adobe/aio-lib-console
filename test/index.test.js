@@ -101,7 +101,7 @@ test('getProjectsForOrg', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'projects.getProjectsByOrgId',
+    fullyQualifiedApiName: 'projects.getProjectsForOrg',
     sdkFunctionName: 'getProjectsForOrg',
     apiParameters,
     apiOptions,
