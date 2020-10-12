@@ -117,6 +117,7 @@ with valid values for apiKey and accessToken
     * [.getProjectForWorkspace(organizationId, workspaceId)](#CoreConsoleAPI+getProjectForWorkspace) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.deleteIntegration(organizationId, projectId, workspaceId, integrationType, integrationId)](#CoreConsoleAPI+deleteIntegration) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.getOrganizations()](#CoreConsoleAPI+getOrganizations) ⇒ <code>Promise.&lt;Response&gt;</code>
+    * [.getServicesForOrg(organizationId)](#CoreConsoleAPI+getServicesForOrg) ⇒ <code>Promise.&lt;Response&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -406,6 +407,18 @@ Get all Organizations
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: <code>Promise.&lt;Response&gt;</code> - the response  
+<a name="CoreConsoleAPI+getServicesForOrg"></a>
+
+### coreConsoleAPI.getServicesForOrg(organizationId) ⇒ <code>Promise.&lt;Response&gt;</code>
+Get all Services available to an Organization
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: <code>Promise.&lt;Response&gt;</code> - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization ID |
+
 <a name="init"></a>
 
 ## init(accessToken, apiKey, [env]) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
