@@ -130,7 +130,7 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.getProjectsByOrgId(parameters, this.__createRequest())
+      this.sdk.apis.projects.getProjectsForOrg(parameters, this.__createRequest())
         .then(response => {
           resolve(response)
         })
