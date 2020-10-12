@@ -588,7 +588,7 @@ class CoreConsoleAPI {
           resolve(response)
         })
         .catch(err => {
-          reject(new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) }))
+          reject(new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) }))
         })
     })
   }

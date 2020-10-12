@@ -1,3 +1,4 @@
+
 /*
 Copyright 2019 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -70,3 +71,4 @@ E('ERROR_GET_PROJECT_BY_WORKSPACE', '%s')
 E('ERROR_DELETE_INTEGRATION', '%s')
 E('ERROR_CREATE_ORGANIZATION', '%s')
 E('ERROR_GET_ORGANIZATIONS', '%s')
+E('ERROR_GET_SERVICES_FOR_ORG', '%s')
