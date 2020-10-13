@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 [![Version](https://img.shields.io/npm/v/@adobe/aio-lib-console.svg)](https://npmjs.org/package/@adobe/aio-lib-console)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/aio-lib-console.svg)](https://npmjs.org/package/@adobe/aio-lib-console)
 [![Build Status](https://travis-ci.com/adobe/aio-lib-console.svg?branch=master)](https://travis-ci.com/adobe/aio-lib-console)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-lib-console/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-lib-console/)
 
 # Adobe I/O Console SDK Library
@@ -117,6 +117,7 @@ with valid values for apiKey and accessToken
     * [.getProjectForWorkspace(organizationId, workspaceId)](#CoreConsoleAPI+getProjectForWorkspace) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.deleteIntegration(organizationId, projectId, workspaceId, integrationType, integrationId)](#CoreConsoleAPI+deleteIntegration) ⇒ <code>Promise.&lt;Response&gt;</code>
     * [.getOrganizations()](#CoreConsoleAPI+getOrganizations) ⇒ <code>Promise.&lt;Response&gt;</code>
+    * [.getServicesForOrg(organizationId)](#CoreConsoleAPI+getServicesForOrg) ⇒ <code>Promise.&lt;Response&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -406,6 +407,18 @@ Get all Organizations
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: <code>Promise.&lt;Response&gt;</code> - the response  
+<a name="CoreConsoleAPI+getServicesForOrg"></a>
+
+### coreConsoleAPI.getServicesForOrg(organizationId) ⇒ <code>Promise.&lt;Response&gt;</code>
+Get all Services available to an Organization
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: <code>Promise.&lt;Response&gt;</code> - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization ID |
+
 <a name="init"></a>
 
 ## init(accessToken, apiKey, [env]) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)

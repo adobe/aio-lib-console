@@ -101,7 +101,7 @@ test('getProjectsForOrg', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'projects.getProjectsByOrgId',
+    fullyQualifiedApiName: 'projects.getProjectsForOrg',
     sdkFunctionName: 'getProjectsForOrg',
     apiParameters,
     apiOptions,
@@ -442,5 +442,21 @@ test('getOrganizations', async () => {
     apiOptions,
     sdkArgs,
     ErrorClass: codes.ERROR_GET_ORGANIZATIONS
+  })
+})
+
+test('getServicesForOrg', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgId: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Organizations.getServicesForOrg',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_SERVICES_FOR_ORG
   })
 })

@@ -10,7 +10,7 @@
         "name": "projects",
         "description": "APIs for I/O Console Projects"
       },
-      { 
+      {
         "name": "workspaces",
         "description": "APIs for I/O Console Workspaces"
       },
@@ -2879,7 +2879,7 @@
           "tags": [
             "projects"
           ],
-          "operationId": "getProjectsByOrgId",
+          "operationId": "getProjectsForOrg",
           "parameters": [
             {
               "name": "orgId",
@@ -4814,6 +4814,141 @@
             {
               "lang": "ruby",
               "source": "require 'uri'\nrequire 'net/http'\n\nurl = URI(\"https://developers.adobe.io/api/organizations/%7BorgId%7D/projects_workspaces/workspaces/%7BworkspaceId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+            }
+          ]
+        }
+      },
+      "/organizations/{orgId}/services": {
+        "get": {
+          "summary": "list services for an organization",
+          "tags": [
+            "Organizations"
+          ],
+          "operationId": "getServicesForOrg",
+          "parameters": [
+            {
+              "name": "orgId",
+              "description": "AMS org id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "platformList": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "docsUrl": {
+                    "type": "string"
+                  },
+                  "learnMoreUrl": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "type": "object",
+                    "properties": {
+                      "licenseConfigs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "productId": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "requiresApproval": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "403": {
+              "description": "Forbidden"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
+            },
+            {
+              "lang": "node",
+              "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+            },
+            {
+              "lang": "php",
+              "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            },
+            {
+              "lang": "java",
+              "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
+            },
+            {
+              "lang": "go",
+              "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            },
+            {
+              "lang": "python",
+              "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/services\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            },
+            {
+              "lang": "csharp",
+              "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+            },
+            {
+              "lang": "ruby",
+              "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
             }
           ]
         }

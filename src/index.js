@@ -130,7 +130,7 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.getProjectsByOrgId(parameters, this.__createRequest())
+      this.sdk.apis.projects.getProjectsForOrg(parameters, this.__createRequest())
         .then(response => {
           resolve(response)
         })
@@ -569,6 +569,26 @@ class CoreConsoleAPI {
         })
         .catch(err => {
           reject(new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) }))
+        })
+    })
+  }
+
+  /**
+   * Get all Services available to an Organization
+   *
+   * @param {string} organizationId Organization ID
+   * @returns {Promise<Response>} the response
+   */
+  getServicesForOrg (organizationId) {
+    const sdkDetails = { organizationId }
+    const params = { orgId: organizationId }
+    return new Promise((resolve, reject) => {
+      this.sdk.apis.Organizations.getServicesForOrg(params, this.__createRequest())
+        .then(response => {
+          resolve(response)
+        })
+        .catch(err => {
+          reject(new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) }))
         })
     })
   }
