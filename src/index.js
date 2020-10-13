@@ -580,7 +580,7 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   getServicesForOrg (organizationId) {
-    const sdkDetails = {}
+    const sdkDetails = { organizationId }
     const params = { orgId: organizationId }
     return new Promise((resolve, reject) => {
       this.sdk.apis.Organizations.getServicesForOrg(params, this.__createRequest())
