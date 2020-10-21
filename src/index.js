@@ -11,8 +11,8 @@ governing permissions and limitations under the License.
 
 const Swagger = require('swagger-client')
 const loggerNamespace = '@adobe/aio-lib-console'
-const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { level: process.env.LOG_LEVEL })
-const { reduceError } = require('./helpers')
+const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { level: process.env.LOG_LEVEL || 'debug' })
+const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
 const { codes } = require('./SDKErrors')
 
 /**
@@ -46,9 +46,9 @@ const { codes } = require('./SDKErrors')
 
 const DEFAULT_ENVIRONMENT = 'prod'
 
-const APISERVER = {
-  prod: 'developers',
-  stage: 'developers-stage'
+const API_HOST = {
+  prod: 'developers.adobe.io',
+  stage: 'developers-stage.adobe.io'
 }
 
 /* global Response */ // for linter
@@ -105,16 +105,18 @@ class CoreConsoleAPI {
       const spec = require('../spec/api.json')
       const swagger = new Swagger({
         spec: spec,
-        requestInterceptor: req => {
-          this.__setHeaders(req, this)
-        },
+        requestInterceptor: requestInterceptorBuilder(this, API_HOST[env]),
+        responseInterceptor,
         usePromise: true
       })
+      /** @private */
       this.sdk = (await swagger)
     }
-
+    /** @private */
     this.apiKey = apiKey
+    /** @private */
     this.accessToken = accessToken
+    /** @private */
     this.env = env
     return this
   }
@@ -125,19 +127,16 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization ID
    * @returns {Promise<Response>} the response
    */
-  getProjectsForOrg (organizationId) {
+  async getProjectsForOrg (organizationId) {
     const parameters = { orgId: organizationId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.getProjectsForOrg(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_PROJECTS_BY_ORG_ID({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects.get_console_organizations__orgId__projects(...this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECTS_BY_ORG_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -159,20 +158,17 @@ class CoreConsoleAPI {
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
    * @returns {Promise<Response>} the response
    */
-  createProject (organizationId, projectDetails) {
+  async createProject (organizationId, projectDetails) {
     const parameters = { orgId: organizationId }
     const requestBody = projectDetails
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.createProject(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_CREATE_PROJECT({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects.post_console_organizations__orgId__projects(...this.__createRequestOptions(parameters, requestBody))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_PROJECT({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -182,19 +178,17 @@ class CoreConsoleAPI {
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
-  getWorkspacesForProject (organizationId, projectId) {
+  async getWorkspacesForProject (organizationId, projectId) {
     const parameters = { orgId: organizationId, projectId: projectId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.getWorkspacesByProjectId(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_WORKSPACES_BY_PROJECT_ID({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(...this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_WORKSPACES_BY_PROJECT_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -204,19 +198,17 @@ class CoreConsoleAPI {
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
-  deleteProject (organizationId, projectId) {
+  async deleteProject (organizationId, projectId) {
     const parameters = { orgId: organizationId, projectId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.deleteProject(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_DELETE_PROJECT({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .delete_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_PROJECT({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -227,20 +219,18 @@ class CoreConsoleAPI {
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
    * @returns {Promise<Response>} the response
    */
-  editProject (organizationId, projectId, projectDetails) {
+  async editProject (organizationId, projectId, projectDetails) {
     const parameters = { orgId: organizationId, projectId }
     const requestBody = projectDetails
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.editProject(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_EDIT_PROJECT({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .patch_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters, requestBody))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_EDIT_PROJECT({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -250,19 +240,17 @@ class CoreConsoleAPI {
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
-  getProject (organizationId, projectId) {
+  async getProject (organizationId, projectId) {
     const parameters = { orgId: organizationId, projectId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.projects.getProjectById(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_PROJECT_BY_ID({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECT_BY_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -273,19 +261,17 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  downloadWorkspaceJson (organizationId, projectId, workspaceId) {
+  async downloadWorkspaceJson (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.downloadWorkspaceJSON(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_DOWNLOAD_WORKSPACE_JSON({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__download(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DOWNLOAD_WORKSPACE_JSON({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -296,20 +282,18 @@ class CoreConsoleAPI {
    * @param {WorkspaceDetails} workspaceDetails Workspace details including name, title, who_created, description, type and quotaRule
    * @returns {Promise<Response>} the response
    */
-  createWorkspace (organizationId, projectId, workspaceDetails) {
+  async createWorkspace (organizationId, projectId, workspaceDetails) {
     const parameters = { orgId: organizationId, projectId }
     const requestBody = workspaceDetails
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.createWorkspace(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_CREATE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__download(this.__createRequestOptions(parameters, requestBody))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -321,20 +305,18 @@ class CoreConsoleAPI {
    * @param {WorkspaceDetails} workspaceDetails Workspace details including name, title, who_created, description, type and quotaRule
    * @returns {Promise<Response>} the response
    */
-  editWorkspace (organizationId, projectId, workspaceId, workspaceDetails) {
+  async editWorkspace (organizationId, projectId, workspaceId, workspaceDetails) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = workspaceDetails
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.editWorkspace(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_EDIT_WORKSPACE({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .patch_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters, requestBody))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_EDIT_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -345,19 +327,17 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  getWorkspace (organizationId, projectId, workspaceId) {
+  async getWorkspace (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.getWorkspaceById(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_WORKSPACE_BY_ID({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_WORKSPACE_BY_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -368,19 +348,17 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  deleteWorkspace (organizationId, projectId, workspaceId) {
+  async deleteWorkspace (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.deleteWorkspace(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_DELETE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -391,19 +369,17 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  getIntegrations (organizationId, projectId, workspaceId) {
+  async getIntegrations (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.getIntegrations(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_INTEGRATIONS({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_INTEGRATIONS({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -417,20 +393,20 @@ class CoreConsoleAPI {
    * @param {string} description Integration description
    * @returns {Promise<Response>} the response
    */
-  createEnterpriseIntegration (organizationId, projectId, workspaceId, certificate, name, description) {
+  async createEnterpriseIntegration (organizationId, projectId, workspaceId, certificate, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = { certificate, name, description }
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.createEnterpriseIntegration(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -442,20 +418,20 @@ class CoreConsoleAPI {
    * @param {IntegrationDetails} integrationDetails Integration details
    * @returns {Promise<Response>} the response
    */
-  createAdobeIdIntegration (organizationId, projectId, workspaceId, integrationDetails) {
+  async createAdobeIdIntegration (organizationId, projectId, workspaceId, integrationDetails) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = integrationDetails
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.createAdobeIdIntegration(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_CREATE_ADOBEID_INTEGRATION({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeId(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_ADOBEID_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -469,20 +445,20 @@ class CoreConsoleAPI {
    * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
    * @returns {Promise<Response>} the response
    */
-  subscribeIntegrationToServices (organizationId, projectId, workspaceId, integrationType, integrationId, serviceInfo) {
+  async subscribeIntegrationToServices (organizationId, projectId, workspaceId, integrationType, integrationId, serviceInfo) {
     const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, integrationId }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.subscribeIntegrationToServices(parameters, this.__createRequest(requestBody))
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_SUBSCRIBE_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__integrationType___credentialId__services(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBSCRIBE_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -492,19 +468,19 @@ class CoreConsoleAPI {
    * @param {string} integrationId Integration ID
    * @returns {Promise<Response>} the response
    */
-  getWorkspaceForIntegration (organizationId, integrationId) {
+  async getWorkspaceForIntegration (organizationId, integrationId) {
     const parameters = { orgId: organizationId, integrationId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.getProjectWorkspaceByIntegration(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_PROJECT_WORKSPACE_BY_INTEGRATION({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects_workspaces_credentials__credentialId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECT_WORKSPACE_BY_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -514,19 +490,19 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  getProjectForWorkspace (organizationId, workspaceId) {
+  async getProjectForWorkspace (organizationId, workspaceId) {
     const parameters = { orgId: organizationId, workspaceId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.getProjectByWorkspace(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_PROJECT_BY_WORKSPACE({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .get_console_organizations__orgId__projects_workspaces_workspaces__workspaceId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECT_BY_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -539,19 +515,19 @@ class CoreConsoleAPI {
    * @param {string} integrationId Integration ID
    * @returns {Promise<Response>} the response
    */
-  deleteIntegration (organizationId, projectId, workspaceId, integrationType, integrationId) {
+  async deleteIntegration (organizationId, projectId, workspaceId, integrationType, integrationId) {
     const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, integrationId }
     const sdkDetails = { parameters }
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.workspaces.deleteIntegration(parameters, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects
+        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -559,18 +535,16 @@ class CoreConsoleAPI {
    *
    * @returns {Promise<Response>} the response
    */
-  getOrganizations () {
+  async getOrganizations () {
     const sdkDetails = {}
+    const parameters = {}
 
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.Organizations.getOrganizations({}, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) }))
-        })
-    })
+    try {
+      const res = await this.sdk.apis.projects.get_console_organizations(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) })
+    }
   }
 
   /**
@@ -579,38 +553,25 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization ID
    * @returns {Promise<Response>} the response
    */
-  getServicesForOrg (organizationId) {
+  async getServicesForOrg (organizationId) {
     const sdkDetails = { organizationId }
-    const params = { orgId: organizationId }
-    return new Promise((resolve, reject) => {
-      this.sdk.apis.Organizations.getServicesForOrg(params, this.__createRequest())
-        .then(response => {
-          resolve(response)
-        })
-        .catch(err => {
-          reject(new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) }))
-        })
+    const parameters = { orgId: organizationId }
+
+    try {
+      const res = await this.sdk.apis.projects.get_console_organizations__orgId__services(this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /** @private */
+  __createRequestOptions (params, body) {
+    return createRequestOptions({
+      params,
+      apiKey: this.apiKey,
+      body
     })
-  }
-
-  /** @private */
-  __createRequest (body) {
-    logger.debug(`ENV ${this.env} ${APISERVER[this.env]}`)
-    return {
-      requestBody: body,
-      serverVariables: {
-        APISERVER: APISERVER[this.env]
-      }
-    }
-  }
-
-  /** @private */
-  __setHeaders (req, coreAPIInstance) {
-    req.headers.Authorization = 'Bearer ' + coreAPIInstance.accessToken
-    if (!req.headers['x-api-key'] && coreAPIInstance.apiKey) {
-      req.headers['x-api-key'] = coreAPIInstance.apiKey
-    }
-    req.headers['Content-Type'] = req.headers['Content-Type'] || 'application/json'
   }
 }
 
