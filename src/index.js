@@ -566,12 +566,14 @@ class CoreConsoleAPI {
   }
 
   /** @private */
-  __createRequestOptions (params, body) {
-    return createRequestOptions({
-      params,
-      apiKey: this.apiKey,
-      body
-    })
+  __createRequestOptions (parameters, body) {
+    return createRequestOptions(
+      this.apiKey,
+      {
+        parameters,
+        body
+      }
+    )
   }
 }
 

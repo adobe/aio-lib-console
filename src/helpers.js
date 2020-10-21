@@ -30,37 +30,43 @@ function reduceError (error = {}) {
 }
 
 /**
- * @param root0
- * @param root0.apiKey
- * @param root0.accessToken
- * @param root0.APISERVER
- * @param root0.params
- * @param root0.body
+ * Create request options compatible with the console swagger definition
+ *
+ * @param {string} apiKey apiKey to access console api
+ * @param {object} [options] optional data used for building the request options
+ * @param {object} [options.parameters] parameters to set to the request, specific to each endpoint
+ * @param {object} [options.body] request body for the request
+ * @returns {Array} [{ swaggerParameters }, { requestBody }]
  */
-function createRequestOptions ({ apiKey, params = {}, body }) {
-  logger.debug(`params ${JSON.stringify(params)}`)
+function createRequestOptions (apiKey, { parameters = {}, body }) {
+  logger.debug(`params ${JSON.stringify(parameters)}`)
+  logger.debug(`params ${JSON.stringify(body)}`)
   return [
     {
-      // 1. params
-      ...params,
+      ...parameters,
       'x-api-key': apiKey,
-      // this is a fake value, the console json spec requires the parameter, however swagger-js
-      // will not set it as Authorization should not be set via a parameter and is hence
-      // ignored by the swagger spec, see
-      // https://github.com/swagger-api/swagger-js/issues/1405 for more details.
+      // This is a fake value, the console swagger spec requires the Authorization parameter
+      // to be set. We cannot set the actual access token here because swagger-js ignores
+      // the value as Authorization header parameters are ignored by swagger.
+      // It is actually a bug in the console swagger spec.
+      // See https://github.com/swagger-api/swagger-js/issues/1405 for more details.
       Authorization: 'donotthrowifmissing'
     },
     {
       requestBody: body
-      // todo double check that I really do not need the APISERVER anymore
     }
   ]
 }
 
 /**
- * @param req
+ * Build a swagger request interceptor for the console sdk
+ *
+ * @param {object} coreConsoleAPIInstance console core api instance
+ * @param {string} apihost console api url host
+ * @returns {Function} a request interceptor
+ *
  */
-function requestInterceptorBuilder (coreAPIInstance, apihost) {
+function requestInterceptorBuilder (coreConsoleAPIInstance, apihost) {
   return (req) => {
     // change host based on env
     const url = new URL(req.url)
@@ -68,14 +74,18 @@ function requestInterceptorBuilder (coreAPIInstance, apihost) {
     req.url = url.href
 
     req.headers['Content-Type'] = req.headers['Content-Type'] || 'application/json'
-    req.headers.Authorization = `Bearer ${coreAPIInstance.accessToken}`
+    req.headers.Authorization = `Bearer ${coreConsoleAPIInstance.accessToken}`
     logger.debug(`REQUEST:\n ${JSON.stringify(req, null, 2)}`)
     return req
   }
 }
 
 /**
- * @param res
+ * A swagger response interceptor for the console sdk
+ *
+ * @param {object} res the response object
+ * @returns {object} the response object
+ *
  */
 function responseInterceptor (res) {
   logger.debug(`RESPONSE:\n ${JSON.stringify(res, null, 2)}`)
