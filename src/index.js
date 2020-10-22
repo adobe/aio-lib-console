@@ -33,10 +33,10 @@ const { codes } = require('./SDKErrors')
  * @property {string} [quotaRule] quotaRule
  */
 /**
- * @typedef {object} IntegrationDetails
+ * @typedef {object} AdobeIdIntegrationDetails
  * @property {string} name Name
  * @property {string} description Description
- * @property {string} [platform] Platform
+ * @property {string} platform Platform
  * @property {string} [urlScheme] url scheme
  * @property {object} [redirectUriList] List of redirect URIs
  * @property {string} [defaultRedirectUri] Default redirect URI
@@ -124,7 +124,7 @@ class CoreConsoleAPI {
   /**
    * Get all Projects in an Organization
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @returns {Promise<Response>} the response
    */
   async getProjectsForOrg (organizationId) {
@@ -142,7 +142,7 @@ class CoreConsoleAPI {
   /**
    * Create a new Firefly Project (from template) in an Organization
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
    * @returns {Promise<Response>} the response
    */
@@ -154,7 +154,7 @@ class CoreConsoleAPI {
   /**
    * Create a new Project in an Organization
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
    * @returns {Promise<Response>} the response
    */
@@ -174,7 +174,7 @@ class CoreConsoleAPI {
   /**
    * Get all Workspaces for a Project
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
@@ -194,7 +194,7 @@ class CoreConsoleAPI {
   /**
    * Delete a Project
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
@@ -214,7 +214,7 @@ class CoreConsoleAPI {
   /**
    * Edit a Project
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
    * @returns {Promise<Response>} the response
@@ -236,7 +236,7 @@ class CoreConsoleAPI {
   /**
    * Get a Project by ID
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @returns {Promise<Response>} the response
    */
@@ -256,7 +256,7 @@ class CoreConsoleAPI {
   /**
    * Download the Workspace Configuration File (json)
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
@@ -277,7 +277,7 @@ class CoreConsoleAPI {
   /**
    * Create a new Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {WorkspaceDetails} workspaceDetails Workspace details including name, title, who_created, description, type and quotaRule
    * @returns {Promise<Response>} the response
@@ -299,7 +299,7 @@ class CoreConsoleAPI {
   /**
    * Edit a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @param {WorkspaceDetails} workspaceDetails Workspace details including name, title, who_created, description, type and quotaRule
@@ -322,7 +322,7 @@ class CoreConsoleAPI {
   /**
    * Get a Workspace by ID
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
@@ -343,7 +343,7 @@ class CoreConsoleAPI {
   /**
    * Delete a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
@@ -362,14 +362,14 @@ class CoreConsoleAPI {
   }
 
   /**
-   * Get all Integrations for a Workspace
+   * Get all credentials for a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  async getIntegrations (organizationId, projectId, workspaceId) {
+  async getCredentials (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
@@ -378,22 +378,22 @@ class CoreConsoleAPI {
         .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials(this.__createRequestOptions(parameters))
       return res
     } catch (err) {
-      throw new codes.ERROR_GET_INTEGRATIONS({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_GET_CREDENTIALS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Create a new Enterprise Integration
+   * Create a new Enterprise Credential for a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
-   * @param {string} name Integration name
-   * @param {string} description Integration description
+   * @param {string} name Credential name
+   * @param {string} description Credential description
    * @returns {Promise<Response>} the response
    */
-  async createEnterpriseIntegration (organizationId, projectId, workspaceId, certificate, name, description) {
+  async createEnterpriseCredential (organizationId, projectId, workspaceId, certificate, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = { certificate, name, description }
     const sdkDetails = { parameters, requestBody }
@@ -405,22 +405,22 @@ class CoreConsoleAPI {
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_CREATE_ENTERPRISE_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Create a new AdobeID Integration
+   * Create a new AdobeID Credential for a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {IntegrationDetails} integrationDetails Integration details
+   * @param {AdobeIdIntegrationDetails} credentialDetails Credential details
    * @returns {Promise<Response>} the response
    */
-  async createAdobeIdIntegration (organizationId, projectId, workspaceId, integrationDetails) {
+  async createAdobeIdCredential (organizationId, projectId, workspaceId, credentialDetails) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
-    const requestBody = integrationDetails
+    const requestBody = credentialDetails
     const sdkDetails = { parameters, requestBody }
 
     try {
@@ -430,23 +430,48 @@ class CoreConsoleAPI {
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_CREATE_ADOBEID_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_CREATE_ADOBEID_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Subscribe an Integration to Services
+   * Create a new Analytics Credential for a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {string} integrationType Integration type (adobeid, analytics or entp)
-   * @param {string} integrationId Integration ID
+   * @param {AdobeIdIntegrationDetails} credentialDetails Credential details
+   * @returns {Promise<Response>} the response
+   */
+  async createAnalyticsCredential (organizationId, projectId, workspaceId, credentialDetails) {
+    const parameters = { orgId: organizationId, projectId, workspaceId }
+    const requestBody = credentialDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.projects
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_analytics(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_ANALYTICS_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Subscribe a Workspace Credential to Services
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {string} credentialType Credential type (adobeid, analytics or entp)
+   * @param {string} credentialId Credential ID
    * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
    * @returns {Promise<Response>} the response
    */
-  async subscribeIntegrationToServices (organizationId, projectId, workspaceId, integrationType, integrationId, serviceInfo) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, integrationId }
+  async subscribeCredentialToServices (organizationId, projectId, workspaceId, credentialType, credentialId, serviceInfo) {
+    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType: credentialType, credentialId }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
 
@@ -457,19 +482,19 @@ class CoreConsoleAPI {
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_SUBSCRIBE_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_SUBSCRIBE_CREDENTIAL_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Get the Workspace for an Integration
+   * Get the Workspace from a Credential ID
    *
-   * @param {string} organizationId Organization ID
-   * @param {string} integrationId Integration ID
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} credentialId Credential ID
    * @returns {Promise<Response>} the response
    */
-  async getWorkspaceForIntegration (organizationId, integrationId) {
-    const parameters = { orgId: organizationId, integrationId }
+  async getWorkspaceForCredential (organizationId, credentialId) {
+    const parameters = { orgId: organizationId, credentialId }
     const sdkDetails = { parameters }
 
     try {
@@ -479,14 +504,14 @@ class CoreConsoleAPI {
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_GET_PROJECT_WORKSPACE_BY_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_GET_PROJECT_WORKSPACE_BY_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
    * Get the Project of a Workspace
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
@@ -506,17 +531,17 @@ class CoreConsoleAPI {
   }
 
   /**
-   * Delete an Integration
+   * Delete a Workspace Credential
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
    * @param {string} integrationType Integration type (adobeid, analytics or entp)
-   * @param {string} integrationId Integration ID
+   * @param {string} credentialId Credential ID
    * @returns {Promise<Response>} the response
    */
-  async deleteIntegration (organizationId, projectId, workspaceId, integrationType, integrationId) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, integrationId }
+  async deleteCredential (organizationId, projectId, workspaceId, integrationType, credentialId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, credentialId }
     const sdkDetails = { parameters }
 
     try {
@@ -526,7 +551,7 @@ class CoreConsoleAPI {
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_DELETE_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
@@ -550,18 +575,606 @@ class CoreConsoleAPI {
   /**
    * Get all Services available to an Organization
    *
-   * @param {string} organizationId Organization ID
+   * @param {string} organizationId Organization AMS ID
    * @returns {Promise<Response>} the response
    */
   async getServicesForOrg (organizationId) {
-    const sdkDetails = { organizationId }
     const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.projects.get_console_organizations__orgId__services(this.__createRequestOptions(parameters))
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create an Adobe I/O Runtime namespace in the given workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @returns {Promise<Response>} the response
+   */
+  async createRuntimeNamespace (organizationId, projectId, workspaceId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace(
+        this.__createRequestOptions(parameters)
+      )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_RUNTIME_SERVICE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get plugins for workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @returns {Promise<Response>} the response
+   */
+  async getPluginsForWorkspace (organizationId, projectId, workspaceId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.workspaces.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__plugins(
+        this.__createRequestOptions(parameters)
+      )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PLUGINS_BY_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get Integrations for an Organization
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async getIntegrationsForOrg (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations.get_console_organizations__orgId__integrations(
+        this.__createRequestOptions(parameters)
+      )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_INTEGRATIONS_BY_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create a new Enterprise Integration for an Organization
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
+   * @param {string} name Integration name
+   * @param {string} description Integration description
+   * @returns {Promise<Response>} the response
+   */
+  async createEnterpriseIntegration (organizationId, certificate, name, description) {
+    const parameters = { orgId: organizationId }
+    const requestBody = { certificate, name, description }
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .post_console_organizations__orgId__integrations_entp(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_ENTERPRISE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create a new AdobeID Integration for an Organization
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {AdobeIdIntegrationDetails} integrationDetails Integration details
+   * @returns {Promise<Response>} the response
+   */
+  async createAdobeIdIntegration (organizationId, integrationDetails) {
+    const parameters = { orgId: organizationId }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .post_console_organizations__orgId__integrations_adobeId(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_ADOBEID_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Update an AdobeID Integration for an Organization
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID to update
+   * @param {AdobeIdIntegrationDetails} integrationDetails Integration details
+   * @returns {Promise<Response>} the response
+   */
+  async updateAdobeIdIntegration (organizationId, integrationId, integrationDetails) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .put_console_organizations__orgId__integrations_adobeId(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_UPDATE_ADOBEID_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Subscribe Organization AdobeId Integration to Services
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @returns {Promise<Response>} the response
+   */
+  async subscribeAdobeIdIntegrationToServices (organizationId, integrationId, serviceInfo) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const requestBody = serviceInfo
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .put_console_organizations__orgId__integrations_adobeid__intId__services(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBSCRIBE_ADOBEID_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Subscribe Organization Enterprise Integration to Services
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @returns {Promise<Response>} the response
+   */
+  async subscribeEnterpriseIntegrationToServices (organizationId, integrationId, serviceInfo) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const requestBody = serviceInfo
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .put_console_organizations__orgId__integrations_entp__intId__services(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBSCRIBE_ENTERPRISE_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * List certification bindings for an Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async getBindingsForIntegration (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgId__integrations__intId__bindings(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_BINDINGS_FOR_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Upload and bind a certificate to an Organization Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
+   * @returns {Promise<Response>} the response
+   */
+  async uploadAndBindCertificate (organizationId, integrationId, certificate) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const requestBody = { certificate }
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .post_console_organizations__orgId__integrations__intId__bindings(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_UPLOAD_AND_BIND_CERTIFICATE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Delete a certificate binding for an Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @param {string} bindingId Binding ID
+   * @returns {Promise<Response>} the response
+   */
+  async deleteBinding (organizationId, integrationId, bindingId) {
+    const parameters = { orgId: organizationId, intId: integrationId, bindingId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .delete_console_organizations__orgId__integrations__intId__bindings__bindingId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_BINDING({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get Integration details
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async getIntegration (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgId__integrations__intId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get Integration secrets
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async getIntegrationSecrets (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgId__integrations__intId__secrets(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_INTEGRATION_SECRETS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+/**
+  * Delete an Integration
+  *
+  * @param {string} organizationId Organization AMS ID
+  * @param {string} integrationType Integration type (adobeid, analytics or entp)
+  * @param {string} integrationId Integration ID
+  * @returns {Promise<Response>} the response
+  */
+ async deleteIntegration (organizationId, integrationType, integrationId) {
+   const parameters = { orgId: organizationId, integrationType, integrationId }
+   const sdkDetails = { parameters }
+
+   try {
+      const res = await this.sdk.apis.projects.
+        delete_console_organizations__orgId__integrations__intId_(
+          this.__createRequestOptions(parameters)
+       )
+     return res
+   } catch (err) {
+     throw new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+   }
+ }
+
+  /**
+   * Create an IMS Org
+   *
+   * @returns {Promise<Response>} the response
+   */
+  async createIMSOrg () {
+    const parameters = { }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .post_console_organizations(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_IMS_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get Application Atlas Policy for an Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async getAtlasApplicationPolicy (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AtlasPolicyEngine
+        .get_console_organizations__orgId__policy__intId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_ATLAS_APPLICATION_POLICY({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get Atlas quota usage for an Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async getAtlasQuotaUsage (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AtlasPolicyEngine
+        .get_console_organizations__orgId__policy__intId__usage(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_ATLAS_QUOTA_USAGE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Validate App Registry (Exchange) Application name
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationName Application name to validate
+   * @returns {Promise<Response>} the response
+   */
+  async validateApplicationName (organizationId, applicationName) {
+    const parameters = { orgId: organizationId, appName: applicationName, appType: 'JGR' }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .get_console_organizations__orgId__apps__appName__validate(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_VALIDATE_APPLICATION_NAME({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get App Registry (Exchange) Application details
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId Application ID
+   * @returns {Promise<Response>} the response
+   */
+  async getApplicationById (organizationId, applicationId) {
+    const parameters = { orgId: organizationId, appId: applicationId, appType: 'JGR' }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .get_console_organizations__orgId__apps__appId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_APPLICATION_BY_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Update App Registry (Exchange) Application, application details are patched.
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId Application ID
+   * @param {object} applicationDetails Application details to update
+   * @returns {Promise<Response>} the response
+   */
+  async updateApplication (organizationId, applicationId, applicationDetails) {
+    const parameters = { orgId: organizationId, appId: applicationId }
+    const requestBody = applicationDetails
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .patch_console_organizations__orgId__apps__appId_(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_UPDATE_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Delete App Registry (Exchange) Application
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId Application ID
+   * @returns {Promise<Response>} the response
+   */
+  async deleteApplication (organizationId, applicationId) {
+    const parameters = { orgId: organizationId, appId: applicationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis..AppRegistry
+        .delete_console_organizations__orgId__apps__appId_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get App Registry (Exchange) Application by name
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationName Application Name
+   * @returns {Promise<Response>} the response
+   */
+  async getApplicationByName (organizationId, applicationName) {
+    const parameters = { orgId: organizationId, appName: applicationName }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .get_console_organizations__orgId__apps_searchName__appName_(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_APPLICATION_BY_NAME({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Submit an Application to App Registry (Exchange)
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId Application ID
+   * @param {string} submitterNotes Notes from submitter
+   * @returns {Promise<Response>} the response
+   */
+  async submitApplication (organizationId, applicationId, submitterNotes) {
+    const parameters = { orgId: organizationId, appId: applicationId }
+    const requestBody = { submitterNotes }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .post_console_organizations__orgId__apps__appId__submit(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBMIT_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get all App Registry (Exchange) Application
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {number} offset offset for returned list
+   * @param {number} length number of elements to return
+   * @returns {Promise<Response>} the response
+   */
+  async getAllApplicationForUser (organizationId, offset, length) {
+    const parameters = { orgId: organizationId, appType: 'JGR', offset, length }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .get_console_organizations__orgId__apps(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_ALL_APPLICATIONS_FOR_USER({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Upload an Icon for an Application in App Registry (Exchange)
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId Application Name
+   * @param {object} icon A Readable stream with the Icon file content. eg: fs.createReadStream()
+   * @returns {Promise<Response>} the response
+   */
+  async uploadApplicationIcon (organizationId, applicationId, icon) {
+    const parameters = { orgId: organizationId, appId: applicationId, appType: 'JGR', assetType: 'ICON' }
+    const requestBody = { file: icon }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .post_console_organizations__orgId__apps__appId__upload(
+          this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_UPLOAD_APPLICATION_ICON({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get App Registry (Exchange) health
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async getAppRegistryHealth (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.AppRegistry
+        .get_console_organizations__orgId__apps_health(
+          this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_APPREGISTRY_HEALTH({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
@@ -580,3 +1193,24 @@ class CoreConsoleAPI {
 module.exports = {
   init: init
 }
+
+// TODO ADD THOSE
+/*
+  '/organizations/{orgId}/integrations/adobeid',
+  '/organizations/{orgId}/integrations/adobeid/{intId}',
+  '/organizations/{orgId}/integrations/adobeid/{intId}/services',
+  '/organizations/{orgId}/apps/{appId}/upload',
+  '/organizations/{orgId}/integrations/entp',
+  '/organizations/{orgId}/integrations/{intId}/bindings',
+  '/organizations/{orgId}/integrations/{intId}/bindings/{bindingId}',
+  '/organizations/{orgId}/integrations/entp/{intId}/services',
+  '/organizations/{orgId}/integrations/{intId}',
+  '/organizations/{orgId}/integrations/{intId}/secrets',
+  '/organizations/{orgId}/integrations',
+  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/plugins',
+  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{integrationType}/{credentialId}/services',
+  '/organizations/{orgId}/projects_workspaces/credentials/{credentialId}',
+  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{credentialId}'
+  organizations/{orgId}/apps/{appName}/validate
+  all the atlas and app registry endpoints.
+*/
