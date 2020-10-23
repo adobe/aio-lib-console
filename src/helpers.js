@@ -47,7 +47,6 @@ function createRequestOptions (apiKey, { parameters = {}, body }) {
       // This is a fake value, the console swagger spec requires the Authorization parameter
       // to be set. We cannot set the actual access token here because swagger-js ignores
       // the value as Authorization header parameters are ignored by swagger.
-      // It is actually a bug in the console swagger spec.
       // See https://github.com/swagger-api/swagger-js/issues/1405 for more details.
       Authorization: '__placeholder__',
       ...parameters
