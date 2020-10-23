@@ -184,7 +184,9 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(...this.__createRequestOptions(parameters))
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_GET_WORKSPACES_BY_PROJECT_ID({ sdkDetails, messageValues: reduceError(err) })
@@ -204,7 +206,9 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.projects
-        .delete_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters))
+        .delete_console_organizations__orgId__projects__projectId_(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_DELETE_PROJECT({ sdkDetails, messageValues: reduceError(err) })
@@ -226,7 +230,9 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.projects
-        .patch_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters, requestBody))
+        .patch_console_organizations__orgId__projects__projectId_(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_EDIT_PROJECT({ sdkDetails, messageValues: reduceError(err) })
@@ -246,7 +252,9 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId_(this.__createRequestOptions(parameters))
+        .get_console_organizations__orgId__projects__projectId_(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_GET_PROJECT_BY_ID({ sdkDetails, messageValues: reduceError(err) })
@@ -266,8 +274,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__download(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.workspaces
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__download(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_DOWNLOAD_WORKSPACE_JSON({ sdkDetails, messageValues: reduceError(err) })
@@ -288,8 +298,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__download(this.__createRequestOptions(parameters, requestBody))
+      const res = await this.sdk.apis.workspaces
+        .post_console_organizations__orgId__projects__projectId__workspaces(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_CREATE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
@@ -311,8 +323,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
-        .patch_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters, requestBody))
+      const res = await this.sdk.apis.workspaces
+        .patch_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_EDIT_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
@@ -332,8 +346,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.workspaces
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_GET_WORKSPACE_BY_ID({ sdkDetails, messageValues: reduceError(err) })
@@ -353,8 +369,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
-        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.workspaces
+        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_DELETE_WORKSPACE({ sdkDetails, messageValues: reduceError(err) })
@@ -374,8 +392,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.workspaces
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_GET_CREDENTIALS({ sdkDetails, messageValues: reduceError(err) })
@@ -399,9 +419,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -424,9 +444,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeId(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -449,9 +469,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_analytics(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -476,9 +496,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__integrationType___credentialId__services(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -498,9 +518,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .get_console_organizations__orgId__projects_workspaces_credentials__credentialId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -520,9 +540,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .get_console_organizations__orgId__projects_workspaces_workspaces__workspaceId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -545,9 +565,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects
+      const res = await this.sdk.apis.workspaces
         .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -565,7 +585,8 @@ class CoreConsoleAPI {
     const parameters = {}
 
     try {
-      const res = await this.sdk.apis.projects.get_console_organizations(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations(...this.__createRequestOptions(parameters))
       return res
     } catch (err) {
       throw new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) })
@@ -583,7 +604,10 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.projects.get_console_organizations__orgId__services(this.__createRequestOptions(parameters))
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgId__services(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
@@ -603,12 +627,13 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace(
-        this.__createRequestOptions(parameters)
-      )
+      const res = await this.sdk.apis.workspaces
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace(
+          ...this.__createRequestOptions(parameters)
+        )
       return res
     } catch (err) {
-      throw new codes.ERROR_CREATE_RUNTIME_SERVICE({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_CREATE_RUNTIME_NAMESPACE({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
@@ -626,7 +651,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.workspaces.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__plugins(
-        this.__createRequestOptions(parameters)
+        ...this.__createRequestOptions(parameters)
       )
       return res
     } catch (err) {
@@ -646,7 +671,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations.get_console_organizations__orgId__integrations(
-        this.__createRequestOptions(parameters)
+        ...this.__createRequestOptions(parameters)
       )
       return res
     } catch (err) {
@@ -671,7 +696,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .post_console_organizations__orgId__integrations_entp(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -694,7 +719,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .post_console_organizations__orgId__integrations_adobeId(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -718,7 +743,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .put_console_organizations__orgId__integrations_adobeId(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -742,7 +767,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .put_console_organizations__orgId__integrations_adobeid__intId__services(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -766,7 +791,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .put_console_organizations__orgId__integrations_entp__intId__services(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -788,7 +813,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .get_console_organizations__orgId__integrations__intId__bindings(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -812,7 +837,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .post_console_organizations__orgId__integrations__intId__bindings(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -835,7 +860,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .delete_console_organizations__orgId__integrations__intId__bindings__bindingId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -857,7 +882,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .get_console_organizations__orgId__integrations__intId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -879,7 +904,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .get_console_organizations__orgId__integrations__intId__secrets(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -887,28 +912,27 @@ class CoreConsoleAPI {
     }
   }
 
-/**
-  * Delete an Integration
-  *
-  * @param {string} organizationId Organization AMS ID
-  * @param {string} integrationType Integration type (adobeid, analytics or entp)
-  * @param {string} integrationId Integration ID
-  * @returns {Promise<Response>} the response
-  */
- async deleteIntegration (organizationId, integrationType, integrationId) {
-   const parameters = { orgId: organizationId, integrationType, integrationId }
-   const sdkDetails = { parameters }
+  /**
+   * Delete an Integration
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} integrationId Integration ID
+   * @returns {Promise<Response>} the response
+   */
+  async deleteIntegration (organizationId, integrationId) {
+    const parameters = { orgId: organizationId, intId: integrationId }
+    const sdkDetails = { parameters }
 
-   try {
-      const res = await this.sdk.apis.projects.
-        delete_console_organizations__orgId__integrations__intId_(
-          this.__createRequestOptions(parameters)
-       )
-     return res
-   } catch (err) {
-     throw new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
-   }
- }
+    try {
+      const res = await this.sdk.apis.Organizations
+        .delete_console_organizations__orgId__integrations__intId_(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_DELETE_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
 
   /**
    * Create an IMS Org
@@ -922,7 +946,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.Organizations
         .post_console_organizations(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -944,7 +968,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AtlasPolicyEngine
         .get_console_organizations__orgId__policy__intId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -966,7 +990,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AtlasPolicyEngine
         .get_console_organizations__orgId__policy__intId__usage(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -988,7 +1012,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .get_console_organizations__orgId__apps__appName__validate(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -1010,7 +1034,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .get_console_organizations__orgId__apps__appId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -1034,7 +1058,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .patch_console_organizations__orgId__apps__appId_(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -1054,9 +1078,9 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis..AppRegistry
+      const res = await this.sdk.apis.AppRegistry
         .delete_console_organizations__orgId__apps__appId_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -1078,7 +1102,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .get_console_organizations__orgId__apps_searchName__appName_(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -1102,7 +1126,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .post_console_organizations__orgId__apps__appId__submit(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -1125,7 +1149,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .get_console_organizations__orgId__apps(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
@@ -1149,7 +1173,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .post_console_organizations__orgId__apps__appId__upload(
-          this.__createRequestOptions(parameters, requestBody)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -1170,7 +1194,7 @@ class CoreConsoleAPI {
     try {
       const res = await this.sdk.apis.AppRegistry
         .get_console_organizations__orgId__apps_health(
-          this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
