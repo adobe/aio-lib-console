@@ -27,7 +27,7 @@ const createSwaggerOptions = (body) => {
 
 const expectedAdditionalApiParameters = (sdkInstance) => {
   return {
-    Authorization: 'donotthrowifmissing',
+    Authorization: '__placeholder__',
     'x-api-key': sdkInstance.apiKey
   }
 }

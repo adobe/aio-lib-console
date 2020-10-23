@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 const Swagger = require('swagger-client')
 const loggerNamespace = '@adobe/aio-lib-console'
-const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { level: process.env.LOG_LEVEL || 'debug' })
+const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
 const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
 const { codes } = require('./SDKErrors')
 
