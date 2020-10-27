@@ -156,7 +156,7 @@ test('getWorkspacesForProject', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'projects.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_',
+    fullyQualifiedApiName: 'projects.get_console_organizations__orgId__projects__projectId__workspaces',
     sdkFunctionName: 'getWorkspacesForProject',
     apiParameters,
     apiOptions,
@@ -391,18 +391,18 @@ test('createAnalyticsCredential', async () => {
 })
 
 test('subscribeCredentialToServices', async () => {
-  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'integrationType', 'credentialId', {}]
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'credentialType', 'credentialId', {}]
   const apiParameters = {
     orgId: 'organizationId',
     projectId: 'projectId',
     workspaceId: 'workspaceId',
-    integrationType: 'integrationType',
+    credentialType: 'credentialType',
     credentialId: 'credentialId'
   }
   const apiOptions = createSwaggerOptions({})
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__integrationType___credentialId__services',
+    fullyQualifiedApiName: 'workspaces.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialType___credentialId__services',
     sdkFunctionName: 'subscribeCredentialToServices',
     apiParameters,
     apiOptions,
@@ -448,18 +448,18 @@ test('getProjectForWorkspace', async () => {
 })
 
 test('deleteCredential', async () => {
-  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'integrationType', 'credentialId']
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'credentialType', 'credentialId']
   const apiParameters = {
     orgId: 'organizationId',
     projectId: 'projectId',
     workspaceId: 'workspaceId',
-    integrationType: 'integrationType',
+    credentialType: 'credentialType',
     credentialId: 'credentialId'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId',
+    fullyQualifiedApiName: 'workspaces.delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId_',
     sdkFunctionName: 'deleteCredential',
     apiParameters,
     apiOptions,

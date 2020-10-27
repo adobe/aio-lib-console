@@ -6736,7 +6736,7 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{integrationType}/{credentialId}/services": {
+    "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{credentialType}/{credentialId}/services": {
       "put": {
         "summary": "Subscribe Credential to Services",
         "tags": [

@@ -184,7 +184,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.projects
-        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId_(
+        .get_console_organizations__orgId__projects__projectId__workspaces(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -491,13 +491,19 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async subscribeCredentialToServices (organizationId, projectId, workspaceId, credentialType, credentialId, serviceInfo) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType: credentialType, credentialId }
+    const parameters = {
+      orgId: organizationId,
+      projectId,
+      workspaceId,
+      credentialId,
+      credentialType: credentialType
+    }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
 
     try {
       const res = await this.sdk.apis.workspaces
-        .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__integrationType___credentialId__services(
+        .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialType___credentialId__services(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -556,17 +562,17 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {string} integrationType Integration type (adobeid, analytics or entp)
+   * @param {string} credentialType Credential type (adobeid, analytics or entp)
    * @param {string} credentialId Credential ID
    * @returns {Promise<Response>} the response
    */
-  async deleteCredential (organizationId, projectId, workspaceId, integrationType, credentialId) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, integrationType, credentialId }
+  async deleteCredential (organizationId, projectId, workspaceId, credentialType, credentialId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId, credentialType, credentialId }
     const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.workspaces
-        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId(
+        .delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId_(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -1217,24 +1223,3 @@ class CoreConsoleAPI {
 module.exports = {
   init: init
 }
-
-// TODO ADD THOSE
-/*
-  '/organizations/{orgId}/integrations/adobeid',
-  '/organizations/{orgId}/integrations/adobeid/{intId}',
-  '/organizations/{orgId}/integrations/adobeid/{intId}/services',
-  '/organizations/{orgId}/apps/{appId}/upload',
-  '/organizations/{orgId}/integrations/entp',
-  '/organizations/{orgId}/integrations/{intId}/bindings',
-  '/organizations/{orgId}/integrations/{intId}/bindings/{bindingId}',
-  '/organizations/{orgId}/integrations/entp/{intId}/services',
-  '/organizations/{orgId}/integrations/{intId}',
-  '/organizations/{orgId}/integrations/{intId}/secrets',
-  '/organizations/{orgId}/integrations',
-  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/plugins',
-  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{integrationType}/{credentialId}/services',
-  '/organizations/{orgId}/projects_workspaces/credentials/{credentialId}',
-  '/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/{credentialId}'
-  organizations/{orgId}/apps/{appName}/validate
-  all the atlas and app registry endpoints.
-*/
