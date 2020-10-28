@@ -3241,7 +3241,16 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/components/credentials/Entp"
+                "type": "object",
+                "required": [
+                  "certificate"
+                ],
+                "properties": {
+                  "certificate": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
           },
@@ -6397,16 +6406,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "certificate"
-                ],
-                "properties": {
-                  "certificate": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/components/schemas/components/credentials/Entp"
               }
             }
           },
