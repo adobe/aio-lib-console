@@ -695,8 +695,8 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async createEnterpriseIntegration (organizationId, certificate, name, description) {
-    const parameters = { orgId: organizationId }
-    const requestBody = { certificate, name, description }
+    const parameters = { orgId: organizationId, name, description }
+    const requestBody = { certificate }
     const sdkDetails = { parameters, requestBody }
 
     try {

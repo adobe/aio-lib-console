@@ -3239,9 +3239,9 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "type": "file"
+                "$ref": "#/components/schemas/components/credentials/Entp"
               }
             }
           },
@@ -6397,7 +6397,16 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/components/credentials/Entp"
+                "type": "object",
+                "required": [
+                  "certificate"
+                ],
+                "properties": {
+                  "certificate": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
           },

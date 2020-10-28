@@ -558,9 +558,11 @@ test('getIntegrationsForOrg', async () => {
 test('createEnterpriseIntegration', async () => {
   const sdkArgs = ['organizationId', 'certificate', 'name', 'description']
   const apiParameters = {
-    orgId: 'organizationId'
+    orgId: 'organizationId',
+    description: 'description',
+    name: 'name'
   }
-  const apiOptions = createSwaggerOptions({ certificate: 'certificate', description: 'description', name: 'name' })
+  const apiOptions = createSwaggerOptions({ certificate: 'certificate' })
 
   await standardTest({
     fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_entp',

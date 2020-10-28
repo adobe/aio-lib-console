@@ -10,19 +10,18 @@ governing permissions and limitations under the License.
 */
 const AioLogger = require('@adobe/aio-lib-core-logging')
 const helpers = require('../src/helpers')
-const { reduceError } = require('../src/helpers')
 
 test('reduceError', () => {
   // no args produces empty object
-  expect(reduceError()).toEqual({})
+  expect(helpers.reduceError()).toEqual({})
 
   // unexpected properties returns the same error with no reduction
   const unexpectedError = { foo: 'bar' }
-  expect(reduceError(unexpectedError)).toEqual(unexpectedError)
+  expect(helpers.reduceError(unexpectedError)).toEqual(unexpectedError)
 
   // inadequate properties returns the same error with no reduction
   const unexpectedError2 = { foo: 'bar', response: {} }
-  expect(reduceError(unexpectedError2)).toEqual(unexpectedError2)
+  expect(helpers.reduceError(unexpectedError2)).toEqual(unexpectedError2)
 
   // expected properties returns the object reduced to a string
   const expectedError = {
@@ -35,7 +34,7 @@ test('reduceError', () => {
       }
     }
   }
-  expect(reduceError(expectedError)).toEqual("500 - Something went gang aft agley. ({\"error_code\":500101,\"message\":\"I'm giving it all I got, cap'n\"})")
+  expect(helpers.reduceError(expectedError)).toEqual("500 - Something went gang aft agley. ({\"error_code\":500101,\"message\":\"I'm giving it all I got, cap'n\"})")
 })
 
 describe('createRequestOptions', () => {
