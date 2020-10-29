@@ -74,6 +74,11 @@ function requestInterceptorBuilder (coreConsoleAPIInstance, apihost) {
 
     req.headers['Content-Type'] = req.headers['Content-Type'] || 'application/json'
     req.headers.Authorization = `Bearer ${coreConsoleAPIInstance.accessToken}`
+    // In the api.json definition some endpoints don't have the `api-key` parameter
+    // defined (e.g in /apps), meaning the header will not be set as
+    // part of `createRequestOptions` and hence must be manually set here
+    req.headers['x-api-key'] = req.headers['x-api-key'] || coreConsoleAPIInstance.apiKey
+
     logger.debug(`REQUEST:\n ${JSON.stringify(req, null, 2)}`)
     return req
   }

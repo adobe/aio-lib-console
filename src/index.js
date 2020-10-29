@@ -1058,7 +1058,7 @@ class CoreConsoleAPI {
    */
   async updateApplication (organizationId, applicationId, applicationDetails) {
     const parameters = { orgId: organizationId, appId: applicationId }
-    const requestBody = applicationDetails
+    const requestBody = { ...applicationDetails }
     const sdkDetails = { parameters }
 
     try {
@@ -1145,11 +1145,11 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {number} offset offset for returned list
-   * @param {number} length number of elements to return
+   * @param {number} pageSize number of elements to return
    * @returns {Promise<Response>} the response
    */
-  async getAllApplicationForUser (organizationId, offset, length) {
-    const parameters = { orgId: organizationId, appType: 'JGR', offset, length }
+  async getAllApplicationsForUser (organizationId, offset, pageSize) {
+    const parameters = { orgId: organizationId, appType: 'JGR', offset, pageSize }
     const sdkDetails = { parameters }
 
     try {
@@ -1168,7 +1168,8 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {string} applicationId Application Name
-   * @param {object} icon A Readable stream with the Icon file content. eg: fs.createReadStream()
+   * @param {object} icon A Readable stream with the Icon file content. eg: fs.createReadStream().
+   *        The icon must be of size 512x512 and of type png or jpg.
    * @returns {Promise<Response>} the response
    */
   async uploadApplicationIcon (organizationId, applicationId, icon) {

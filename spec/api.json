@@ -2689,6 +2689,8 @@
           {
             "name": "appId",
             "description": "AppRegistry Application ID",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
