@@ -72,21 +72,23 @@ describe('createRequestOptions', () => {
 })
 
 test('requestInterceptorBuilder', () => {
-  const reqInterceptor = helpers.requestInterceptorBuilder({ accessToken: '123' }, 'theapihost.com')
+  const reqInterceptor = helpers.requestInterceptorBuilder({ accessToken: '123', apiKey: '456' }, 'theapihost.com')
 
   expect(reqInterceptor({ url: 'https://example.com/hello/from/the?world=2', headers: {} })).toEqual({
     url: 'https://theapihost.com/hello/from/the?world=2',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer 123'
+      Authorization: 'Bearer 123',
+      'x-api-key': '456'
     }
   })
 
-  expect(reqInterceptor({ url: 'https://example.com/hello/from/the?world=2', headers: { 'Content-Type': 'someother' } })).toEqual({
+  expect(reqInterceptor({ url: 'https://example.com/hello/from/the?world=2', headers: { 'Content-Type': 'someother', 'x-api-key': '789' } })).toEqual({
     url: 'https://theapihost.com/hello/from/the?world=2',
     headers: {
       'Content-Type': 'someother',
-      Authorization: 'Bearer 123'
+      Authorization: 'Bearer 123',
+      'x-api-key': '789'
     }
   })
 })

@@ -910,19 +910,19 @@ test('submitApplication', async () => {
   })
 })
 
-test('getAllApplicationForUser', async () => {
-  const sdkArgs = ['organizationId', 'offset', 'length']
+test('getAllApplicationsForUser', async () => {
+  const sdkArgs = ['organizationId', 'offset', 'pageSize']
   const apiParameters = {
     orgId: 'organizationId',
     offset: 'offset',
-    length: 'length',
+    pageSize: 'pageSize',
     appType: 'JGR'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
     fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps',
-    sdkFunctionName: 'getAllApplicationForUser',
+    sdkFunctionName: 'getAllApplicationsForUser',
     apiParameters,
     apiOptions,
     sdkArgs,

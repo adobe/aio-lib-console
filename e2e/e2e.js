@@ -40,8 +40,8 @@ const workspaceDescription = 'WDESC' + ts
 const modifiedWorkspaceDescription = 'mod' + ts
 const credentialNameAdobeId = 'cred-oauth' + ts
 const credentialNameEntp = 'cred-entp' + ts
-const integrationNameAdobeId = 'int-oauth' + ts
-const integrationNameEntp = 'int-entp' + ts
+// const integrationNameAdobeId = 'int-oauth' + ts
+// const integrationNameEntp = 'int-entp' + ts
 
 beforeAll(async () => {
   sdkClient = await sdk.init(accessToken, apiKey, env)
