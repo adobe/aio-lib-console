@@ -755,10 +755,10 @@ describe('delete workspace/project', () => {
 //       expect(res.body).toEqual({ sdkList: [sdkCode] })
 //     })
 
-//     // like in credentials ?
-//     // todo get integration / getIntegration  secrets
-//     // todo get bindings / upload bindings / delete binding
-//     // todo atlas stuff
+//     // add those like in credentials (refactor)
+//     // - get integration / getIntegration  secrets
+//     // - get bindings / upload bindings / delete binding
+//     // - atlas quota
 
 //     test('test deleteIntegration API (integrationType: entp)', async () => {
 //       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
@@ -820,10 +820,10 @@ describe('delete workspace/project', () => {
 //       expect(res.body).toEqual({ sdkList: [sdkCode] })
 //     })
 
-//     // like in credentials ?
-//     // todo get integration / getIntegration  secrets
-//     // todo get bindings / upload bindings / delete binding
-//     // todo atlas stuff
+//     // add those like in credentials (refactor)
+//     // - get integration / getIntegration  secrets
+//     // - get bindings / upload bindings / delete binding
+//     // - atlas quota
 
 //     test('test deleteIntegration API (integrationType: adobeid)', async () => {
 //       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
