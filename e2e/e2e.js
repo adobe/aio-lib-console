@@ -40,8 +40,6 @@ const workspaceDescription = 'WDESC' + ts
 const modifiedWorkspaceDescription = 'mod' + ts
 const credentialNameAdobeId = 'cred-oauth' + ts
 const credentialNameEntp = 'cred-entp' + ts
-// const integrationNameAdobeId = 'int-oauth' + ts
-// const integrationNameEntp = 'int-entp' + ts
 
 beforeAll(async () => {
   sdkClient = await sdk.init(accessToken, apiKey, env)
@@ -651,17 +649,6 @@ describe('App Registry APIs', () => {
     expect(res2.ok).toBe(true)
     expect(res2.body.status).toEqual('IN REVIEW')
   })
-
-  // Can't delete app after submission
-  // test('test deleteApplication API', async () => {
-  //   expect(appId).toBeDefined() // if not, getApplicationByName test failed
-  //   expect(orgId).toBeDefined()
-
-  //   const res = await sdkClient.deleteApplication(orgId, appId)
-  //   expect(res.ok).toBe(true)
-  //   expect(res.status).toBe(200)
-  //   expect(res.statusText).toBe('OK')
-  // })
 })
 
 describe('delete workspace/project', () => {
