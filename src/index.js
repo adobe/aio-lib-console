@@ -16,6 +16,19 @@ const { reduceError, requestInterceptorBuilder, responseInterceptor, createReque
 const { codes } = require('./SDKErrors')
 
 /**
+ * @typedef {object} Response
+ * @property {string} url requested url
+ * @property {boolean} ok response ok indicator
+ * @property {number} status response status code
+ * @property {number} statusText response status text
+ * @property {object} headers response headers
+ * @property {object} body response body object
+ * @property {object} obj response body object
+ * @property {object} data response body string
+ * @property {object} text response body string
+ */
+
+/**
  * @typedef {object} ProjectDetails
  * @property {string} name Name
  * @property {string} title Title

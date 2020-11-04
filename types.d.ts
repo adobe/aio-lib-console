@@ -27,6 +27,29 @@ declare function requestInterceptorBuilder(coreConsoleAPIInstance: any, apihost:
 declare function responseInterceptor(res: any): any;
 
 /**
+ * @property url - requested url
+ * @property ok - response ok indicator
+ * @property status - response status code
+ * @property statusText - response status text
+ * @property headers - response headers
+ * @property body - response body object
+ * @property obj - response body object
+ * @property data - response body string
+ * @property text - response body string
+ */
+declare type Response = {
+    url: string;
+    ok: boolean;
+    status: number;
+    statusText: number;
+    headers: any;
+    body: any;
+    obj: any;
+    data: any;
+    text: any;
+};
+
+/**
  * @property name - Name
  * @property title - Title
  * @property [who_created] - Creator name
