@@ -30,14 +30,14 @@ declare function responseInterceptor(res: any): any;
  * @property name - Name
  * @property title - Title
  * @property [who_created] - Creator name
- * @property description - Description
+ * @property [description] - Description
  * @property type - Type (default or jaeger)
  */
 declare type ProjectDetails = {
     name: string;
     title: string;
     who_created?: string;
-    description: string;
+    description?: string;
     type: string;
 };
 

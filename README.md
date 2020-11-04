@@ -878,7 +878,7 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | name | <code>string</code> | Name |
 | title | <code>string</code> | Title |
 | [who_created] | <code>string</code> | Creator name |
-| description | <code>string</code> | Description |
+| [description] | <code>string</code> | Description |
 | type | <code>string</code> | Type (default or jaeger) |
 
 <a name="WorkspaceDetails"></a>
