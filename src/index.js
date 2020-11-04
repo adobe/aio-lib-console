@@ -28,7 +28,7 @@ const { codes } = require('./SDKErrors')
  * @property {string} name Name
  * @property {string} [title] Title
  * @property {string} [who_created] Creator name
- * @property {string} description Description
+ * @property {string} [description] Description
  * @property {string} [type] Type
  * @property {string} [quotaRule] quotaRule
  */

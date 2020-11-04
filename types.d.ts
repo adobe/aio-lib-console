@@ -45,7 +45,7 @@ declare type ProjectDetails = {
  * @property name - Name
  * @property [title] - Title
  * @property [who_created] - Creator name
- * @property description - Description
+ * @property [description] - Description
  * @property [type] - Type
  * @property [quotaRule] - quotaRule
  */
@@ -53,7 +53,7 @@ declare type WorkspaceDetails = {
     name: string;
     title?: string;
     who_created?: string;
-    description: string;
+    description?: string;
     type?: string;
     quotaRule?: string;
 };
