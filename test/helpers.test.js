@@ -8,20 +8,20 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-
-const { reduceError } = require('../src/helpers')
+const AioLogger = require('@adobe/aio-lib-core-logging')
+const helpers = require('../src/helpers')
 
 test('reduceError', () => {
   // no args produces empty object
-  expect(reduceError()).toEqual({})
+  expect(helpers.reduceError()).toEqual({})
 
   // unexpected properties returns the same error with no reduction
   const unexpectedError = { foo: 'bar' }
-  expect(reduceError(unexpectedError)).toEqual(unexpectedError)
+  expect(helpers.reduceError(unexpectedError)).toEqual(unexpectedError)
 
   // inadequate properties returns the same error with no reduction
   const unexpectedError2 = { foo: 'bar', response: {} }
-  expect(reduceError(unexpectedError2)).toEqual(unexpectedError2)
+  expect(helpers.reduceError(unexpectedError2)).toEqual(unexpectedError2)
 
   // expected properties returns the object reduced to a string
   const expectedError = {
@@ -34,5 +34,85 @@ test('reduceError', () => {
       }
     }
   }
-  expect(reduceError(expectedError)).toEqual("500 - Something went gang aft agley. ({\"error_code\":500101,\"message\":\"I'm giving it all I got, cap'n\"})")
+  expect(helpers.reduceError(expectedError)).toEqual("500 - Something went gang aft agley. ({\"error_code\":500101,\"message\":\"I'm giving it all I got, cap'n\"})")
+})
+
+describe('createRequestOptions', () => {
+  test('(apiKey, {})', () => {
+    expect(helpers.createRequestOptions('apiKey', {})).toEqual([{
+      'x-api-key': 'apiKey',
+      Authorization: '__placeholder__'
+    }, {
+      requestBody: undefined
+    }])
+  })
+  test('(apiKey, { parameters: { hello: 1, x-api-key: new } })', () => {
+    expect(helpers.createRequestOptions('apiKey', { parameters: { hello: 1, 'x-api-key': 'new' } })).toEqual([{
+      'x-api-key': 'new',
+      Authorization: '__placeholder__',
+      hello: 1
+    }, {
+      requestBody: undefined
+    }])
+  })
+
+  test('(apiKey, { parameters: { hello: 1, hola: 2 }, body: { bonjour: 3, gutenTag: 4 } })', () => {
+    expect(helpers.createRequestOptions('apiKey', { parameters: { hello: 1, hola: 2 }, body: { bonjour: 3, gutenTag: 4 } })).toEqual([{
+      'x-api-key': 'apiKey',
+      Authorization: '__placeholder__',
+      hello: 1,
+      hola: 2
+    }, {
+      requestBody: {
+        bonjour: 3,
+        gutenTag: 4
+      }
+    }])
+  })
+})
+
+test('requestInterceptorBuilder', () => {
+  const reqInterceptor = helpers.requestInterceptorBuilder({ accessToken: '123', apiKey: '456' }, 'theapihost.com')
+
+  expect(reqInterceptor({ url: 'https://example.com/hello/from/the?world=2', headers: {} })).toEqual({
+    url: 'https://theapihost.com/hello/from/the?world=2',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer 123',
+      'x-api-key': '456'
+    }
+  })
+
+  expect(reqInterceptor({ url: 'https://example.com/hello/from/the?world=2', headers: { 'Content-Type': 'someother', 'x-api-key': '789' } })).toEqual({
+    url: 'https://theapihost.com/hello/from/the?world=2',
+    headers: {
+      'Content-Type': 'someother',
+      Authorization: 'Bearer 123',
+      'x-api-key': '789'
+    }
+  })
+})
+
+describe('responseInterceptor', () => {
+  beforeEach(() => {
+    AioLogger.mockReset()
+  })
+  test('not json', () => {
+    const res = { ok: true, text: Buffer.from('hello yall') }
+    helpers.responseInterceptor({ ok: true, text: Buffer.from('hello yall') })
+    expect(AioLogger.debug).toHaveBeenCalledWith(`RESPONSE:\n${JSON.stringify(res, null, 2)}`)
+    expect(AioLogger.debug).toHaveBeenCalledWith('DATA:\nhello yall')
+  })
+  test('json', () => {
+    const res = { ok: true, text: Buffer.from('{"hello": "yall"}') }
+    helpers.responseInterceptor({ ok: true, text: Buffer.from('{"hello": "yall"}') })
+    expect(AioLogger.debug).toHaveBeenCalledWith(`RESPONSE:\n${JSON.stringify(res, null, 2)}`)
+    expect(AioLogger.debug).toHaveBeenCalledWith('DATA:\n{\n  "hello": "yall"\n}')
+  })
+  test('not ok', () => {
+    const res = { ok: false, text: Buffer.from('this is an error response') }
+    helpers.responseInterceptor({ ok: false, text: Buffer.from('this is an error response') })
+    expect(AioLogger.debug).toHaveBeenCalledWith(`RESPONSE:\n${JSON.stringify(res, null, 2)}`)
+    expect(AioLogger.debug).toHaveBeenCalledTimes(1)
+  })
 })

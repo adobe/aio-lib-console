@@ -18,7 +18,7 @@ const apiSpec = fs.readFileSync(path.join(__dirname, '../spec/api.json'))
 const apiSpecJSON = JSON.parse(apiSpec.toString())
 const endpointBaseURL = apiSpecJSON.servers[0].url
   .replace(/\/+$/, '') // remove any trailing forward slashes, if any
-  .replace(/{APISERVER}/g, 'developers') // substitute for the right api server
+  .replace(/developers-stage.adobe.io/g, 'developers.adobe.io/console') // substitute for the right api server
 
 jest.unmock('swagger-client')
 
@@ -64,29 +64,7 @@ test('test getOrganizations without apiKey', async () => {
   const method = 'GET'
   const sdkClient = await sdk.init('accesstoken')
 
-  mockResponseWithMethod(url, method, [
-    {
-      id: '918',
-      code: '048F5DE85620B4D8',
-      name: 'MAC New Feature Testing',
-      description: null,
-      type: 'entp',
-      roles: [
-        {
-          principal: '048F5DE85620B4D8',
-          organization: '048F5DE85620B4D8',
-          target: '048F5DE85620B4D8',
-          named_role: 'org_admin',
-          target_type: 'TRG_ORG',
-          target_data: {}
-        }
-      ],
-      role: 'ADMIN'
-    }
-  ])
+  mockResponseWithMethod(url, method, [{}])
   // check success response
-  var res = await sdkClient.getOrganizations()
-  expect(res.ok).toBe(true)
-  expect(Array.isArray(res.body)).toBe(true)
-  expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
+  await expect(sdkClient.getOrganizations()).rejects.toThrow('[CoreConsoleAPISDK:ERROR_GET_ORGANIZATIONS] Error: Required parameter x-api-key is not provided')
 })
