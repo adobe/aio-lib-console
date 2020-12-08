@@ -42,4 +42,7 @@ const mockSwaggerClient = {
   }
 }
 
-module.exports = jest.fn(() => mockSwaggerClient)
+const mockSwagger = jest.fn(() => mockSwaggerClient)
+mockSwagger.http = jest.fn()
+
+module.exports = mockSwagger

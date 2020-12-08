@@ -156,6 +156,7 @@ with valid values for apiKey and accessToken
     * [.getAllApplicationsForUser(organizationId, offset, pageSize)](#CoreConsoleAPI+getAllApplicationsForUser) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.uploadApplicationIcon(organizationId, applicationId, icon)](#CoreConsoleAPI+uploadApplicationIcon) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAppRegistryHealth(organizationId)](#CoreConsoleAPI+getAppRegistryHealth) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -814,6 +815,20 @@ Get App Registry (Exchange) health
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
+
+<a name="CoreConsoleAPI+getSDKProperties"></a>
+
+### coreConsoleAPI.getSDKProperties(organizationId, integrationId, sdkCode) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
+Get details about a service (SDK) subscribed to an integration
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: <code>Promise.&lt;ConsoleResponse&gt;</code> - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| integrationId | <code>string</code> | Integration ID |
+| sdkCode | <code>string</code> | the service sdkCode to query (e.g. AdobeAnalyticsSDK) |
 
 <a name="createRequestOptions"></a>
 
