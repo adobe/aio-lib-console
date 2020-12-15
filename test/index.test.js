@@ -510,7 +510,7 @@ test('createRuntimeNamespace', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace',
+    fullyQualifiedApiName: 'runtime.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace',
     sdkFunctionName: 'createRuntimeNamespace',
     apiParameters,
     apiOptions,
