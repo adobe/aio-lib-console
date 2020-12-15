@@ -646,7 +646,7 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters }
 
     try {
-      const res = await this.sdk.apis.workspaces
+      const res = await this.sdk.apis.runtime
         .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__namespace(
           ...this.__createRequestOptions(parameters)
         )
