@@ -966,3 +966,57 @@ test('getAppRegistryHealth', async () => {
     ErrorClass: codes.ERROR_GET_APPREGISTRY_HEALTH
   })
 })
+
+test('getSDKProperties', async () => {
+  const sdkClient = await createSdkClient()
+  const sdkArgs = {
+    orgId: 'organizationId',
+    intId: 'integrationId',
+    sdkCode: 'sdkCode'
+  }
+
+  // test missing args
+  const messageValues = `missing one or more of "${sdkArgs.orgId}, ${sdkArgs.intId}, ${sdkArgs.sdkCode}" parameters`
+
+  await expect(sdkClient.getSDKProperties(undefined, undefined, undefined))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
+  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, undefined, undefined))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
+  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, undefined))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
+  await expect(sdkClient.getSDKProperties(undefined, sdkArgs.intId, sdkArgs.sdkCode))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
+
+  // test request - success
+  const Swagger = require('swagger-client')
+  Swagger.http.mockResolvedValue({
+    body: 'success'
+  })
+  await sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode)
+  expect(Swagger.http).toHaveBeenCalledTimes(1)
+  expect(Swagger.http).toHaveBeenCalledWith({
+    url: 'https://console.adobe.io/graphql',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': gApiKey,
+      Authorization: `Bearer ${gAccessToken}`
+    },
+    body: expect.any(String)
+  })
+
+  // failure cases
+  /// returns an error array
+  Swagger.http.mockReset()
+  Swagger.http.mockResolvedValue({
+    body: { errors: [{ err: 'fake error' }] }
+  })
+  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues: JSON.stringify({ err: 'fake error' }) }))
+  /// Swagger.http throws
+  Swagger.http.mockReset()
+  const err = new Error('some API error')
+  Swagger.http.mockRejectedValue(err)
+  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode))
+    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues: err }))
+})

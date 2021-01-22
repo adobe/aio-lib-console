@@ -365,7 +365,7 @@ describe('Workspace credential test', () => {
       expect(res.body.client_secrets).toBeDefined()
     })
 
-    // commented out because endpoint returns 404
+    // commented out because endpoint returns 404 - tracked internally at IOC-4292
     // test('test uploadAndBindCertificate API', async () => {
     //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
 
@@ -488,7 +488,7 @@ describe('Workspace credential test', () => {
       expect(res.body.client_secrets).toBeDefined()
     })
 
-    // atlas policy apis - commented out because return 405 method not allowed ?
+    // atlas policy apis - commented out because return 405 method not allowed ? - tracked internally at IOC-4290
     // test('test getAtlasApplicationPolicy API', async () => {
     //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
     //   expect(orgId).toBeDefined()
@@ -687,7 +687,7 @@ describe('delete workspace/project', () => {
 })
 
 // Test organization integrations (similar to workspace credentials), commented out
-// because delete integration is failing..
+// because delete integration is failing.. - tracked internally at IOC-4291
 
 // describe('Organization Integration tests', () => {
 //   describe('Enterprise integration', () => {

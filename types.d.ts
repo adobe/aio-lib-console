@@ -490,5 +490,13 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getAppRegistryHealth(organizationId: string): Promise<Response>;
+    /**
+     * Get details about a service (SDK) subscribed to an integration
+     * @param organizationId - Organization AMS ID
+     * @param integrationId - Integration ID
+     * @param sdkCode - the service sdkCode to query (e.g. AdobeAnalyticsSDK)
+     * @returns the response
+     */
+    getSDKProperties(organizationId: string, integrationId: string, sdkCode: string): Promise<ConsoleResponse>;
 }
 
