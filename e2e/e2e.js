@@ -27,7 +27,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
 
@@ -36,6 +36,7 @@ const fireflyProjectName = 'FPN' + ts
 const projectDescription = 'PDESC' + ts
 const modifiedProjectDescription = 'mod' + ts
 const workspaceName = 'WN' + ts
+const fireflyWorkspaceName = 'FWN' + ts
 const workspaceDescription = 'WDESC' + ts
 const modifiedWorkspaceDescription = 'mod' + ts
 const credentialNameAdobeId = 'cred-oauth' + ts
@@ -95,7 +96,7 @@ describe('organizations', () => {
 })
 
 describe('create, edit, get', () => {
-  test('test createFireflyProject API', async () => {
+  test('test createFireflyProject API with trailing spaces in title and description', async () => {
     expect(orgId).toBeDefined()
 
     const res = await sdkClient.createFireflyProject(orgId, { name: fireflyProjectName, title: 'E2ETestFireflyProjectTitle', description: projectDescription })
@@ -110,7 +111,7 @@ describe('create, edit, get', () => {
     console.log('Firefly Project created with Id: ' + fireflyProjectId)
   })
 
-  test('test createProject API', async () => {
+  test('test createProject API (default project type)', async () => {
     expect(orgId).toBeDefined()
 
     const projectType = 'default'
@@ -127,7 +128,7 @@ describe('create, edit, get', () => {
     console.log('Default workspace was created with Id: ' + defaultWorkspaceId)
   })
 
-  test('test editProject API', async () => {
+  test('test editProject API (default project type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -138,6 +139,24 @@ describe('create, edit, get', () => {
     expect(typeof (res.body)).toBe('object')
     expect(res.body.description).toEqual(modifiedProjectDescription)
     expect(res.body.id).toEqual(projectId)
+  })
+
+  test('test editProject API (firefly project type and with trailing spaces in title and description)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+
+    const res = await sdkClient.editProject(
+      orgId,
+      fireflyProjectId,
+      { name: fireflyProjectName, description: modifiedProjectDescription, title: 'modified project title', type: 'jaeger' }
+    )
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.description).toEqual(modifiedProjectDescription)
+    expect(res.body.title).toEqual('modified project title')
+    expect(res.body.id).toEqual(fireflyProjectId)
   })
 
   test('test getProject API (default type)', async () => {
@@ -166,9 +185,10 @@ describe('create, edit, get', () => {
     expect(res.body.name).toEqual(fireflyProjectName)
     expect(res.body.appId).toBeTruthy()
     expect(res.body.id).toEqual(fireflyProjectId)
+    expect(res.body.description).toEqual(modifiedProjectDescription)
   })
 
-  test('test createWorkspace API - should fail because only one is allowed for a default project', async () => {
+  test('test createWorkspace API for default project type - should fail because only one is allowed for a default project', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
@@ -181,7 +201,7 @@ describe('create, edit, get', () => {
   })
 
   /*  This is required because "Only one workspace allowed for project type default" */
-  test('test deleteWorkspace API (to delete the default workspace)', async () => {
+  test('test deleteWorkspace API for default project type (to delete the default workspace)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
@@ -192,7 +212,7 @@ describe('create, edit, get', () => {
     expect(res.statusText).toBe('OK')
   })
 
-  test('test createWorkspace API', async () => {
+  test('test createWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -207,7 +227,37 @@ describe('create, edit, get', () => {
     console.log('Workspace created with Id: ' + workspaceId)
   })
 
-  test('test getWorkspacesForProject API', async () => {
+  test('test createWorkspace API for firefly project type (with trailing spaces in title and description)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    const res = await sdkClient.createWorkspace(orgId, fireflyProjectId, { name: fireflyWorkspaceName, title: 'workspace title', description: workspaceDescription })
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(201)
+    expect(res.statusText).toBe('Created')
+    expect(typeof (res.body)).toBe('object')
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'workspaceId']))
+    expect(res.body.projectId).toEqual(fireflyProjectId)
+    fireflyWorkspaceId = res.body.workspaceId
+    console.log('Workspace created with Id: ' + fireflyWorkspaceId)
+  })
+
+  test('test getWorkspacesForProject API for firefly project type', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.getWorkspacesForProject(orgId, fireflyProjectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(Array.isArray(res.body)).toBe(true)
+    expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'title', 'description', 'id']))
+    const workspaceNames = res.body.map(x => x.name)
+    expect(workspaceNames).toEqual(expect.arrayContaining(['Production', fireflyWorkspaceName])) // no Stage workspace by default
+    expect(res.body.map(x => x.id)).toEqual(expect.arrayContaining([fireflyWorkspaceId]))
+  })
+
+  test('test getWorkspacesForProject API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -222,7 +272,7 @@ describe('create, edit, get', () => {
     expect(res.body[0].id).toEqual(workspaceId)
   })
 
-  test('test editWorkspace API', async () => {
+  test('test editWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -234,7 +284,19 @@ describe('create, edit, get', () => {
     expect(res.body.description).toBe(modifiedWorkspaceDescription)
   })
 
-  test('test getWorkspace API', async () => {
+  test('test editWorkspace API for firefly project type', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.editWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId, { name: fireflyWorkspaceName, description: modifiedWorkspaceDescription })
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(res.body.description).toBe(modifiedWorkspaceDescription)
+  })
+
+  test('test getWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -248,7 +310,21 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(workspaceId)
   })
 
-  test('test getProjectForWorkspace API', async () => {
+  test('test getWorkspace API for firefly project type', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.getWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.description).toEqual(modifiedWorkspaceDescription)
+    expect(res.body.id).toEqual(fireflyWorkspaceId)
+  })
+
+  test('test getProjectForWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -260,6 +336,20 @@ describe('create, edit, get', () => {
     expect(typeof (res.body)).toBe('object')
     expect(res.body.projectId).toEqual(projectId)
     expect(res.body.workspaceId).toEqual(workspaceId)
+  })
+
+  test('test getProjectForWorkspace API for firefly project type', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.getProjectForWorkspace(orgId, fireflyWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.projectId).toEqual(fireflyProjectId)
+    expect(res.body.workspaceId).toEqual(fireflyWorkspaceId)
   })
 })
 
@@ -663,6 +753,17 @@ describe('delete workspace/project', () => {
     expect(res.statusText).toBe('OK')
   })
 
+  test('test deleteWorkspace API for firefly project', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+
   test('test deleteProject API (default type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -823,3 +924,84 @@ describe('delete workspace/project', () => {
 //     })
 //   })
 // })
+
+describe('create, edit, get, delete: test trailing spaces', () => {
+  let trailingProjectId, trailingWorkspaceId
+  const trailingProjectName = 't' + fireflyProjectName
+  const trailingWorkspaceName = 't' + fireflyWorkspaceName
+
+  test('test trailing spaces for firefly project', async () => {
+    expect(orgId).toBeDefined()
+
+    const projectDescriptionWithTrailingSpaces = ` ${projectDescription} `
+    const projectTitle = 'E2E Test Firefly Project Title'
+    const projectTitleWithTrailingSpaces = ` ${projectTitle} `
+
+    let res = await sdkClient.createFireflyProject(orgId, { name: trailingProjectName, title: projectTitleWithTrailingSpaces, description: projectDescriptionWithTrailingSpaces })
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(201)
+    expect(res.statusText).toBe('Created')
+    expect(typeof (res.body)).toBe('object')
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['runtime', 'projectId', 'appId', 'workspaces', 'projectType']))
+    expect(Array.isArray(res.body.workspaces)).toBe(true)
+    expect(res.body.workspaces[0].workspaceId).toBeDefined()
+    trailingProjectId = res.body.projectId
+    console.log('Firefly Project created with Id: ' + trailingProjectId)
+
+    // ! trailing spaces are removed when get or edit
+    res = await sdkClient.getProject(orgId, trailingProjectId)
+    expect(res.body.title).toEqual(projectTitle)
+    expect(res.body.description).toEqual(projectDescription)
+
+    const modifiedTitle = 'some other title'
+    res = await sdkClient.editProject(orgId, trailingProjectId, { name: trailingProjectName, title: ` ${modifiedTitle} `, description: ` ${modifiedProjectDescription} ` })
+
+    expect(res.body.title).toEqual(modifiedTitle)
+    expect(res.body.description).toEqual(modifiedProjectDescription)
+  })
+
+  test('test trailing spaces for firefly workspace', async () => {
+    expect(orgId).toBeDefined()
+    expect(trailingProjectId).toBeDefined()
+
+    const workspaceTitle = 'workspace title'
+    const workspaceTitleWithTrailingSpaces = ` ${workspaceTitle} `
+    const workspaceDescriptionWithTrailingSpaces = ` ${workspaceDescription} `
+
+    let res = await sdkClient.createWorkspace(orgId, trailingProjectId, { name: trailingWorkspaceName, title: workspaceTitleWithTrailingSpaces, description: workspaceDescriptionWithTrailingSpaces })
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(201)
+    expect(res.statusText).toBe('Created')
+    expect(typeof (res.body)).toBe('object')
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'workspaceId']))
+    expect(res.body.projectId).toEqual(trailingProjectId)
+    trailingWorkspaceId = res.body.workspaceId
+    console.log('Workspace created with Id: ' + trailingWorkspaceId)
+
+    // ! trailing spaces are removed when get or edit
+
+    res = await sdkClient.getWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    expect(res.body.title).toEqual(workspaceTitle)
+    expect(res.body.description).toEqual(workspaceDescription)
+
+    const modifiedTitle = 'some other title'
+    res = await sdkClient.editWorkspace(orgId, trailingProjectId, trailingWorkspaceId, { name: trailingWorkspaceName, title: ` ${modifiedTitle} `, description: ` ${modifiedWorkspaceDescription} ` })
+    expect(res.body.title).toEqual(modifiedTitle)
+    expect(res.body.description).toEqual(modifiedProjectDescription)
+  })
+  test('delete', async () => {
+    expect(orgId).toBeDefined()
+    expect(trailingProjectId).toBeDefined()
+    expect(trailingWorkspaceId).toBeDefined()
+
+    let res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+
+    res = await sdkClient.deleteProject(orgId, trailingProjectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+})
