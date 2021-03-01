@@ -96,7 +96,7 @@ describe('organizations', () => {
 })
 
 describe('create, edit, get', () => {
-  test('test createFireflyProject API with trailing spaces in title and description', async () => {
+  test('test createFireflyProject API', async () => {
     expect(orgId).toBeDefined()
 
     const res = await sdkClient.createFireflyProject(orgId, { name: fireflyProjectName, title: 'E2ETestFireflyProjectTitle', description: projectDescription })
@@ -141,7 +141,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(projectId)
   })
 
-  test('test editProject API (firefly project type and with trailing spaces in title and description)', async () => {
+  test('test editProject API for firefly project', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
 
@@ -227,7 +227,7 @@ describe('create, edit, get', () => {
     console.log('Workspace created with Id: ' + workspaceId)
   })
 
-  test('test createWorkspace API for firefly project type (with trailing spaces in title and description)', async () => {
+  test('test createWorkspace API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     const res = await sdkClient.createWorkspace(orgId, fireflyProjectId, { name: fireflyWorkspaceName, title: 'workspace title', description: workspaceDescription })
