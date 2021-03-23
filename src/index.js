@@ -116,13 +116,17 @@ class CoreConsoleAPI {
    *      (which defaults to `prod` as well if not set)
    * @returns {Promise<CoreConsoleAPI>} a CoreConsoleAPI object
    */
-  async init (accessToken, apiKey, env = getCliEnv()) {
+  async init (accessToken, apiKey, env) {
     const initErrors = []
     if (!accessToken) {
       initErrors.push('accessToken')
     }
 
-    const apiHost = API_HOST[env] || API_HOST[DEFAULT_ENV]
+    let apiHost = API_HOST[env]
+    if (!apiHost) {
+      apiHost = API_HOST[DEFAULT_ENV]
+      env = DEFAULT_ENV
+    }
 
     if (initErrors.length) {
       const sdkDetails = { accessToken }
@@ -1273,10 +1277,9 @@ class CoreConsoleAPI {
         }
       }`
 
-      const consoleGraphQLEndpoint = CONSOLE_GRAPHQL_ENDPOINT[this.env] || CONSOLE_GRAPHQL_ENDPOINT[DEFAULT_ENV]
       // send the request
       response = await Swagger.http({
-        url: consoleGraphQLEndpoint,
+        url: CONSOLE_GRAPHQL_ENDPOINT[this.env],
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
