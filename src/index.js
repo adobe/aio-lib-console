@@ -14,6 +14,7 @@ const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
 const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
 const { codes } = require('./SDKErrors')
+const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
 
 /**
  * @typedef {object} Response
@@ -57,8 +58,6 @@ const { codes } = require('./SDKErrors')
  * @property {object} [approvalInfo] approvalInfo
  */
 
-const DEFAULT_ENVIRONMENT = 'prod'
-
 const API_HOST = {
   prod: 'developers.adobe.io',
   stage: 'developers-stage.adobe.io'
@@ -76,10 +75,14 @@ const CONSOLE_GRAPHQL_ENDPOINT = {
  *
  * @param {string} accessToken the access token corresponding to an integration or user token
  * @param {string} apiKey api key to access the Developer Console
- * @param {string} [env=prod] the server environment ('prod' or 'stage')
+ * @param {string} env The name of the environment. `prod` and `stage`
+ *      are the only values supported. `prod` is default and any value
+ *      other than `prod` or `stage` it is assumed to be the default
+ *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
+ *      (which defaults to `prod` as well if not set)
  * @returns {Promise<CoreConsoleAPI>} a Promise with a CoreConsoleAPI object
  */
-function init (accessToken, apiKey, env = DEFAULT_ENVIRONMENT) {
+function init (accessToken, apiKey, env = getCliEnv()) {
   return new Promise((resolve, reject) => {
     const clientWrapper = new CoreConsoleAPI()
 
@@ -106,13 +109,23 @@ class CoreConsoleAPI {
    *
    * @param {string} accessToken the access token corresponding to an integration or user token
    * @param {string} apiKey api key to access the Developer Console
-   * @param {string} [env=prod] the server environment ('prod' or 'stage')
+   * @param {string} env The name of the environment. `prod` and `stage`
+   *      are the only values supported. `prod` is default and any value
+   *      other than `prod` or `stage` it is assumed to be the default
+   *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
+   *      (which defaults to `prod` as well if not set)
    * @returns {Promise<CoreConsoleAPI>} a CoreConsoleAPI object
    */
   async init (accessToken, apiKey, env) {
     const initErrors = []
     if (!accessToken) {
       initErrors.push('accessToken')
+    }
+
+    let apiHost = API_HOST[env]
+    if (!apiHost) {
+      apiHost = API_HOST[DEFAULT_ENV]
+      env = DEFAULT_ENV
     }
 
     if (initErrors.length) {
@@ -123,7 +136,7 @@ class CoreConsoleAPI {
       const spec = require('../spec/api.json')
       const swagger = new Swagger({
         spec: spec,
-        requestInterceptor: requestInterceptorBuilder(this, API_HOST[env]),
+        requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
         usePromise: true
       })
@@ -1263,6 +1276,7 @@ class CoreConsoleAPI {
           __typename
         }
       }`
+
       // send the request
       response = await Swagger.http({
         url: CONSOLE_GRAPHQL_ENDPOINT[this.env],
