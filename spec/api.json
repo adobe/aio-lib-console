@@ -25,6 +25,10 @@
     {
       "name": "AtlasPolicyEngine",
       "description": "APIs for Atlas Policy Engine"
+    },
+    {
+      "name": "Extensions",
+      "description": "APIs for App Registry and Extension Registry"
     }
   ],
   "paths": {
@@ -7227,6 +7231,2370 @@
             "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/%7BcredentialId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app": {
+      "get": {
+        "summary": "Get list of extensions for an org",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "appId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "publisherId": {
+                        "type": "string"
+                      },
+                      "icon": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "icon id"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "icon name"
+                          },
+                          "link": {
+                            "type": "string",
+                            "description": "icon link"
+                          }
+                        }
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "isPrivate": {
+                        "type": "string"
+                      },
+                      "media": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "media id"
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "image"
+                            },
+                            "order": {
+                              "type": "string",
+                              "description": "Order of media 0|1|2"
+                            },
+                            "icon": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "icon id"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "icon name"
+                                },
+                                "link": {
+                                  "type": "string",
+                                  "description": "icon link"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "support": {
+                        "type": "object",
+                        "properties": {
+                          "email": {
+                            "type": "string",
+                            "description": "support email"
+                          },
+                          "contact": {
+                            "type": "string",
+                            "description": "support contact"
+                          },
+                          "website": {
+                            "type": "string",
+                            "description": "support website"
+                          }
+                        }
+                      },
+                      "lifecycle": {
+                        "type": "object",
+                        "properties": {
+                          "created": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "lastModified": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "submitted": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "published": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "reviewed": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "unpublished": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "workspaces": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "name of the workspace"
+                            },
+                            "id": {
+                              "type": "string",
+                              "description": "workspace id"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Request"
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "icon id"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "icon name"
+                        },
+                        "link": {
+                          "type": "string",
+                          "description": "icon link"
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "isPrivate": {
+                      "type": "string"
+                    },
+                    "media": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "media id"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "image"
+                          },
+                          "order": {
+                            "type": "string",
+                            "description": "Order of media 0|1|2"
+                          },
+                          "icon": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "icon id"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "icon name"
+                              },
+                              "link": {
+                                "type": "string",
+                                "description": "icon link"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "support": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "support email"
+                        },
+                        "contact": {
+                          "type": "string",
+                          "description": "support contact"
+                        },
+                        "website": {
+                          "type": "string",
+                          "description": "support website"
+                        }
+                      }
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "workspaces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "name of the workspace"
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "workspace id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Submit an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "appType": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "notes": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "appType": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "submitted": {
+                        "type": "object",
+                        "properties": {
+                          "by": {
+                            "type": "object",
+                            "properties": {
+                              "guid": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "notes": {
+                            "type": "string"
+                          },
+                          "on": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app/{appId}": {
+      "put": {
+        "summary": "Update an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Request"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "appId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "icon id"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "icon name"
+                        },
+                        "link": {
+                          "type": "string",
+                          "description": "icon link"
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "isPrivate": {
+                      "type": "string"
+                    },
+                    "media": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "media id"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "image"
+                          },
+                          "order": {
+                            "type": "string",
+                            "description": "Order of media 0|1|2"
+                          },
+                          "icon": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "icon id"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "icon name"
+                              },
+                              "link": {
+                                "type": "string",
+                                "description": "icon link"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "support": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "support email"
+                        },
+                        "contact": {
+                          "type": "string",
+                          "description": "support contact"
+                        },
+                        "website": {
+                          "type": "string",
+                          "description": "support website"
+                        }
+                      }
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "workspaces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "name of the workspace"
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "workspace id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Invalid Input"
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app/{appId}/workspace": {
+      "post": {
+        "summary": "Create a new workspace in an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Requestbody"
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "endpoints": {
+                      "type": "object",
+                      "properties": {
+                        "additionalProp1": {
+                          "type": "object"
+                        },
+                        "additionalProp2": {
+                          "type": "object"
+                        },
+                        "additionalProp3": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "licenseGroupIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "releaseNotes": {
+                      "type": "string"
+                    },
+                    "technicalUserId": {
+                      "type": "string"
+                    },
+                    "appId": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app/{appId}/workspace/{workspaceId}": {
+      "put": {
+        "summary": "Update a workspace in an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Requestbody"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "endpoints": {
+                      "type": "object",
+                      "properties": {
+                        "additionalProp1": {
+                          "type": "object"
+                        },
+                        "additionalProp2": {
+                          "type": "object"
+                        },
+                        "additionalProp3": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "licenseGroupIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "releaseNotes": {
+                      "type": "string"
+                    },
+                    "technicalUserId": {
+                      "type": "string"
+                    },
+                    "appId": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get details of a workspace in an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "endpoints": {
+                      "type": "object",
+                      "properties": {
+                        "additionalProp1": {
+                          "type": "object"
+                        },
+                        "additionalProp2": {
+                          "type": "object"
+                        },
+                        "additionalProp3": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "licenseGroupIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "releaseNotes": {
+                      "type": "string"
+                    },
+                    "technicalUserId": {
+                      "type": "string"
+                    },
+                    "appId": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete a workspace in an extension",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "App ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Requestbody"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "endpoints": {
+                      "type": "object",
+                      "properties": {
+                        "additionalProp1": {
+                          "type": "object"
+                        },
+                        "additionalProp2": {
+                          "type": "object"
+                        },
+                        "additionalProp3": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "licenseGroupIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "releaseNotes": {
+                      "type": "string"
+                    },
+                    "technicalUserId": {
+                      "type": "string"
+                    },
+                    "appId": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app/{appName}": {
+      "get": {
+        "summary": "Check Extension Name",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/xp/{xpId}": {
+      "get": {
+        "summary": "Get all available extension points",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "serviceCode": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "idVer": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "specVersion": {
+                      "type": "string"
+                    },
+                    "operations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "ficodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If service code or EP ID is not found"
+          },
+          "405": {
+            "description": "Invalid Input"
+          }
+        }
       }
     }
   },
