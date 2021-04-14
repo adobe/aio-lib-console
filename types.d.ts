@@ -103,6 +103,95 @@ declare type AdobeIdIntegrationDetails = {
 };
 
 /**
+ * @property id - Id
+ */
+declare type ExtensionIcon = {
+    id: string;
+};
+
+/**
+ * @property id - Id
+ * @property type - Type
+ * @property order - order
+ */
+declare type ExtensionMedia = {
+    id: string;
+    type: string;
+    order: string;
+};
+
+/**
+ * @property name - Name
+ * @property title - Title
+ * @property description - Description
+ * @property version - Version
+ * @property icon - Icon
+ * @property media - array of Media Objects
+ */
+declare type ExtensionDetails = {
+    name: string;
+    title: string;
+    description: string;
+    version: string;
+    icon: ExtensionIcon;
+    media: ExtensionMedia[];
+};
+
+/**
+ * @property appType - app type
+ * @property id - Id
+ * @property notes - Notes
+ */
+declare type ExtensionSubmissionDetails = {
+    appType: string;
+    id: string;
+    notes: string;
+};
+
+/**
+ * @property additionalProp1 - additional property 1
+ * @property additionalProp2 - additional property 2
+ */
+declare type ExtensionWrokspaceEndpoints = {
+    additionalProp1: any;
+    additionalProp2: any;
+};
+
+/**
+ * @property code - Code
+ * @property name - Name
+ * @property licenseGroupIds - License group Ids
+ */
+declare type ExtensionWorkspaceServices = {
+    code: string;
+    name: string;
+    licenseGroupIds: string[];
+};
+
+/**
+ * @property id - Id
+ * @property name - Name
+ * @property endpoints - Description
+ * @property services - Services
+ * @property icon - Icon
+ * @property releaseNotes - Release Notes
+ * @property technicalUserId - Technical user Id
+ * @property appId - App Id
+ * @property publisherId - Publisher Id
+ */
+declare type ExtensionWorkspaceDetails = {
+    id: string;
+    name: string;
+    endpoints: ExtensionWrokspaceEndpoints;
+    services: ExtensionWorkspaceServices;
+    icon: ExtensionIcon;
+    releaseNotes: string;
+    technicalUserId: string;
+    appId: string;
+    publisherId: string;
+};
+
+/**
  * Returns a Promise that resolves with a new CoreConsoleAPI object
  * @param accessToken - the access token corresponding to an integration or user token
  * @param apiKey - api key to access the Developer Console
@@ -490,6 +579,100 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getAppRegistryHealth(organizationId: string): Promise<Response>;
+    /**
+     * Get list of extensions for an org
+     * @param organizationId - Organization AMS ID
+     * @param [options] - Query options
+     * @param [options.appId] - App ID
+     * @param [options.xp] - xp
+     * @returns the response
+     */
+    getExtensionsForOrg(organizationId: string, options?: {
+        appId?: string;
+        xp?: string;
+    }): Promise<Response>;
+    /**
+     * Create new Extension
+     * @param organizationId - Organization AMS ID
+     * @param extensionDetails - Extension details
+     * @returns the response
+     */
+    createExtension(organizationId: string, extensionDetails: ExtensionDetails): Promise<Response>;
+    /**
+     * Submit an Extension
+     * @param organizationId - Organization AMS ID
+     * @param submisssionDetails - Extension submission details
+     * @returns the response
+     */
+    submitExtension(organizationId: string, submisssionDetails: ExtensionSubmissionDetails[]): Promise<Response>;
+    /**
+     * Update an Extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @param extensionDetails - Extension details
+     * @returns the response
+     */
+    updateExtension(organizationId: string, appId: string, extensionDetails: ExtensionDetails): Promise<Response>;
+    /**
+     * Delete an Extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @returns the response
+     */
+    deleteExtension(organizationId: string, appId: string): Promise<Response>;
+    /**
+     * Create a new workspace in an extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @param workspaceDetails - Workspace details
+     * @returns the response
+     */
+    createExtensionWorkspace(organizationId: string, appId: string, workspaceDetails: ExtensionWorkspaceDetails): Promise<Response>;
+    /**
+     * Update a workspace in an extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @param workspaceId - Workspace ID
+     * @param workspaceDetails - Workspace details
+     * @returns the response
+     */
+    updateExtensionWorkspace(organizationId: string, appId: string, workspaceId: string, workspaceDetails: WorkspaceDetails): Promise<Response>;
+    /**
+     * Delete a workspace in an extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @param workspaceId - Workspace ID
+     * @returns the response
+     */
+    deleteExtensionWorkspace(organizationId: string, appId: string, workspaceId: string): Promise<Response>;
+    /**
+     * Get details of a workspace in an extension
+     * @param organizationId - Organization AMS ID
+     * @param appId - App ID
+     * @param workspaceId - Workspace ID
+     * @returns the response
+     */
+    getExtensionWorkspace(organizationId: string, appId: string, workspaceId: string): Promise<Response>;
+    /**
+     * Check Extension Name
+     * @param organizationId - Organization AMS ID
+     * @param appName - App Name
+     * @returns the response
+     */
+    checkExtensionName(organizationId: string, appName: string): Promise<Response>;
+    /**
+     * Get all available extension points
+     * @param organizationId - Organization AMS ID
+     * @param xpId - xp ID
+     * @param [options] - Query options
+     * @param [options.offset] - Offset
+     * @param [options.pageSize] - page size
+     * @returns the response
+     */
+    getAllExtensionPoints(organizationId: string, xpId: string, options?: {
+        offset?: number;
+        pageSize?: number;
+    }): Promise<Response>;
     /**
      * Get details about a service (SDK) subscribed to an integration
      * @param organizationId - Organization AMS ID

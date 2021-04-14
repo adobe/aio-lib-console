@@ -95,6 +95,20 @@ with valid values for apiKey and accessToken</p>
 <dd></dd>
 <dt><a href="#AdobeIdIntegrationDetails">AdobeIdIntegrationDetails</a> : <code>object</code></dt>
 <dd></dd>
+<dt><a href="#ExtensionIcon">ExtensionIcon</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionMedia">ExtensionMedia</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionDetails">ExtensionDetails</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionSubmissionDetails">ExtensionSubmissionDetails</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWrokspaceEndpoints">ExtensionWrokspaceEndpoints</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWorkspaceServices">ExtensionWorkspaceServices</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWorkspaceDetails">ExtensionWorkspaceDetails</a> : <code>object</code></dt>
+<dd></dd>
 </dl>
 
 <a name="CoreConsoleAPI"></a>
@@ -156,6 +170,17 @@ with valid values for apiKey and accessToken
     * [.getAllApplicationsForUser(organizationId, offset, pageSize)](#CoreConsoleAPI+getAllApplicationsForUser) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.uploadApplicationIcon(organizationId, applicationId, icon)](#CoreConsoleAPI+uploadApplicationIcon) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAppRegistryHealth(organizationId)](#CoreConsoleAPI+getAppRegistryHealth) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getExtensionsForOrg(organizationId, [options])](#CoreConsoleAPI+getExtensionsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.createExtension(organizationId, extensionDetails)](#CoreConsoleAPI+createExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.submitExtension(organizationId, submisssionDetails)](#CoreConsoleAPI+submitExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.updateExtension(organizationId, appId, extensionDetails)](#CoreConsoleAPI+updateExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.deleteExtension(organizationId, appId)](#CoreConsoleAPI+deleteExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.createExtensionWorkspace(organizationId, appId, workspaceDetails)](#CoreConsoleAPI+createExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.updateExtensionWorkspace(organizationId, appId, workspaceId, workspaceDetails)](#CoreConsoleAPI+updateExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.deleteExtensionWorkspace(organizationId, appId, workspaceId)](#CoreConsoleAPI+deleteExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getExtensionWorkspace(organizationId, appId, workspaceId)](#CoreConsoleAPI+getExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.checkExtensionName(organizationId, appName)](#CoreConsoleAPI+checkExtensionName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getAllExtensionPoints(organizationId, xpId, [options])](#CoreConsoleAPI+getAllExtensionPoints) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
@@ -816,6 +841,160 @@ Get App Registry (Exchange) health
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
 
+<a name="CoreConsoleAPI+getExtensionsForOrg"></a>
+
+### coreConsoleAPI.getExtensionsForOrg(organizationId, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get list of extensions for an org
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| [options] | <code>object</code> | Query options |
+| [options.appId] | <code>string</code> | App ID |
+| [options.xp] | <code>string</code> | xp |
+
+<a name="CoreConsoleAPI+createExtension"></a>
+
+### coreConsoleAPI.createExtension(organizationId, extensionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Create new Extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| extensionDetails | [<code>ExtensionDetails</code>](#ExtensionDetails) | Extension details |
+
+<a name="CoreConsoleAPI+submitExtension"></a>
+
+### coreConsoleAPI.submitExtension(organizationId, submisssionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Submit an Extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| submisssionDetails | [<code>Array.&lt;ExtensionSubmissionDetails&gt;</code>](#ExtensionSubmissionDetails) | Extension submission details |
+
+<a name="CoreConsoleAPI+updateExtension"></a>
+
+### coreConsoleAPI.updateExtension(organizationId, appId, extensionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Update an Extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+| extensionDetails | [<code>ExtensionDetails</code>](#ExtensionDetails) | Extension details |
+
+<a name="CoreConsoleAPI+deleteExtension"></a>
+
+### coreConsoleAPI.deleteExtension(organizationId, appId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Delete an Extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+
+<a name="CoreConsoleAPI+createExtensionWorkspace"></a>
+
+### coreConsoleAPI.createExtensionWorkspace(organizationId, appId, workspaceDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Create a new workspace in an extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+| workspaceDetails | [<code>ExtensionWorkspaceDetails</code>](#ExtensionWorkspaceDetails) | Workspace details |
+
+<a name="CoreConsoleAPI+updateExtensionWorkspace"></a>
+
+### coreConsoleAPI.updateExtensionWorkspace(organizationId, appId, workspaceId, workspaceDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Update a workspace in an extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+| workspaceId | <code>string</code> | Workspace ID |
+| workspaceDetails | [<code>WorkspaceDetails</code>](#WorkspaceDetails) | Workspace details |
+
+<a name="CoreConsoleAPI+deleteExtensionWorkspace"></a>
+
+### coreConsoleAPI.deleteExtensionWorkspace(organizationId, appId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Delete a workspace in an extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+| workspaceId | <code>string</code> | Workspace ID |
+
+<a name="CoreConsoleAPI+getExtensionWorkspace"></a>
+
+### coreConsoleAPI.getExtensionWorkspace(organizationId, appId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get details of a workspace in an extension
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appId | <code>string</code> | App ID |
+| workspaceId | <code>string</code> | Workspace ID |
+
+<a name="CoreConsoleAPI+checkExtensionName"></a>
+
+### coreConsoleAPI.checkExtensionName(organizationId, appName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Check Extension Name
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| appName | <code>string</code> | App Name |
+
+<a name="CoreConsoleAPI+getAllExtensionPoints"></a>
+
+### coreConsoleAPI.getAllExtensionPoints(organizationId, xpId, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get all available extension points
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| xpId | <code>string</code> | xp ID |
+| [options] | <code>object</code> | Query options |
+| [options.offset] | <code>number</code> | Offset |
+| [options.pageSize] | <code>number</code> | page size |
+
 <a name="CoreConsoleAPI+getSDKProperties"></a>
 
 ### coreConsoleAPI.getSDKProperties(organizationId, integrationId, sdkCode) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
@@ -947,6 +1126,96 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | [defaultRedirectUri] | <code>string</code> | Default redirect URI |
 | [domain] | <code>string</code> | domain |
 | [approvalInfo] | <code>object</code> | approvalInfo |
+
+<a name="ExtensionIcon"></a>
+
+## ExtensionIcon : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+
+<a name="ExtensionMedia"></a>
+
+## ExtensionMedia : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+| type | <code>string</code> | Type |
+| order | <code>string</code> | order |
+
+<a name="ExtensionDetails"></a>
+
+## ExtensionDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Name |
+| title | <code>string</code> | Title |
+| description | <code>string</code> | Description |
+| version | <code>string</code> | Version |
+| icon | [<code>ExtensionIcon</code>](#ExtensionIcon) | Icon |
+| media | [<code>Array.&lt;ExtensionMedia&gt;</code>](#ExtensionMedia) | array of Media Objects |
+
+<a name="ExtensionSubmissionDetails"></a>
+
+## ExtensionSubmissionDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| appType | <code>string</code> | app type |
+| id | <code>string</code> | Id |
+| notes | <code>string</code> | Notes |
+
+<a name="ExtensionWrokspaceEndpoints"></a>
+
+## ExtensionWrokspaceEndpoints : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| additionalProp1 | <code>object</code> | additional property 1 |
+| additionalProp2 | <code>object</code> | additional property 2 |
+
+<a name="ExtensionWorkspaceServices"></a>
+
+## ExtensionWorkspaceServices : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Code |
+| name | <code>string</code> | Name |
+| licenseGroupIds | <code>Array.&lt;string&gt;</code> | License group Ids |
+
+<a name="ExtensionWorkspaceDetails"></a>
+
+## ExtensionWorkspaceDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+| name | <code>string</code> | Name |
+| endpoints | [<code>ExtensionWrokspaceEndpoints</code>](#ExtensionWrokspaceEndpoints) | Description |
+| services | [<code>ExtensionWorkspaceServices</code>](#ExtensionWorkspaceServices) | Services |
+| icon | [<code>ExtensionIcon</code>](#ExtensionIcon) | Icon |
+| releaseNotes | <code>string</code> | Release Notes |
+| technicalUserId | <code>string</code> | Technical user Id |
+| appId | <code>string</code> | App Id |
+| publisherId | <code>string</code> | Publisher Id |
 
 ### Debug Logs
 
