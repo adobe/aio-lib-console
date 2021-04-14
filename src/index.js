@@ -56,6 +56,54 @@ const { codes } = require('./SDKErrors')
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
  */
+/**
+ * @typedef {object} ExtensionIcon
+ * @property {string} id Id
+ */
+/**
+ * @typedef {object} ExtensionMedia
+ * @property {string} id Id
+ * @property {string} type Type
+ * @property {string} order order
+ */
+/**
+ * @typedef {object} ExtensionDetails
+ * @property {string} name Name
+ * @property {string} title Title
+ * @property {string} description Description
+ * @property {string} version Version
+ * @property {ExtensionIcon} icon Icon
+ * @property {Array.<ExtensionMedia>} media array of Media Objects
+ */
+/**
+ * @typedef {object} ExtensionSubmissionDetails
+ * @property {string} appType app type
+ * @property {string} id Id
+ * @property {string} notes Notes
+ */
+/**
+ * @typedef {object} ExtensionWrokspaceEndpoints
+ * @property {object} additionalProp1 additional property 1
+ * @property {object} additionalProp2 additional property 2
+ */
+/**
+ * @typedef {object} ExtensionWorkspaceServices
+ * @property {string} code Code
+ * @property {string} name Name
+ * @property {Array.<string>} licenseGroupIds License group Ids
+ */
+/**
+ * @typedef {object} ExtensionWorkspaceDetails
+ * @property {string} id Id
+ * @property {string} name Name
+ * @property {ExtensionWrokspaceEndpoints} endpoints Description
+ * @property {ExtensionWorkspaceServices} services Services
+ * @property {ExtensionIcon} icon Icon
+ * @property {string} releaseNotes Release Notes
+ * @property {string} technicalUserId Technical user Id
+ * @property {string} appId App Id
+ * @property {string} publisherId Publisher Id
+ */
 
 const DEFAULT_ENVIRONMENT = 'prod'
 
@@ -1279,7 +1327,7 @@ class CoreConsoleAPI {
    * Submit an Extension
    *
    * @param {string} organizationId Organization AMS ID
-   * @param {ExtensionSubmissionDetails} submisssionDetails Extension submission details
+   * @param {Array.<ExtensionSubmissionDetails>} submisssionDetails Extension submission details
    * @returns {Promise<Response>} the response
    */
   async submitExtension (organizationId, submisssionDetails) {
