@@ -624,123 +624,6 @@ describe('Workspace credential test', () => {
   // missing analytics credentials tests
 })
 
-describe('App Registry APIs', () => {
-  let appId
-  let appName
-
-  test('test getAppRegistryHealth API', async () => {
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.getAppRegistryHealth(orgId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(res.body.status).toEqual('UP')
-  })
-
-  test('test getApplicationByName API', async () => {
-    expect(orgId).toBeDefined()
-    expect(fireflyProjectId).toBeDefined() // createFireflyProject test must have been successful
-
-    appName = `${orgId}-${fireflyProjectName}`
-
-    const res = await sdkClient.getApplicationByName(orgId, appName)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(res.body.name).toEqual(appName)
-    expect(res.body.appType).toEqual('JGR')
-    expect(res.body.status).toEqual('DRAFT')
-    expect(res.body.icon).toEqual(null)
-    expect(res.body.workspaces).toEqual([
-      expect.objectContaining({ name: 'Production' })
-      // expect.objectContaining({ name: workspaceName }) // soon
-    ])
-    appId = res.body.appId
-  })
-
-  test('test getApplicationById API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.getApplicationById(orgId, appId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(res.body.name).toEqual(appName)
-    expect(res.body.appType).toEqual('JGR')
-    expect(res.body.status).toEqual('DRAFT')
-    expect(res.body.icon).toEqual(null)
-  })
-
-  test('test getAllApplicationsForUser API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.getAllApplicationsForUser(orgId, 0, 20)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(Array.isArray(res.body.appList)).toBe(true)
-    // we expect our newly created app to be still in the first 20
-    expect(res.body.appList.some(a => a.appId === appId)).toBe(true)
-  })
-
-  test('test validateAppName API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.validateApplicationName(orgId, appName)
-    expect(res.body).toEqual(true)
-  })
-
-  test('test updateApplication API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-    // NOTE 1: updating a submitted app, returns 400
-
-    // NOTE 2: need to specify workspaces in applicationDetails otherwise get a 500
-    const res = await sdkClient.updateApplication(orgId, appId, { description: 'hello from e2e test', workspaces: [] })
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(res.body.description).toEqual('hello from e2e test')
-    // get again to confirm description change
-    const res2 = await sdkClient.getApplicationById(orgId, appId)
-    expect(res2.ok).toBe(true)
-    expect(res2.body.description).toEqual('hello from e2e test')
-  })
-
-  test('test uploadApplicationIcon API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-    // NOTE: updating a submitted app, returns 400
-
-    const res = await sdkClient.uploadApplicationIcon(orgId, appId, fs.createReadStream(path.join(__dirname, 'e2e-test-app-icon.jpg')))
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    // get again to confirm icon upload
-    const res2 = await sdkClient.getApplicationById(orgId, appId)
-    expect(res2.ok).toBe(true)
-    expect(res2.body.icon).toEqual(expect.any(String)) // is url
-  })
-
-  test('test submitApplication API', async () => {
-    expect(appId).toBeDefined() // if not, getApplicationByName test failed
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.submitApplication(orgId, appId, 'some notes')
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-    expect(res.body.status).toEqual('IN REVIEW')
-    // get again to confirm in review status
-    const res2 = await sdkClient.getApplicationById(orgId, appId)
-    expect(res2.ok).toBe(true)
-    expect(res2.body.status).toEqual('IN REVIEW')
-  })
-})
-
 describe('delete workspace/project', () => {
   test('test deleteWorkspace API', async () => {
     expect(orgId).toBeDefined()
@@ -1003,5 +886,211 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
+  })
+})
+
+describe('Extension API tests', () => {
+  let appId
+  let workspaceId
+  test('test create Extension API', async () => {
+    expect(orgId).toBeDefined()
+    const extensionDetails = {
+      name: 'testExt',
+      title: 'testExt',
+      description: 'test extension for Firefly e2e',
+      version: '1.0.0',
+      icon: {
+        id: 'testicon'
+      },
+      media: [
+        {
+          id: 'testid',
+          type: 'test',
+          order: 'test'
+        }
+      ]
+    }
+
+    const res = await sdkClient.createExtension(orgId, extensionDetails)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body).toHaveProperty('appId')
+    appId = res.body.appId // save appId for testing other calls
+    expect(res.body).toHaveProperty('publisherId')
+    expect(res.body).toHaveProperty('lifecycle')
+  })
+
+  test('test Update Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    const extensionDetails = {
+      name: 'testExt',
+      title: 'testExt',
+      description: 'Updated test extension for Firefly e2e',
+      version: '2.0.0',
+      icon: {
+        id: 'testicon'
+      },
+      media: [
+        {
+          id: 'testid',
+          type: 'test',
+          order: 'test'
+        }
+      ]
+    }
+
+    const res = await sdkClient.updateExtension(orgId, appId, extensionDetails)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body).toHaveProperty('appId')
+    expect(res.body).toHaveProperty('publisherId')
+    expect(res.body).toHaveProperty('lifecycle')
+    expect(res.body.description).toBe('Updated test extension for Firefly e2e')
+    expect(res.body.version).toBe('2.0.0')
+  })
+
+  test('test submit Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    const submisssionDetails = [
+      {
+        appType: 'testapp', // need a valid app type
+        id: 'test', // need a valid id
+        notes: 'test submission'
+      }
+    ]
+
+    const res = await sdkClient.submitExtension(orgId, submisssionDetails)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('Array')
+    expect(res.body[0]).toHaveProperty('appType')
+    expect(res.body[0]).toHaveProperty('submitted')
+    expect(res.body[0]).toHaveProperty('status')
+  })
+
+  test('test list Extension API', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.getExtensionsForOrg(orgId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('Array')
+    expect(res.body[0]).toHaveProperty('appId')
+    expect(res.body[0]).toHaveProperty('publisherId')
+  })
+
+  test('test create Workspace for Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    const workspaceDetails = {
+      id: 'testid',
+      name: 'test workspace',
+      endpoints: {
+        additionalProp1: {},
+        additionalProp2: {},
+        additionalProp3: {}
+      },
+      services: {
+        code: 'code',
+        licenseGroupIds: [
+          'string'
+        ],
+        name: 'test'
+      },
+      releaseNotes: 'test',
+      technicalUserId: 'string',
+      appId: appId,
+      publisherId: 'test'
+    }
+
+    const res = await sdkClient.createExtensionWorkspace(orgId, appId, workspaceDetails)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body).toHaveProperty('id')
+    expect(res.body.name).toBe('test workspace')
+    expect(res.body.appId).toBe(appId)
+  })
+
+  test('test update Workspace for Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+    const workspaceDetails = {
+      id: 'testid',
+      name: 'updated test workspace',
+      endpoints: {
+        additionalProp1: {},
+        additionalProp2: {},
+        additionalProp3: {}
+      },
+      services: {
+        code: 'code',
+        licenseGroupIds: [
+          'string'
+        ],
+        name: 'test'
+      },
+      releaseNotes: 'test',
+      technicalUserId: 'string',
+      appId: appId,
+      publisherId: 'test'
+    }
+
+    const res = await sdkClient.updateExtensionWorkspace(orgId, appId, workspaceId, workspaceDetails)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.name).toBe('updated test workspace')
+    expect(res.body.id).toBe(workspaceId)
+    expect(res.body.appId).toBe(appId)
+  })
+
+  test('test get Workspace for Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    const res = await sdkClient.getExtensionWorkspace(orgId, appId, workspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.name).toBe('updated test workspace')
+    expect(res.body.id).toBe(workspaceId)
+    expect(res.body.appId).toBe(appId)
+  })
+
+  test('test delete Workspace for Extension API', async () => {
+    expect(orgId).toBeDefined()
+    expect(appId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteExtensionWorkspace(orgId, appId, workspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(typeof (res.body)).toBe('object')
+    expect(res.body.name).toBe('updated test workspace')
+    expect(res.body.id).toBe(workspaceId)
+    expect(res.body.appId).toBe(appId)
+  })
+
+  test('test check Extension name API', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.checkExtensionName(orgId, 'appName')
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  test('test get ALL ExtensionPoints API', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.getAllExtensionPoints(orgId, 'xpId')
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
   })
 })
