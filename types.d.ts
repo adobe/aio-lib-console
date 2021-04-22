@@ -513,73 +513,6 @@ declare class CoreConsoleAPI {
      */
     getAtlasQuotaUsage(organizationId: string, integrationId: string): Promise<Response>;
     /**
-     * Validate App Registry (Exchange) Application name
-     * @param organizationId - Organization AMS ID
-     * @param applicationName - Application name to validate
-     * @returns the response
-     */
-    validateApplicationName(organizationId: string, applicationName: string): Promise<Response>;
-    /**
-     * Get App Registry (Exchange) Application details
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @returns the response
-     */
-    getApplicationById(organizationId: string, applicationId: string): Promise<Response>;
-    /**
-     * Update App Registry (Exchange) Application, application details are patched.
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @param applicationDetails - Application details to update
-     * @returns the response
-     */
-    updateApplication(organizationId: string, applicationId: string, applicationDetails: any): Promise<Response>;
-    /**
-     * Delete App Registry (Exchange) Application
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @returns the response
-     */
-    deleteApplication(organizationId: string, applicationId: string): Promise<Response>;
-    /**
-     * Get App Registry (Exchange) Application by name
-     * @param organizationId - Organization AMS ID
-     * @param applicationName - Application Name
-     * @returns the response
-     */
-    getApplicationByName(organizationId: string, applicationName: string): Promise<Response>;
-    /**
-     * Submit an Application to App Registry (Exchange)
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @param submitterNotes - Notes from submitter
-     * @returns the response
-     */
-    submitApplication(organizationId: string, applicationId: string, submitterNotes: string): Promise<Response>;
-    /**
-     * Get all App Registry (Exchange) Application
-     * @param organizationId - Organization AMS ID
-     * @param offset - offset for returned list
-     * @param pageSize - number of elements to return
-     * @returns the response
-     */
-    getAllApplicationsForUser(organizationId: string, offset: number, pageSize: number): Promise<Response>;
-    /**
-     * Upload an Icon for an Application in App Registry (Exchange)
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application Name
-     * @param icon - A Readable stream with the Icon file content. eg: fs.createReadStream().
-     *        The icon must be of size 512x512 and of type png or jpg.
-     * @returns the response
-     */
-    uploadApplicationIcon(organizationId: string, applicationId: string, icon: any): Promise<Response>;
-    /**
-     * Get App Registry (Exchange) health
-     * @param organizationId - Organization AMS ID
-     * @returns the response
-     */
-    getAppRegistryHealth(organizationId: string): Promise<Response>;
-    /**
      * Get list of extensions for an org
      * @param organizationId - Organization AMS ID
      * @param [options] - Query options
@@ -632,27 +565,27 @@ declare class CoreConsoleAPI {
      * Update a workspace in an extension
      * @param organizationId - Organization AMS ID
      * @param appId - App ID
-     * @param workspaceId - Workspace ID
+     * @param workspaceName - Workspace Name
      * @param workspaceDetails - Workspace details
      * @returns the response
      */
-    updateExtensionWorkspace(organizationId: string, appId: string, workspaceId: string, workspaceDetails: WorkspaceDetails): Promise<Response>;
+    updateExtensionWorkspace(organizationId: string, appId: string, workspaceName: string, workspaceDetails: WorkspaceDetails): Promise<Response>;
     /**
      * Delete a workspace in an extension
      * @param organizationId - Organization AMS ID
      * @param appId - App ID
-     * @param workspaceId - Workspace ID
+     * @param workspaceName - Workspace Name
      * @returns the response
      */
-    deleteExtensionWorkspace(organizationId: string, appId: string, workspaceId: string): Promise<Response>;
+    deleteExtensionWorkspace(organizationId: string, appId: string, workspaceName: string): Promise<Response>;
     /**
      * Get details of a workspace in an extension
      * @param organizationId - Organization AMS ID
      * @param appId - App ID
-     * @param workspaceId - Workspace ID
+     * @param workspaceName - Workspace Name
      * @returns the response
      */
-    getExtensionWorkspace(organizationId: string, appId: string, workspaceId: string): Promise<Response>;
+    getExtensionWorkspace(organizationId: string, appId: string, workspaceName: string): Promise<Response>;
     /**
      * Check Extension Name
      * @param organizationId - Organization AMS ID
@@ -663,13 +596,13 @@ declare class CoreConsoleAPI {
     /**
      * Get all available extension points
      * @param organizationId - Organization AMS ID
-     * @param xpId - xp ID
-     * @param [options] - Query options
+     * @param [xpId = All] - xp ID, default 'ALL'
+     * @param [options] - Get options
      * @param [options.offset] - Offset
      * @param [options.pageSize] - page size
      * @returns the response
      */
-    getAllExtensionPoints(organizationId: string, xpId: string, options?: {
+    getAllExtensionPoints(organizationId: string, xpId?: string, options?: {
         offset?: number;
         pageSize?: number;
     }): Promise<Response>;

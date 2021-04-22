@@ -958,16 +958,16 @@ test('createExtensionWorkspace', async () => {
 })
 
 test('updateExtensionWorkspace', async () => {
-  const sdkArgs = ['organizationId', 'appId', 'workspaceId', { some: 'body' }]
+  const sdkArgs = ['organizationId', 'appId', 'workspaceName', { some: 'body' }]
   const apiParameters = {
     orgId: 'organizationId',
     appId: 'appId',
-    workspaceId: 'workspaceId'
+    workspaceName: 'workspaceName'
   }
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.put_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_',
+    fullyQualifiedApiName: 'Extensions.put_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_',
     sdkFunctionName: 'updateExtensionWorkspace',
     apiParameters,
     apiOptions,
@@ -977,16 +977,16 @@ test('updateExtensionWorkspace', async () => {
 })
 
 test('deleteExtensionWorkspace', async () => {
-  const sdkArgs = ['organizationId', 'appId', 'workspaceId']
+  const sdkArgs = ['organizationId', 'appId', 'workspaceName']
   const apiParameters = {
     orgId: 'organizationId',
     appId: 'appId',
-    workspaceId: 'workspaceId'
+    workspaceName: 'workspaceName'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.delete_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_',
+    fullyQualifiedApiName: 'Extensions.delete_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_',
     sdkFunctionName: 'deleteExtensionWorkspace',
     apiParameters,
     apiOptions,
@@ -996,16 +996,16 @@ test('deleteExtensionWorkspace', async () => {
 })
 
 test('getExtensionWorkspace', async () => {
-  const sdkArgs = ['organizationId', 'appId', 'workspaceId']
+  const sdkArgs = ['organizationId', 'appId', 'workspaceName']
   const apiParameters = {
     orgId: 'organizationId',
     appId: 'appId',
-    workspaceId: 'workspaceId'
+    workspaceName: 'workspaceName'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_',
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_',
     sdkFunctionName: 'getExtensionWorkspace',
     apiParameters,
     apiOptions,
@@ -1032,11 +1032,29 @@ test('checkExtensionName', async () => {
   })
 })
 
-test('getAllExtensionPoints', async () => {
-  const sdkArgs = ['organizationId', 'xpId']
+test('getAllExtensionPoints no xp Id', async () => {
+  const sdkArgs = ['organizationId', 'All']
   const apiParameters = {
     orgId: 'organizationId',
-    xpId: 'xpId'
+    xpId: 'All'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_xp__xpId_',
+    sdkFunctionName: 'getAllExtensionPoints',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getAllExtensionPoints using xp Id', async () => {
+  const sdkArgs = ['organizationId', 'testXP']
+  const apiParameters = {
+    orgId: 'organizationId',
+    xpId: 'testXP'
   }
   const apiOptions = createSwaggerOptions()
 

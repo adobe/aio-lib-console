@@ -1216,18 +1216,18 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {string} appId App ID
-   * @param {string} workspaceId Workspace ID
+   * @param {string} workspaceName Workspace Name
    * @param {WorkspaceDetails} workspaceDetails Workspace details
    * @returns {Promise<Response>} the response
    */
-  async updateExtensionWorkspace (organizationId, appId, workspaceId, workspaceDetails) {
-    const parameters = { orgId: organizationId, appId: appId, workspaceId: workspaceId }
+  async updateExtensionWorkspace (organizationId, appId, workspaceName, workspaceDetails) {
+    const parameters = { orgId: organizationId, appId: appId, workspaceName: workspaceName }
     const requestBody = workspaceDetails
     const sdkDetails = { parameters, requestBody }
 
     try {
       const res = await this.sdk.apis.Extensions
-        .put_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_(
+        .put_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -1241,16 +1241,16 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {string} appId App ID
-   * @param {string} workspaceId Workspace ID
+   * @param {string} workspaceName Workspace Name
    * @returns {Promise<Response>} the response
    */
-  async deleteExtensionWorkspace (organizationId, appId, workspaceId) {
-    const parameters = { orgId: organizationId, appId: appId, workspaceId: workspaceId }
+  async deleteExtensionWorkspace (organizationId, appId, workspaceName) {
+    const parameters = { orgId: organizationId, appId: appId, workspaceName: workspaceName }
     const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.Extensions
-        .delete_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_(
+        .delete_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -1264,16 +1264,16 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {string} appId App ID
-   * @param {string} workspaceId Workspace ID
+   * @param {string} workspaceName Workspace Name
    * @returns {Promise<Response>} the response
    */
-  async getExtensionWorkspace (organizationId, appId, workspaceId) {
-    const parameters = { orgId: organizationId, appId: appId, workspaceId: workspaceId }
+  async getExtensionWorkspace (organizationId, appId, workspaceName) {
+    const parameters = { orgId: organizationId, appId: appId, workspaceName: workspaceName }
     const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.Extensions
-        .get_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceId_(
+        .get_console_organizations__orgId__xr_api_v1_app__appId__workspace__workspaceName_(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -1307,13 +1307,13 @@ class CoreConsoleAPI {
    *  Get all available extension points
    *
    * @param {string} organizationId Organization AMS ID
-   * @param {string} xpId xp ID
-   * @param {object} [options] Query options
+   * @param {string} [xpId] xp ID, default 'ALL'
+   * @param {object} [options] Get options
    * @param {number} [options.offset] Offset
    * @param {number} [options.pageSize] page size
    * @returns {Promise<Response>} the response
    */
-  async getAllExtensionPoints (organizationId, xpId, options = {}) {
+  async getAllExtensionPoints (organizationId, xpId = 'All', options = {}) {
     const parameters = options
     parameters.orgId = organizationId
     parameters.xpId = xpId

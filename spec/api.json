@@ -8599,8 +8599,8 @@
             }
           },
           {
-            "name": "workspaceId",
-            "description": "Workspace ID",
+            "name": "workspaceName",
+            "description": "Workspace Name",
             "in": "path",
             "required": true,
             "schema": {
@@ -8843,8 +8843,8 @@
             }
           },
           {
-            "name": "workspaceId",
-            "description": "Workspace ID",
+            "name": "workspaceName",
+            "description": "Workspace Name",
             "in": "path",
             "required": true,
             "schema": {
@@ -9084,8 +9084,8 @@
             }
           },
           {
-            "name": "workspaceId",
-            "description": "Workspace ID",
+            "name": "workspaceName",
+            "description": "Workspace Name",
             "in": "path",
             "required": true,
             "schema": {
