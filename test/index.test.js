@@ -1032,8 +1032,26 @@ test('checkExtensionName', async () => {
   })
 })
 
-test('getAllExtensionPoints no xp Id', async () => {
+test('getAllExtensionPoints default xp Id', async () => {
   const sdkArgs = ['organizationId', 'All']
+  const apiParameters = {
+    orgId: 'organizationId',
+    xpId: 'All'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_xp__xpId_',
+    sdkFunctionName: 'getAllExtensionPoints',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getAllExtensionPoints no xp Id', async () => {
+  const sdkArgs = ['organizationId']
   const apiParameters = {
     orgId: 'organizationId',
     xpId: 'All'
@@ -1065,5 +1083,43 @@ test('getAllExtensionPoints using xp Id', async () => {
     apiOptions,
     sdkArgs,
     ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getEndPointsInWorkspace', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId']
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    sdkFunctionName: 'getEndPointsInWorkspace',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_WORKSPACE_ENDPOINTS
+  })
+})
+
+test('updateEndPointsInWorkspace', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', { some: 'body' }]
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
+  }
+  const apiOptions = createSwaggerOptions({ some: 'body' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    sdkFunctionName: 'updateEndPointsInWorkspace',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_UPDATE_WORKSPACE_ENDPOINTS
   })
 })

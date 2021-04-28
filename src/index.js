@@ -1329,6 +1329,53 @@ class CoreConsoleAPI {
     }
   }
 
+  /**
+   *  Get endpoints in a workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @returns {Promise<Response>} the response
+   */
+  async getEndPointsInWorkspace (organizationId, projectId, workspaceId) {
+    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.Extensions
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_WORKSPACE_ENDPOINTS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   *  Update endpoints in a workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {EndpointDetails} endpointDetails endpoint details
+   * @returns {Promise<Response>} the response
+   */
+  async updateEndPointsInWorkspace (organizationId, projectId, workspaceId, endpointDetails) {
+    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const requestBody = endpointDetails
+    const sdkDetails = { parameters, requestBody }
+    try {
+      const res = await this.sdk.apis.Extensions
+        .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_UPDATE_WORKSPACE_ENDPOINTS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
   /** @private */
   __createRequestOptions (parameters, body) {
     return createRequestOptions(
