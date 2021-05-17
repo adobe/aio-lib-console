@@ -636,15 +636,15 @@ describe('Extension API tests', () => {
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
     const endpoints = {
-    "endpoints" : {
-        "firefly/excshell/1": {
-                "view": {
-                    "href": "https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html"
-                }
-            }
+      endpoints: {
+        'firefly/excshell/1': {
+          view: {
+            href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
+          }
+        }
+      }
     }
-    }
-    const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endPoints)
+    const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endpoints)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
