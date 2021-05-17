@@ -624,6 +624,40 @@ describe('Workspace credential test', () => {
   // missing analytics credentials tests
 })
 
+describe('Extension API tests', () => {
+  test('test get ALL ExtensionPoints API', async () => {
+    expect(orgId).toBeDefined()
+    const res = await sdkClient.getAllExtensionPoints(orgId, 'firefly')
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+  test('test update endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+    const endpoints = {
+    "endpoints" : {
+        "firefly/excshell/1": {
+                "view": {
+                    "href": "https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html"
+                }
+            }
+    }
+    }
+    const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endPoints)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+  test('test get endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+    const res = await sdkClient.getEndPointsInWorkspace(orgId, projectId, workspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+})
+
 describe('delete workspace/project', () => {
   test('test deleteWorkspace API', async () => {
     expect(orgId).toBeDefined()
@@ -886,15 +920,5 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
-  })
-})
-
-describe('Extension API tests', () => {
-  test('test get ALL ExtensionPoints API', async () => {
-    expect(orgId).toBeDefined()
-
-    const res = await sdkClient.getAllExtensionPoints(orgId, 'xpId')
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
   })
 })

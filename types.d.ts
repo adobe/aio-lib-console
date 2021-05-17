@@ -513,90 +513,9 @@ declare class CoreConsoleAPI {
      */
     getAtlasQuotaUsage(organizationId: string, integrationId: string): Promise<Response>;
     /**
-     * Get list of extensions for an org
-     * @param organizationId - Organization AMS ID
-     * @param [options] - Query options
-     * @param [options.appId] - App ID
-     * @param [options.xp] - xp
-     * @returns the response
-     */
-    getExtensionsForOrg(organizationId: string, options?: {
-        appId?: string;
-        xp?: string;
-    }): Promise<Response>;
-    /**
-     * Create new Extension
-     * @param organizationId - Organization AMS ID
-     * @param extensionDetails - Extension details
-     * @returns the response
-     */
-    createExtension(organizationId: string, extensionDetails: ExtensionDetails): Promise<Response>;
-    /**
-     * Submit an Extension
-     * @param organizationId - Organization AMS ID
-     * @param submisssionDetails - Extension submission details
-     * @returns the response
-     */
-    submitExtension(organizationId: string, submisssionDetails: ExtensionSubmissionDetails[]): Promise<Response>;
-    /**
-     * Update an Extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @param extensionDetails - Extension details
-     * @returns the response
-     */
-    updateExtension(organizationId: string, appId: string, extensionDetails: ExtensionDetails): Promise<Response>;
-    /**
-     * Delete an Extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @returns the response
-     */
-    deleteExtension(organizationId: string, appId: string): Promise<Response>;
-    /**
-     * Create a new workspace in an extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @param workspaceDetails - Workspace details
-     * @returns the response
-     */
-    createExtensionWorkspace(organizationId: string, appId: string, workspaceDetails: ExtensionWorkspaceDetails): Promise<Response>;
-    /**
-     * Update a workspace in an extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @param workspaceName - Workspace Name
-     * @param workspaceDetails - Workspace details
-     * @returns the response
-     */
-    updateExtensionWorkspace(organizationId: string, appId: string, workspaceName: string, workspaceDetails: WorkspaceDetails): Promise<Response>;
-    /**
-     * Delete a workspace in an extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @param workspaceName - Workspace Name
-     * @returns the response
-     */
-    deleteExtensionWorkspace(organizationId: string, appId: string, workspaceName: string): Promise<Response>;
-    /**
-     * Get details of a workspace in an extension
-     * @param organizationId - Organization AMS ID
-     * @param appId - App ID
-     * @param workspaceName - Workspace Name
-     * @returns the response
-     */
-    getExtensionWorkspace(organizationId: string, appId: string, workspaceName: string): Promise<Response>;
-    /**
-     * Check Extension Name
-     * @param organizationId - Organization AMS ID
-     * @param appName - App Name
-     * @returns the response
-     */
-    checkExtensionName(organizationId: string, appName: string): Promise<Response>;
-    /**
      * Get all available extension points
      * @param organizationId - Organization AMS ID
-     * @param [xpId = All] - xp ID, default 'ALL'
+     * @param [xpId = firefly] - xp ID, default 'firefly'
      * @param [options] - Get options
      * @param [options.offset] - Offset
      * @param [options.pageSize] - page size
@@ -606,6 +525,23 @@ declare class CoreConsoleAPI {
         offset?: number;
         pageSize?: number;
     }): Promise<Response>;
+    /**
+     * Get endpoints in a workspace
+     * @param organizationId - Organization AMS ID
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
+     * @returns the response
+     */
+    getEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string): Promise<Response>;
+    /**
+     * Update endpoints in a workspace
+     * @param organizationId - Organization AMS ID
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
+     * @param endpointDetails - endpoint details
+     * @returns the response
+     */
+    updateEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string, endpointDetails: EndpointDetails): Promise<Response>;
     /**
      * Get details about a service (SDK) subscribed to an integration
      * @param organizationId - Organization AMS ID

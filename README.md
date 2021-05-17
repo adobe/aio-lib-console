@@ -161,17 +161,9 @@ with valid values for apiKey and accessToken
     * [.createIMSOrg()](#CoreConsoleAPI+createIMSOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAtlasApplicationPolicy(organizationId, integrationId)](#CoreConsoleAPI+getAtlasApplicationPolicy) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAtlasQuotaUsage(organizationId, integrationId)](#CoreConsoleAPI+getAtlasQuotaUsage) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getExtensionsForOrg(organizationId, [options])](#CoreConsoleAPI+getExtensionsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.createExtension(organizationId, extensionDetails)](#CoreConsoleAPI+createExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.submitExtension(organizationId, submisssionDetails)](#CoreConsoleAPI+submitExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.updateExtension(organizationId, appId, extensionDetails)](#CoreConsoleAPI+updateExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.deleteExtension(organizationId, appId)](#CoreConsoleAPI+deleteExtension) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.createExtensionWorkspace(organizationId, appId, workspaceDetails)](#CoreConsoleAPI+createExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.updateExtensionWorkspace(organizationId, appId, workspaceName, workspaceDetails)](#CoreConsoleAPI+updateExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.deleteExtensionWorkspace(organizationId, appId, workspaceName)](#CoreConsoleAPI+deleteExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getExtensionWorkspace(organizationId, appId, workspaceName)](#CoreConsoleAPI+getExtensionWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.checkExtensionName(organizationId, appName)](#CoreConsoleAPI+checkExtensionName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAllExtensionPoints(organizationId, [xpId], [options])](#CoreConsoleAPI+getAllExtensionPoints) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getEndPointsInWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
@@ -712,144 +704,6 @@ Get Atlas quota usage for an Integration
 | organizationId | <code>string</code> | Organization AMS ID |
 | integrationId | <code>string</code> | Integration ID |
 
-<a name="CoreConsoleAPI+getExtensionsForOrg"></a>
-
-### coreConsoleAPI.getExtensionsForOrg(organizationId, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get list of extensions for an org
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| [options] | <code>object</code> | Query options |
-| [options.appId] | <code>string</code> | App ID |
-| [options.xp] | <code>string</code> | xp |
-
-<a name="CoreConsoleAPI+createExtension"></a>
-
-### coreConsoleAPI.createExtension(organizationId, extensionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Create new Extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| extensionDetails | [<code>ExtensionDetails</code>](#ExtensionDetails) | Extension details |
-
-<a name="CoreConsoleAPI+submitExtension"></a>
-
-### coreConsoleAPI.submitExtension(organizationId, submisssionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Submit an Extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| submisssionDetails | [<code>Array.&lt;ExtensionSubmissionDetails&gt;</code>](#ExtensionSubmissionDetails) | Extension submission details |
-
-<a name="CoreConsoleAPI+updateExtension"></a>
-
-### coreConsoleAPI.updateExtension(organizationId, appId, extensionDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Update an Extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-| extensionDetails | [<code>ExtensionDetails</code>](#ExtensionDetails) | Extension details |
-
-<a name="CoreConsoleAPI+deleteExtension"></a>
-
-### coreConsoleAPI.deleteExtension(organizationId, appId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Delete an Extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-
-<a name="CoreConsoleAPI+createExtensionWorkspace"></a>
-
-### coreConsoleAPI.createExtensionWorkspace(organizationId, appId, workspaceDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Create a new workspace in an extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-| workspaceDetails | [<code>ExtensionWorkspaceDetails</code>](#ExtensionWorkspaceDetails) | Workspace details |
-
-<a name="CoreConsoleAPI+updateExtensionWorkspace"></a>
-
-### coreConsoleAPI.updateExtensionWorkspace(organizationId, appId, workspaceName, workspaceDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Update a workspace in an extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-| workspaceName | <code>string</code> | Workspace Name |
-| workspaceDetails | [<code>WorkspaceDetails</code>](#WorkspaceDetails) | Workspace details |
-
-<a name="CoreConsoleAPI+deleteExtensionWorkspace"></a>
-
-### coreConsoleAPI.deleteExtensionWorkspace(organizationId, appId, workspaceName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Delete a workspace in an extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-| workspaceName | <code>string</code> | Workspace Name |
-
-<a name="CoreConsoleAPI+getExtensionWorkspace"></a>
-
-### coreConsoleAPI.getExtensionWorkspace(organizationId, appId, workspaceName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get details of a workspace in an extension
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appId | <code>string</code> | App ID |
-| workspaceName | <code>string</code> | Workspace Name |
-
-<a name="CoreConsoleAPI+checkExtensionName"></a>
-
-### coreConsoleAPI.checkExtensionName(organizationId, appName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Check Extension Name
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| appName | <code>string</code> | App Name |
-
 <a name="CoreConsoleAPI+getAllExtensionPoints"></a>
 
 ### coreConsoleAPI.getAllExtensionPoints(organizationId, [xpId], [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -861,10 +715,39 @@ Get all available extension points
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | organizationId | <code>string</code> |  | Organization AMS ID |
-| [xpId] | <code>string</code> | <code>&quot;All&quot;</code> | xp ID, default 'ALL' |
+| [xpId] | <code>string</code> | <code>&quot;firefly&quot;</code> | xp ID, default 'firefly' |
 | [options] | <code>object</code> |  | Get options |
 | [options.offset] | <code>number</code> |  | Offset |
 | [options.pageSize] | <code>number</code> |  | page size |
+
+<a name="CoreConsoleAPI+getEndPointsInWorkspace"></a>
+
+### coreConsoleAPI.getEndPointsInWorkspace(organizationId, projectId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get endpoints in a workspace
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
+
+<a name="CoreConsoleAPI+updateEndPointsInWorkspace"></a>
+
+### coreConsoleAPI.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Update endpoints in a workspace
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
+| endpointDetails | <code>EndpointDetails</code> | endpoint details |
 
 <a name="CoreConsoleAPI+getSDKProperties"></a>
 

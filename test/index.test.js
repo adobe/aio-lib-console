@@ -855,15 +855,15 @@ test('getSDKProperties', async () => {
 })
 
 test('getAllExtensionPoints default xp Id', async () => {
-  const sdkArgs = ['organizationId', 'All']
+  const sdkArgs = ['organizationId', 'firefly']
   const apiParameters = {
     orgId: 'organizationId',
-    xpId: 'All'
+    xpId: 'firefly'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_xp__xpId_',
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
     sdkFunctionName: 'getAllExtensionPoints',
     apiParameters,
     apiOptions,
@@ -876,12 +876,12 @@ test('getAllExtensionPoints no xp Id', async () => {
   const sdkArgs = ['organizationId']
   const apiParameters = {
     orgId: 'organizationId',
-    xpId: 'All'
+    xpId: 'firefly'
   }
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_xp__xpId_',
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
     sdkFunctionName: 'getAllExtensionPoints',
     apiParameters,
     apiOptions,
@@ -899,7 +899,7 @@ test('getAllExtensionPoints using xp Id', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_xp__xpId_',
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
     sdkFunctionName: 'getAllExtensionPoints',
     apiParameters,
     apiOptions,
