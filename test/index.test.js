@@ -11,6 +11,10 @@ governing permissions and limitations under the License.
 
 const { codes } = require('../src/SDKErrors')
 const sdk = require('../src')
+const libEnv = require('@adobe/aio-lib-env')
+const { STAGE_ENV, PROD_ENV } = jest.requireActual('@adobe/aio-lib-env')
+
+jest.mock('@adobe/aio-lib-env')
 
 /* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect", "standardTest"] }] */
 // /////////////////////////////////////////////
@@ -32,13 +36,15 @@ const expectedAdditionalApiParameters = (sdkInstance) => {
   }
 }
 
-const createSdkClient = async (accessToken = gAccessToken, apiKey = gApiKey) => {
-  return sdk.init(accessToken, apiKey)
+const createSdkClient = async (accessToken = gAccessToken, apiKey = gApiKey, env) => {
+  return sdk.init(accessToken, apiKey, env)
 }
 
 // /////////////////////////////////////////////
 
 beforeEach(() => {
+  jest.restoreAllMocks()
+  libEnv.getCliEnv.mockReturnValue(PROD_ENV) // default
 })
 
 test('sdk init test', async () => {
@@ -52,6 +58,41 @@ test('sdk init test - no accessToken', async () => {
   return expect(sdk.init(null)).rejects.toEqual(
     new codes.ERROR_SDK_INITIALIZATION({ messageValues: 'accessToken' })
   )
+})
+
+test('sdk constructor', async () => {
+  let client
+
+  // default, should use PROD endpoint (default for global cli env is PROD)
+  client = await createSdkClient()
+  expect(client.env).toEqual(PROD_ENV)
+
+  // if constructor parameter is set to STAGE, should use STAGE endpoint (overrides global env)
+  client = await createSdkClient(undefined, undefined, STAGE_ENV)
+  expect(client.env).toEqual(STAGE_ENV)
+
+  // if constructor parameter is set to an unknown string, should use PROD endpoint (default env)
+  client = await createSdkClient(undefined, undefined, 'gibberish')
+  expect(client.env).toEqual(PROD_ENV)
+
+  // if constructor parameter is set to null, should use PROD endpoint (default env)
+  client = await createSdkClient(undefined, undefined, null)
+  expect(client.env).toEqual(PROD_ENV)
+
+  // if global cli env is set to STAGE, should use it
+  libEnv.getCliEnv.mockReturnValue(STAGE_ENV)
+  client = await createSdkClient()
+  expect(client.env).toEqual(STAGE_ENV)
+
+  // if global cli env is set to PROD, should use it
+  libEnv.getCliEnv.mockReturnValue(PROD_ENV)
+  client = await createSdkClient()
+  expect(client.env).toEqual(PROD_ENV)
+
+  // default, should use PROD endpoint (global cli env is not set)
+  libEnv.getCliEnv.mockReturnValue(null)
+  client = await createSdkClient()
+  expect(client.env).toEqual(PROD_ENV)
 })
 
 /** @private */
