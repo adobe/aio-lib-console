@@ -64,7 +64,7 @@ const API_HOST = {
 }
 
 const CONSOLE_GRAPHQL_ENDPOINT = {
-  stage: 'https://console-stage.adobe.io/graphql',
+  stage: 'https://console-devall.adobe.io/graphql',
   prod: 'https://console.adobe.io/graphql'
 }
 
