@@ -60,7 +60,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
 
 const API_HOST = {
   prod: 'developers.adobe.io',
-  stage: 'developers-stage.adobe.io'
+  stage: 'developers-devall.adobe.io'
 }
 
 const CONSOLE_GRAPHQL_ENDPOINT = {
