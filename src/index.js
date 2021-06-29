@@ -106,13 +106,23 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} publisherId Publisher Id
  */
 
+// const API_HOST = {
+//   prod: 'developers.adobe.io',
+//   stage: 'developers-stage.adobe.io'
+// }
+//
+// const CONSOLE_GRAPHQL_ENDPOINT = {
+//   stage: 'https://console-stage.adobe.io/graphql',
+//   prod: 'https://console.adobe.io/graphql'
+// }
+
 const API_HOST = {
   prod: 'developers.adobe.io',
-  stage: 'developers-stage.adobe.io'
+  stage: 'developers-devall.adobe.io'
 }
 
 const CONSOLE_GRAPHQL_ENDPOINT = {
-  stage: 'https://console-stage.adobe.io/graphql',
+  stage: 'https://console-devall.adobe.io/graphql',
   prod: 'https://console.adobe.io/graphql'
 }
 
