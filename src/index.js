@@ -57,6 +57,54 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
  */
+/**
+ * @typedef {object} ExtensionIcon
+ * @property {string} id Id
+ */
+/**
+ * @typedef {object} ExtensionMedia
+ * @property {string} id Id
+ * @property {string} type Type
+ * @property {string} order order
+ */
+/**
+ * @typedef {object} ExtensionDetails
+ * @property {string} name Name
+ * @property {string} title Title
+ * @property {string} description Description
+ * @property {string} version Version
+ * @property {ExtensionIcon} icon Icon
+ * @property {Array.<ExtensionMedia>} media array of Media Objects
+ */
+/**
+ * @typedef {object} ExtensionSubmissionDetails
+ * @property {string} appType app type
+ * @property {string} id Id
+ * @property {string} notes Notes
+ */
+/**
+ * @typedef {object} ExtensionWrokspaceEndpoints
+ * @property {object} additionalProp1 additional property 1
+ * @property {object} additionalProp2 additional property 2
+ */
+/**
+ * @typedef {object} ExtensionWorkspaceServices
+ * @property {string} code Code
+ * @property {string} name Name
+ * @property {Array.<string>} licenseGroupIds License group Ids
+ */
+/**
+ * @typedef {object} ExtensionWorkspaceDetails
+ * @property {string} id Id
+ * @property {string} name Name
+ * @property {ExtensionWrokspaceEndpoints} endpoints Description
+ * @property {ExtensionWorkspaceServices} services Services
+ * @property {ExtensionIcon} icon Icon
+ * @property {string} releaseNotes Release Notes
+ * @property {string} technicalUserId Technical user Id
+ * @property {string} appId App Id
+ * @property {string} publisherId Publisher Id
+ */
 
 const API_HOST = {
   prod: 'developers.adobe.io',
@@ -1036,207 +1084,75 @@ class CoreConsoleAPI {
   }
 
   /**
-   * Validate App Registry (Exchange) Application name
+   *  Get all available extension points
    *
    * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationName Application name to validate
+   * @param {string} [xpId] xp ID, default 'firefly'
+   * @param {object} [options] Get options
+   * @param {number} [options.offset] Offset
+   * @param {number} [options.pageSize] page size
    * @returns {Promise<Response>} the response
    */
-  async validateApplicationName (organizationId, applicationName) {
-    const parameters = { orgId: organizationId, appName: applicationName, appType: 'JGR' }
+  async getAllExtensionPoints (organizationId, xpId = 'firefly', options = {}) {
+    const parameters = options
+    parameters.orgId = organizationId
+    parameters.xpId = xpId
     const sdkDetails = { parameters }
-
     try {
-      const res = await this.sdk.apis.AppRegistry
-        .get_console_organizations__orgId__apps__appName__validate(
+      const res = await this.sdk.apis.Extensions
+        .get_console_organizations__orgId__xp__xpId_(
           ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_VALIDATE_APPLICATION_NAME({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_GET_ALL_EXTENSIONPOINTS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Get App Registry (Exchange) Application details
+   *  Get endpoints in a workspace
    *
    * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId Application ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  async getApplicationById (organizationId, applicationId) {
-    const parameters = { orgId: organizationId, appId: applicationId, appType: 'JGR' }
-    const sdkDetails = { parameters }
+  async getEndPointsInWorkspace (organizationId, projectId, workspaceId) {
+    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
 
+    const sdkDetails = { parameters }
     try {
-      const res = await this.sdk.apis.AppRegistry
-        .get_console_organizations__orgId__apps__appId_(
+      const res = await this.sdk.apis.Extensions
+        .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters)
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_GET_APPLICATION_BY_ID({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_GET_WORKSPACE_ENDPOINTS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
   /**
-   * Update App Registry (Exchange) Application, application details are patched.
+   *  Update endpoints in a workspace
    *
    * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId Application ID
-   * @param {object} applicationDetails Application details to update
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {EndpointDetails} endpointDetails endpoint details
    * @returns {Promise<Response>} the response
    */
-  async updateApplication (organizationId, applicationId, applicationDetails) {
-    const parameters = { orgId: organizationId, appId: applicationId }
-    const requestBody = { ...applicationDetails }
-    const sdkDetails = { parameters }
-
+  async updateEndPointsInWorkspace (organizationId, projectId, workspaceId, endpointDetails) {
+    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const requestBody = endpointDetails
+    const sdkDetails = { parameters, requestBody }
     try {
-      const res = await this.sdk.apis.AppRegistry
-        .patch_console_organizations__orgId__apps__appId_(
+      const res = await this.sdk.apis.Extensions
+        .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
-      throw new codes.ERROR_UPDATE_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Delete App Registry (Exchange) Application
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId Application ID
-   * @returns {Promise<Response>} the response
-   */
-  async deleteApplication (organizationId, applicationId) {
-    const parameters = { orgId: organizationId, appId: applicationId }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .delete_console_organizations__orgId__apps__appId_(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_DELETE_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Get App Registry (Exchange) Application by name
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationName Application Name
-   * @returns {Promise<Response>} the response
-   */
-  async getApplicationByName (organizationId, applicationName) {
-    const parameters = { orgId: organizationId, appName: applicationName }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .get_console_organizations__orgId__apps_searchName__appName_(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_GET_APPLICATION_BY_NAME({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Submit an Application to App Registry (Exchange)
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId Application ID
-   * @param {string} submitterNotes Notes from submitter
-   * @returns {Promise<Response>} the response
-   */
-  async submitApplication (organizationId, applicationId, submitterNotes) {
-    const parameters = { orgId: organizationId, appId: applicationId }
-    const requestBody = { submitterNotes }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .post_console_organizations__orgId__apps__appId__submit(
-          ...this.__createRequestOptions(parameters, requestBody)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_SUBMIT_APPLICATION({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Get all App Registry (Exchange) Application
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {number} offset offset for returned list
-   * @param {number} pageSize number of elements to return
-   * @returns {Promise<Response>} the response
-   */
-  async getAllApplicationsForUser (organizationId, offset, pageSize) {
-    const parameters = { orgId: organizationId, appType: 'JGR', offset, pageSize }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .get_console_organizations__orgId__apps(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_GET_ALL_APPLICATIONS_FOR_USER({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Upload an Icon for an Application in App Registry (Exchange)
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId Application Name
-   * @param {object} icon A Readable stream with the Icon file content. eg: fs.createReadStream().
-   *        The icon must be of size 512x512 and of type png or jpg.
-   * @returns {Promise<Response>} the response
-   */
-  async uploadApplicationIcon (organizationId, applicationId, icon) {
-    const parameters = { orgId: organizationId, appId: applicationId, appType: 'JGR', assetType: 'ICON' }
-    const requestBody = { file: icon }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .post_console_organizations__orgId__apps__appId__upload(
-          ...this.__createRequestOptions(parameters, requestBody)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_UPLOAD_APPLICATION_ICON({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Get App Registry (Exchange) health
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @returns {Promise<Response>} the response
-   */
-  async getAppRegistryHealth (organizationId) {
-    const parameters = { orgId: organizationId }
-    const sdkDetails = { parameters }
-
-    try {
-      const res = await this.sdk.apis.AppRegistry
-        .get_console_organizations__orgId__apps_health(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_GET_APPREGISTRY_HEALTH({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_UPDATE_WORKSPACE_ENDPOINTS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 

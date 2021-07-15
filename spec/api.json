@@ -25,6 +25,10 @@
     {
       "name": "AtlasPolicyEngine",
       "description": "APIs for Atlas Policy Engine"
+    },
+    {
+      "name": "Extensions",
+      "description": "APIs for App Registry and Extension Registry"
     }
   ],
   "paths": {
@@ -7227,6 +7231,401 @@
             "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/%7BcredentialId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
+      }
+    },
+    "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/endpoints": {
+      "put": {
+        "summary": "Update endpoints in a workspace",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Org ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Project ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endpoints": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Endpoints added to the workspace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "endpoints": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get endpoints in a workspace",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Org ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Project ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endpoints added to the workspace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "endpoints": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/console/organizations/{orgId}/xp/{xpId}": {
+      "get": {
+        "summary": "Get all available extension points",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "serviceCode": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "idVer": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "specVersion": {
+                      "type": "string"
+                    },
+                    "operations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "ficodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "publisherId": {
+                      "type": "string"
+                    },
+                    "lifecycle": {
+                      "type": "object",
+                      "properties": {
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "lastModified": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "submitted": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "published": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "reviewed": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "unpublished": {
+                          "type": "object",
+                          "properties": {
+                            "by": {
+                              "type": "object",
+                              "properties": {
+                                "guid": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "notes": {
+                              "type": "string"
+                            },
+                            "on": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If service code or EP ID is not found"
+          },
+          "405": {
+            "description": "Invalid Input"
+          }
+        }
       }
     }
   },
