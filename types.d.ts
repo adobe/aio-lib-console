@@ -103,6 +103,95 @@ declare type AdobeIdIntegrationDetails = {
 };
 
 /**
+ * @property id - Id
+ */
+declare type ExtensionIcon = {
+    id: string;
+};
+
+/**
+ * @property id - Id
+ * @property type - Type
+ * @property order - order
+ */
+declare type ExtensionMedia = {
+    id: string;
+    type: string;
+    order: string;
+};
+
+/**
+ * @property name - Name
+ * @property title - Title
+ * @property description - Description
+ * @property version - Version
+ * @property icon - Icon
+ * @property media - array of Media Objects
+ */
+declare type ExtensionDetails = {
+    name: string;
+    title: string;
+    description: string;
+    version: string;
+    icon: ExtensionIcon;
+    media: ExtensionMedia[];
+};
+
+/**
+ * @property appType - app type
+ * @property id - Id
+ * @property notes - Notes
+ */
+declare type ExtensionSubmissionDetails = {
+    appType: string;
+    id: string;
+    notes: string;
+};
+
+/**
+ * @property additionalProp1 - additional property 1
+ * @property additionalProp2 - additional property 2
+ */
+declare type ExtensionWrokspaceEndpoints = {
+    additionalProp1: any;
+    additionalProp2: any;
+};
+
+/**
+ * @property code - Code
+ * @property name - Name
+ * @property licenseGroupIds - License group Ids
+ */
+declare type ExtensionWorkspaceServices = {
+    code: string;
+    name: string;
+    licenseGroupIds: string[];
+};
+
+/**
+ * @property id - Id
+ * @property name - Name
+ * @property endpoints - Description
+ * @property services - Services
+ * @property icon - Icon
+ * @property releaseNotes - Release Notes
+ * @property technicalUserId - Technical user Id
+ * @property appId - App Id
+ * @property publisherId - Publisher Id
+ */
+declare type ExtensionWorkspaceDetails = {
+    id: string;
+    name: string;
+    endpoints: ExtensionWrokspaceEndpoints;
+    services: ExtensionWorkspaceServices;
+    icon: ExtensionIcon;
+    releaseNotes: string;
+    technicalUserId: string;
+    appId: string;
+    publisherId: string;
+};
+
+/**
  * Returns a Promise that resolves with a new CoreConsoleAPI object
  * @param accessToken - the access token corresponding to an integration or user token
  * @param apiKey - api key to access the Developer Console
@@ -424,72 +513,35 @@ declare class CoreConsoleAPI {
      */
     getAtlasQuotaUsage(organizationId: string, integrationId: string): Promise<Response>;
     /**
-     * Validate App Registry (Exchange) Application name
+     * Get all available extension points
      * @param organizationId - Organization AMS ID
-     * @param applicationName - Application name to validate
+     * @param [xpId = firefly] - xp ID, default 'firefly'
+     * @param [options] - Get options
+     * @param [options.offset] - Offset
+     * @param [options.pageSize] - page size
      * @returns the response
      */
-    validateApplicationName(organizationId: string, applicationName: string): Promise<Response>;
+    getAllExtensionPoints(organizationId: string, xpId?: string, options?: {
+        offset?: number;
+        pageSize?: number;
+    }): Promise<Response>;
     /**
-     * Get App Registry (Exchange) Application details
+     * Get endpoints in a workspace
      * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
      * @returns the response
      */
-    getApplicationById(organizationId: string, applicationId: string): Promise<Response>;
+    getEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string): Promise<Response>;
     /**
-     * Update App Registry (Exchange) Application, application details are patched.
+     * Update endpoints in a workspace
      * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @param applicationDetails - Application details to update
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
+     * @param endpointDetails - endpoint details
      * @returns the response
      */
-    updateApplication(organizationId: string, applicationId: string, applicationDetails: any): Promise<Response>;
-    /**
-     * Delete App Registry (Exchange) Application
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @returns the response
-     */
-    deleteApplication(organizationId: string, applicationId: string): Promise<Response>;
-    /**
-     * Get App Registry (Exchange) Application by name
-     * @param organizationId - Organization AMS ID
-     * @param applicationName - Application Name
-     * @returns the response
-     */
-    getApplicationByName(organizationId: string, applicationName: string): Promise<Response>;
-    /**
-     * Submit an Application to App Registry (Exchange)
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application ID
-     * @param submitterNotes - Notes from submitter
-     * @returns the response
-     */
-    submitApplication(organizationId: string, applicationId: string, submitterNotes: string): Promise<Response>;
-    /**
-     * Get all App Registry (Exchange) Application
-     * @param organizationId - Organization AMS ID
-     * @param offset - offset for returned list
-     * @param pageSize - number of elements to return
-     * @returns the response
-     */
-    getAllApplicationsForUser(organizationId: string, offset: number, pageSize: number): Promise<Response>;
-    /**
-     * Upload an Icon for an Application in App Registry (Exchange)
-     * @param organizationId - Organization AMS ID
-     * @param applicationId - Application Name
-     * @param icon - A Readable stream with the Icon file content. eg: fs.createReadStream().
-     *        The icon must be of size 512x512 and of type png or jpg.
-     * @returns the response
-     */
-    uploadApplicationIcon(organizationId: string, applicationId: string, icon: any): Promise<Response>;
-    /**
-     * Get App Registry (Exchange) health
-     * @param organizationId - Organization AMS ID
-     * @returns the response
-     */
-    getAppRegistryHealth(organizationId: string): Promise<Response>;
+    updateEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string, endpointDetails: EndpointDetails): Promise<Response>;
     /**
      * Get details about a service (SDK) subscribed to an integration
      * @param organizationId - Organization AMS ID
