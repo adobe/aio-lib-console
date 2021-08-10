@@ -95,6 +95,20 @@ with valid values for apiKey and accessToken</p>
 <dd></dd>
 <dt><a href="#AdobeIdIntegrationDetails">AdobeIdIntegrationDetails</a> : <code>object</code></dt>
 <dd></dd>
+<dt><a href="#ExtensionIcon">ExtensionIcon</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionMedia">ExtensionMedia</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionDetails">ExtensionDetails</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionSubmissionDetails">ExtensionSubmissionDetails</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWrokspaceEndpoints">ExtensionWrokspaceEndpoints</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWorkspaceServices">ExtensionWorkspaceServices</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ExtensionWorkspaceDetails">ExtensionWorkspaceDetails</a> : <code>object</code></dt>
+<dd></dd>
 </dl>
 
 <a name="CoreConsoleAPI"></a>
@@ -147,15 +161,9 @@ with valid values for apiKey and accessToken
     * [.createIMSOrg()](#CoreConsoleAPI+createIMSOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAtlasApplicationPolicy(organizationId, integrationId)](#CoreConsoleAPI+getAtlasApplicationPolicy) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAtlasQuotaUsage(organizationId, integrationId)](#CoreConsoleAPI+getAtlasQuotaUsage) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.validateApplicationName(organizationId, applicationName)](#CoreConsoleAPI+validateApplicationName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getApplicationById(organizationId, applicationId)](#CoreConsoleAPI+getApplicationById) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.updateApplication(organizationId, applicationId, applicationDetails)](#CoreConsoleAPI+updateApplication) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.deleteApplication(organizationId, applicationId)](#CoreConsoleAPI+deleteApplication) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getApplicationByName(organizationId, applicationName)](#CoreConsoleAPI+getApplicationByName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.submitApplication(organizationId, applicationId, submitterNotes)](#CoreConsoleAPI+submitApplication) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getAllApplicationsForUser(organizationId, offset, pageSize)](#CoreConsoleAPI+getAllApplicationsForUser) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.uploadApplicationIcon(organizationId, applicationId, icon)](#CoreConsoleAPI+uploadApplicationIcon) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getAppRegistryHealth(organizationId)](#CoreConsoleAPI+getAppRegistryHealth) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getAllExtensionPoints(organizationId, [xpId], [options])](#CoreConsoleAPI+getAllExtensionPoints) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getEndPointsInWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
 
 <a name="CoreConsoleAPI+init"></a>
@@ -696,10 +704,26 @@ Get Atlas quota usage for an Integration
 | organizationId | <code>string</code> | Organization AMS ID |
 | integrationId | <code>string</code> | Integration ID |
 
-<a name="CoreConsoleAPI+validateApplicationName"></a>
+<a name="CoreConsoleAPI+getAllExtensionPoints"></a>
 
-### coreConsoleAPI.validateApplicationName(organizationId, applicationName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Validate App Registry (Exchange) Application name
+### coreConsoleAPI.getAllExtensionPoints(organizationId, [xpId], [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get all available extension points
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| organizationId | <code>string</code> |  | Organization AMS ID |
+| [xpId] | <code>string</code> | <code>&quot;firefly&quot;</code> | xp ID, default 'firefly' |
+| [options] | <code>object</code> |  | Get options |
+| [options.offset] | <code>number</code> |  | Offset |
+| [options.pageSize] | <code>number</code> |  | page size |
+
+<a name="CoreConsoleAPI+getEndPointsInWorkspace"></a>
+
+### coreConsoleAPI.getEndPointsInWorkspace(organizationId, projectId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get endpoints in a workspace
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
@@ -707,25 +731,13 @@ Validate App Registry (Exchange) Application name
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
-| applicationName | <code>string</code> | Application name to validate |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
 
-<a name="CoreConsoleAPI+getApplicationById"></a>
+<a name="CoreConsoleAPI+updateEndPointsInWorkspace"></a>
 
-### coreConsoleAPI.getApplicationById(organizationId, applicationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get App Registry (Exchange) Application details
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| applicationId | <code>string</code> | Application ID |
-
-<a name="CoreConsoleAPI+updateApplication"></a>
-
-### coreConsoleAPI.updateApplication(organizationId, applicationId, applicationDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Update App Registry (Exchange) Application, application details are patched.
+### coreConsoleAPI.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Update endpoints in a workspace
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
@@ -733,88 +745,9 @@ Update App Registry (Exchange) Application, application details are patched.
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
-| applicationId | <code>string</code> | Application ID |
-| applicationDetails | <code>object</code> | Application details to update |
-
-<a name="CoreConsoleAPI+deleteApplication"></a>
-
-### coreConsoleAPI.deleteApplication(organizationId, applicationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Delete App Registry (Exchange) Application
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| applicationId | <code>string</code> | Application ID |
-
-<a name="CoreConsoleAPI+getApplicationByName"></a>
-
-### coreConsoleAPI.getApplicationByName(organizationId, applicationName) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get App Registry (Exchange) Application by name
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| applicationName | <code>string</code> | Application Name |
-
-<a name="CoreConsoleAPI+submitApplication"></a>
-
-### coreConsoleAPI.submitApplication(organizationId, applicationId, submitterNotes) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Submit an Application to App Registry (Exchange)
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| applicationId | <code>string</code> | Application ID |
-| submitterNotes | <code>string</code> | Notes from submitter |
-
-<a name="CoreConsoleAPI+getAllApplicationsForUser"></a>
-
-### coreConsoleAPI.getAllApplicationsForUser(organizationId, offset, pageSize) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get all App Registry (Exchange) Application
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| offset | <code>number</code> | offset for returned list |
-| pageSize | <code>number</code> | number of elements to return |
-
-<a name="CoreConsoleAPI+uploadApplicationIcon"></a>
-
-### coreConsoleAPI.uploadApplicationIcon(organizationId, applicationId, icon) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Upload an Icon for an Application in App Registry (Exchange)
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
-| applicationId | <code>string</code> | Application Name |
-| icon | <code>object</code> | A Readable stream with the Icon file content. eg: fs.createReadStream().        The icon must be of size 512x512 and of type png or jpg. |
-
-<a name="CoreConsoleAPI+getAppRegistryHealth"></a>
-
-### coreConsoleAPI.getAppRegistryHealth(organizationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Get App Registry (Exchange) health
-
-**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| organizationId | <code>string</code> | Organization AMS ID |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
+| endpointDetails | <code>EndpointDetails</code> | endpoint details |
 
 <a name="CoreConsoleAPI+getSDKProperties"></a>
 
@@ -947,6 +880,96 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | [defaultRedirectUri] | <code>string</code> | Default redirect URI |
 | [domain] | <code>string</code> | domain |
 | [approvalInfo] | <code>object</code> | approvalInfo |
+
+<a name="ExtensionIcon"></a>
+
+## ExtensionIcon : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+
+<a name="ExtensionMedia"></a>
+
+## ExtensionMedia : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+| type | <code>string</code> | Type |
+| order | <code>string</code> | order |
+
+<a name="ExtensionDetails"></a>
+
+## ExtensionDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Name |
+| title | <code>string</code> | Title |
+| description | <code>string</code> | Description |
+| version | <code>string</code> | Version |
+| icon | [<code>ExtensionIcon</code>](#ExtensionIcon) | Icon |
+| media | [<code>Array.&lt;ExtensionMedia&gt;</code>](#ExtensionMedia) | array of Media Objects |
+
+<a name="ExtensionSubmissionDetails"></a>
+
+## ExtensionSubmissionDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| appType | <code>string</code> | app type |
+| id | <code>string</code> | Id |
+| notes | <code>string</code> | Notes |
+
+<a name="ExtensionWrokspaceEndpoints"></a>
+
+## ExtensionWrokspaceEndpoints : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| additionalProp1 | <code>object</code> | additional property 1 |
+| additionalProp2 | <code>object</code> | additional property 2 |
+
+<a name="ExtensionWorkspaceServices"></a>
+
+## ExtensionWorkspaceServices : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| code | <code>string</code> | Code |
+| name | <code>string</code> | Name |
+| licenseGroupIds | <code>Array.&lt;string&gt;</code> | License group Ids |
+
+<a name="ExtensionWorkspaceDetails"></a>
+
+## ExtensionWorkspaceDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | Id |
+| name | <code>string</code> | Name |
+| endpoints | [<code>ExtensionWrokspaceEndpoints</code>](#ExtensionWrokspaceEndpoints) | Description |
+| services | [<code>ExtensionWorkspaceServices</code>](#ExtensionWorkspaceServices) | Services |
+| icon | [<code>ExtensionIcon</code>](#ExtensionIcon) | Icon |
+| releaseNotes | <code>string</code> | Release Notes |
+| technicalUserId | <code>string</code> | Technical user Id |
+| appId | <code>string</code> | App Id |
+| publisherId | <code>string</code> | Publisher Id |
 
 ### Debug Logs
 

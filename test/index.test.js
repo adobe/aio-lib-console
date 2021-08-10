@@ -841,173 +841,6 @@ test('getAtlasQuotaUsage', async () => {
   })
 })
 
-test('validateApplicationName', async () => {
-  const sdkArgs = ['organizationId', 'applicationName']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appName: 'applicationName',
-    appType: 'JGR'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps__appName__validate',
-    sdkFunctionName: 'validateApplicationName',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_VALIDATE_APPLICATION_NAME
-  })
-})
-
-test('getApplicationById', async () => {
-  const sdkArgs = ['organizationId', 'applicationId']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appId: 'applicationId',
-    appType: 'JGR'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps__appId_',
-    sdkFunctionName: 'getApplicationById',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_GET_APPLICATION_BY_ID
-  })
-})
-
-test('updateApplication', async () => {
-  const sdkArgs = ['organizationId', 'applicationId', { some: 'body' }]
-  const apiParameters = {
-    orgId: 'organizationId',
-    appId: 'applicationId'
-  }
-  const apiOptions = createSwaggerOptions({ some: 'body' })
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.patch_console_organizations__orgId__apps__appId_',
-    sdkFunctionName: 'updateApplication',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_UPDATE_APPLICATION
-  })
-})
-
-test('deleteApplication', async () => {
-  const sdkArgs = ['organizationId', 'applicationId']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appId: 'applicationId'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.delete_console_organizations__orgId__apps__appId_',
-    sdkFunctionName: 'deleteApplication',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_DELETE_APPLICATION
-  })
-})
-
-test('getApplicationByName', async () => {
-  const sdkArgs = ['organizationId', 'applicationName']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appName: 'applicationName'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps_searchName__appName_',
-    sdkFunctionName: 'getApplicationByName',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_GET_APPLICATION_BY_NAME
-  })
-})
-
-test('submitApplication', async () => {
-  const sdkArgs = ['organizationId', 'applicationId', 'submitterNotesfake']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appId: 'applicationId'
-  }
-  const apiOptions = createSwaggerOptions({ submitterNotes: 'submitterNotesfake' })
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.post_console_organizations__orgId__apps__appId__submit',
-    sdkFunctionName: 'submitApplication',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_SUBMIT_APPLICATION
-  })
-})
-
-test('getAllApplicationsForUser', async () => {
-  const sdkArgs = ['organizationId', 'offset', 'pageSize']
-  const apiParameters = {
-    orgId: 'organizationId',
-    offset: 'offset',
-    pageSize: 'pageSize',
-    appType: 'JGR'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps',
-    sdkFunctionName: 'getAllApplicationsForUser',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_GET_ALL_APPLICATIONS_FOR_USER
-  })
-})
-
-test('uploadApplicationIcon', async () => {
-  const sdkArgs = ['organizationId', 'applicationId', 'fakeicon']
-  const apiParameters = {
-    orgId: 'organizationId',
-    appId: 'applicationId',
-    appType: 'JGR',
-    assetType: 'ICON'
-  }
-  const apiOptions = createSwaggerOptions({ file: 'fakeicon' })
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.post_console_organizations__orgId__apps__appId__upload',
-    sdkFunctionName: 'uploadApplicationIcon',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_UPLOAD_APPLICATION_ICON
-  })
-})
-
-test('getAppRegistryHealth', async () => {
-  const sdkArgs = ['organizationId']
-  const apiParameters = {
-    orgId: 'organizationId'
-  }
-  const apiOptions = createSwaggerOptions()
-
-  await standardTest({
-    fullyQualifiedApiName: 'AppRegistry.get_console_organizations__orgId__apps_health',
-    sdkFunctionName: 'getAppRegistryHealth',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_GET_APPREGISTRY_HEALTH
-  })
-})
-
 test('getSDKProperties', async () => {
   const sdkClient = await createSdkClient()
   const sdkArgs = {
@@ -1060,4 +893,96 @@ test('getSDKProperties', async () => {
   Swagger.http.mockRejectedValue(err)
   await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode))
     .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues: err }))
+})
+
+test('getAllExtensionPoints default xp Id', async () => {
+  const sdkArgs = ['organizationId', 'firefly']
+  const apiParameters = {
+    orgId: 'organizationId',
+    xpId: 'firefly'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
+    sdkFunctionName: 'getAllExtensionPoints',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getAllExtensionPoints no xp Id', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgId: 'organizationId',
+    xpId: 'firefly'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
+    sdkFunctionName: 'getAllExtensionPoints',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getAllExtensionPoints using xp Id', async () => {
+  const sdkArgs = ['organizationId', 'testXP']
+  const apiParameters = {
+    orgId: 'organizationId',
+    xpId: 'testXP'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xp__xpId_',
+    sdkFunctionName: 'getAllExtensionPoints',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_ALL_EXTENSIONPOINTS
+  })
+})
+
+test('getEndPointsInWorkspace', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId']
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    sdkFunctionName: 'getEndPointsInWorkspace',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_WORKSPACE_ENDPOINTS
+  })
+})
+
+test('updateEndPointsInWorkspace', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', { some: 'body' }]
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
+  }
+  const apiOptions = createSwaggerOptions({ some: 'body' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    sdkFunctionName: 'updateEndPointsInWorkspace',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_UPDATE_WORKSPACE_ENDPOINTS
+  })
 })
