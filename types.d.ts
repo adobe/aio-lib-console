@@ -195,10 +195,14 @@ declare type ExtensionWorkspaceDetails = {
  * Returns a Promise that resolves with a new CoreConsoleAPI object
  * @param accessToken - the access token corresponding to an integration or user token
  * @param apiKey - api key to access the Developer Console
- * @param [env = prod] - the server environment ('prod' or 'stage')
+ * @param env - The name of the environment. `prod` and `stage`
+ *      are the only values supported. `prod` is default and any value
+ *      other than `prod` or `stage` it is assumed to be the default
+ *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
+ *      (which defaults to `prod` as well if not set)
  * @returns a Promise with a CoreConsoleAPI object
  */
-declare function init(accessToken: string, apiKey: string, env?: string): Promise<CoreConsoleAPI>;
+declare function init(accessToken: string, apiKey: string, env: string): Promise<CoreConsoleAPI>;
 
 /**
  * This class provides methods to call your CoreConsoleAPI APIs.
@@ -210,10 +214,14 @@ declare class CoreConsoleAPI {
      * Initializes a CoreConsoleAPI object and returns it
      * @param accessToken - the access token corresponding to an integration or user token
      * @param apiKey - api key to access the Developer Console
-     * @param [env = prod] - the server environment ('prod' or 'stage')
+     * @param env - The name of the environment. `prod` and `stage`
+     *      are the only values supported. `prod` is default and any value
+     *      other than `prod` or `stage` it is assumed to be the default
+     *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
+     *      (which defaults to `prod` as well if not set)
      * @returns a CoreConsoleAPI object
      */
-    init(accessToken: string, apiKey: string, env?: string): Promise<CoreConsoleAPI>;
+    init(accessToken: string, apiKey: string, env: string): Promise<CoreConsoleAPI>;
     /**
      * Get all Projects in an Organization
      * @param organizationId - Organization AMS ID
@@ -221,7 +229,7 @@ declare class CoreConsoleAPI {
      */
     getProjectsForOrg(organizationId: string): Promise<Response>;
     /**
-     * Create a new Firefly Project (from template) in an Organization
+     * Create a new App Builder Project (from template) in an Organization
      * @param organizationId - Organization AMS ID
      * @param projectDetails - Project details including name, title, who_created, description and type
      * @returns the response

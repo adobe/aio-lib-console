@@ -18,5 +18,5 @@ The tests cover:
 
 1. Malformed api key or access token
 2. `read` APIs
-3. `create,edit,delete` APIs for default and firefly projects, workspaces, integrations and services
+3. `create,edit,delete` APIs for default and app builder projects, workspaces, integrations and services
 4. check whitespaces in project and workspace title and description

@@ -79,7 +79,7 @@ with valid values for apiKey and accessToken</p>
 <dt><a href="#responseInterceptor">responseInterceptor(res)</a> ⇒ <code>object</code></dt>
 <dd><p>A swagger response interceptor for the console sdk</p>
 </dd>
-<dt><a href="#init">init(accessToken, apiKey, [env])</a> ⇒ <code><a href="#CoreConsoleAPI">Promise.&lt;CoreConsoleAPI&gt;</a></code></dt>
+<dt><a href="#init">init(accessToken, apiKey, env)</a> ⇒ <code><a href="#CoreConsoleAPI">Promise.&lt;CoreConsoleAPI&gt;</a></code></dt>
 <dd><p>Returns a Promise that resolves with a new CoreConsoleAPI object</p>
 </dd>
 </dl>
@@ -121,7 +121,7 @@ with valid values for apiKey and accessToken
 **Kind**: global class  
 
 * [CoreConsoleAPI](#CoreConsoleAPI)
-    * [.init(accessToken, apiKey, [env])](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+    * [.init(accessToken, apiKey, env)](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
     * [.getProjectsForOrg(organizationId)](#CoreConsoleAPI+getProjectsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createFireflyProject(organizationId, projectDetails)](#CoreConsoleAPI+createFireflyProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createProject(organizationId, projectDetails)](#CoreConsoleAPI+createProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -168,17 +168,17 @@ with valid values for apiKey and accessToken
 
 <a name="CoreConsoleAPI+init"></a>
 
-### coreConsoleAPI.init(accessToken, apiKey, [env]) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+### coreConsoleAPI.init(accessToken, apiKey, env) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
 Initializes a CoreConsoleAPI object and returns it
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI) - a CoreConsoleAPI object  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| accessToken | <code>string</code> |  | the access token corresponding to an integration or user token |
-| apiKey | <code>string</code> |  | api key to access the Developer Console |
-| [env] | <code>string</code> | <code>&quot;prod&quot;</code> | the server environment ('prod' or 'stage') |
+| Param | Type | Description |
+| --- | --- | --- |
+| accessToken | <code>string</code> | the access token corresponding to an integration or user token |
+| apiKey | <code>string</code> | api key to access the Developer Console |
+| env | <code>string</code> | The name of the environment. `prod` and `stage`      are the only values supported. `prod` is default and any value      other than `prod` or `stage` it is assumed to be the default      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env      (which defaults to `prod` as well if not set) |
 
 <a name="CoreConsoleAPI+getProjectsForOrg"></a>
 
@@ -195,7 +195,7 @@ Get all Projects in an Organization
 <a name="CoreConsoleAPI+createFireflyProject"></a>
 
 ### coreConsoleAPI.createFireflyProject(organizationId, projectDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-Create a new Firefly Project (from template) in an Organization
+Create a new App Builder Project (from template) in an Organization
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
 **Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
@@ -805,17 +805,17 @@ A swagger response interceptor for the console sdk
 
 <a name="init"></a>
 
-## init(accessToken, apiKey, [env]) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+## init(accessToken, apiKey, env) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
 Returns a Promise that resolves with a new CoreConsoleAPI object
 
 **Kind**: global function  
 **Returns**: [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI) - a Promise with a CoreConsoleAPI object  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| accessToken | <code>string</code> |  | the access token corresponding to an integration or user token |
-| apiKey | <code>string</code> |  | api key to access the Developer Console |
-| [env] | <code>string</code> | <code>&quot;prod&quot;</code> | the server environment ('prod' or 'stage') |
+| Param | Type | Description |
+| --- | --- | --- |
+| accessToken | <code>string</code> | the access token corresponding to an integration or user token |
+| apiKey | <code>string</code> | api key to access the Developer Console |
+| env | <code>string</code> | The name of the environment. `prod` and `stage`      are the only values supported. `prod` is default and any value      other than `prod` or `stage` it is assumed to be the default      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env      (which defaults to `prod` as well if not set) |
 
 <a name="Response"></a>
 
