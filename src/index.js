@@ -219,7 +219,7 @@ class CoreConsoleAPI {
   }
 
   /**
-   * Create a new Firefly Project (from template) in an Organization
+   * Create a new App Builder Project (from template) in an Organization
    *
    * @param {string} organizationId Organization AMS ID
    * @param {ProjectDetails} projectDetails Project details including name, title, who_created, description and type
