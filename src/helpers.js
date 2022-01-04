@@ -63,7 +63,6 @@ function createRequestOptions (apiKey, { parameters = {}, body }) {
  * @param {object} coreConsoleAPIInstance console core api instance
  * @param {string} apihost console api url host
  * @returns {Function} a request interceptor
- *
  */
 function requestInterceptorBuilder (coreConsoleAPIInstance, apihost) {
   return (req) => {
@@ -89,7 +88,6 @@ function requestInterceptorBuilder (coreConsoleAPIInstance, apihost) {
  *
  * @param {object} res the response object
  * @returns {object} the response object
- *
  */
 function responseInterceptor (res) {
   logger.debug(`RESPONSE:\n${JSON.stringify(res, null, 2)}`)
