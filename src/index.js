@@ -1138,7 +1138,7 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {EndpointDetails} endpointDetails endpoint details
+   * @param {object} endpointDetails endpoint details
    * @returns {Promise<Response>} the response
    */
   async updateEndPointsInWorkspace (organizationId, projectId, workspaceId, endpointDetails) {

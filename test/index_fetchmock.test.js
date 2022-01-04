@@ -9,7 +9,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-var fetchMock = require('fetch-mock')
+const fetchMock = require('fetch-mock')
 const sdk = require('../src')
 const fs = require('fs')
 const path = require('path')
@@ -53,7 +53,7 @@ test('test getOrganizations', async () => {
     }
   ])
   // check success response
-  var res = await sdkClient.getOrganizations()
+  const res = await sdkClient.getOrganizations()
   expect(res.ok).toBe(true)
   expect(Array.isArray(res.body)).toBe(true)
   expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))

@@ -747,7 +747,7 @@ Update endpoints in a workspace
 | organizationId | <code>string</code> | Organization AMS ID |
 | projectId | <code>string</code> | Project ID |
 | workspaceId | <code>string</code> | Workspace ID |
-| endpointDetails | <code>EndpointDetails</code> | endpoint details |
+| endpointDetails | <code>object</code> | endpoint details |
 
 <a name="CoreConsoleAPI+getSDKProperties"></a>
 

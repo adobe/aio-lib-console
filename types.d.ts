@@ -549,7 +549,7 @@ declare class CoreConsoleAPI {
      * @param endpointDetails - endpoint details
      * @returns the response
      */
-    updateEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string, endpointDetails: EndpointDetails): Promise<Response>;
+    updateEndPointsInWorkspace(organizationId: string, projectId: string, workspaceId: string, endpointDetails: any): Promise<Response>;
     /**
      * Get details about a service (SDK) subscribed to an integration
      * @param organizationId - Organization AMS ID
