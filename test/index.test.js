@@ -986,3 +986,52 @@ test('updateEndPointsInWorkspace', async () => {
     ErrorClass: codes.ERROR_UPDATE_WORKSPACE_ENDPOINTS
   })
 })
+
+test('getDevTerms', async () => {
+  const sdkArgs = []
+  const apiParameters = {}
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'DevTerms.get_console_services_ims_terms',
+    sdkFunctionName: 'getDevTerms',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_DEV_TERMS
+  })
+})
+
+test('acceptOrgDevTerms', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgId: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'DevTerms.post_console_services_ims_organizations__orgId__terms',
+    sdkFunctionName: 'acceptOrgDevTerms',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_POST_DEV_TERMS_ACCEPTANCE
+  })
+})
+
+test('checkOrgDevTerms', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgId: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'DevTerms.get_console_services_ims_organizations__orgId__terms',
+    sdkFunctionName: 'checkOrgDevTerms',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_DEV_TERMS_ACCEPTANCE
+  })
+})

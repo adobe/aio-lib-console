@@ -83,7 +83,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} notes Notes
  */
 /**
- * @typedef {object} ExtensionWrokspaceEndpoints
+ * @typedef {object} ExtensionWorkspaceEndpoints
  * @property {object} additionalProp1 additional property 1
  * @property {object} additionalProp2 additional property 2
  */
@@ -97,7 +97,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @typedef {object} ExtensionWorkspaceDetails
  * @property {string} id Id
  * @property {string} name Name
- * @property {ExtensionWrokspaceEndpoints} endpoints Description
+ * @property {ExtensionWorkspaceEndpoints} endpoints Description
  * @property {ExtensionWorkspaceServices} services Services
  * @property {ExtensionIcon} icon Icon
  * @property {string} releaseNotes Release Notes
@@ -110,7 +110,6 @@ const API_HOST = {
   prod: 'developers.adobe.io',
   stage: 'developers-stage.adobe.io'
 }
-
 const CONSOLE_GRAPHQL_ENDPOINT = {
   stage: 'https://console-stage.adobe.io/graphql',
   prod: 'https://console.adobe.io/graphql'
@@ -696,6 +695,67 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Check developer terms acceptance
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async checkOrgDevTerms (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .get_console_services_ims_organizations__orgId__terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_DEV_TERMS_ACCEPTANCE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Accept developer terms
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async acceptOrgDevTerms (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .post_console_services_ims_organizations__orgId__terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_POST_DEV_TERMS_ACCEPTANCE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get developer terms
+   *
+   * @returns {Promise<Response>} the response
+   */
+  async getDevTerms () {
+    const sdkDetails = {}
+    const parameters = {}
+
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .get_console_services_ims_terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_DEV_TERMS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
