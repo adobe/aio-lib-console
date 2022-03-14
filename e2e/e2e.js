@@ -704,6 +704,29 @@ describe('delete workspace/project', () => {
   })
 })
 
+describe('dev terms', () => {
+  test('get dev terms', async () => {
+    const res = await sdkClient.getDevTerms()
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+  test('check dev terms', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.checkOrgDevTerms(orgId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+  test('accept dev terms', async () => {
+    expect(orgId).toBeDefined()
+    const res = await sdkClient.acceptOrgDevTerms(orgId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+})
 // Test organization integrations (similar to workspace credentials), commented out
 // because delete integration is failing.. - tracked internally at IOC-4291
 
