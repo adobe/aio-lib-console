@@ -110,12 +110,6 @@ const API_HOST = {
   prod: 'developers.adobe.io',
   stage: 'developers-stage.adobe.io'
 }
-const CONSOLE_GRAPHQL_ENDPOINT = {
-  stage: 'https://console-stage.adobe.io/graphql',
-  prod: 'https://console.adobe.io/graphql'
-}
-
-/* global ConsoleResponse */ // for linter
 
 /**
  * Returns a Promise that resolves with a new CoreConsoleAPI object
@@ -1233,53 +1227,20 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @param {string} integrationId Integration ID
    * @param {string} sdkCode the service sdkCode to query (e.g. AdobeAnalyticsSDK)
-   * @returns {Promise<ConsoleResponse>} the response
+   * @returns {Promise<Response>} the response
    */
   async getSDKProperties (organizationId, integrationId, sdkCode) {
-    // this call is not part of the swagger api so we neead to expose it manually via the graphQL API
-    const sdkDetails = { orgId: organizationId, intId: integrationId, sdkCode }
-    if (organizationId === undefined || integrationId === undefined || sdkCode === undefined) {
-      throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: 'missing one or more of "organizationId, integrationId, sdkCode" parameters' })
-    }
-
-    let response
+    const parameters = { orgId: organizationId, intId: integrationId, sdkCode }
+    const sdkDetails = { parameters }
     try {
-      // graphql query
-      const query = `
-      query GetSdkProperties($orgId: String!, $intId: String!, $sdkCode: String!) {
-        getSdkProperties(orgId: $orgId, intId: $intId, sdkCode: $sdkCode) {
-          licenseConfigs { id name productId description selected __typename }
-          __typename
-        }
-      }`
-
-      // send the request
-      response = await Swagger.http({
-        url: CONSOLE_GRAPHQL_ENDPOINT[this.env],
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          Authorization: `Bearer ${this.accessToken}`
-        },
-        body: JSON.stringify({
-          operationName: 'GetSdkProperties',
-          query,
-          variables: { intId: integrationId, orgId: organizationId, sdkCode }
-        })
-      })
+      const res = await this.sdk.apis.console
+        .get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
     } catch (err) {
       throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: reduceError(err) })
     }
-
-    if (response.body.errors) {
-      // in case of errors the GraphQL api returns 200 with an errors array, so here the
-      // first error from the array is wrapped into an SDK error and thrown
-      const err = response.body.errors[0]
-      throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: JSON.stringify(err) })
-    }
-
-    return response
   }
 }
 

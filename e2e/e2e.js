@@ -27,7 +27,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId, fromCredentialId
 
 const ts = new Date().getTime()
 
@@ -385,6 +385,7 @@ describe('Workspace credential test', () => {
       expect(Array.isArray(res.body)).toBe(true)
       expect(res.body[0].id_workspace).toEqual(workspaceId)
       expect(res.body[0].id_integration).toEqual(credentialId)
+      fromCredentialId = res.body[0].id_integration
       expect(res.body[0].flow_type).toEqual('entp')
       expect(res.body[0].integration_type).toEqual('service')
     })
@@ -864,6 +865,18 @@ describe('dev terms', () => {
 //     })
 //   })
 // })
+
+describe('getSDKProperties', () => {
+  test('getSDKProperties', async () => {
+    expect(orgId).toBeDefined()
+    expect(fromCredentialId).toBeDefined()
+    const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+    const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+})
 
 describe('create, edit, get, delete: test trailing spaces', () => {
   let trailingProjectId, trailingWorkspaceId
