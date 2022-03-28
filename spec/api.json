@@ -330,9 +330,9 @@
     },
     "/console/organizations/{orgId}/integrations/entp/{intId}/service/{sdkCode}/properties": {
       "get": {
-        "summary": "Get details about a service (SDK) subscribed to an integration",
+        "summary": "List of credential sdk properties",
         "tags": [
-          "console"
+          "Organizations"
         ],
         "parameters": [
           {
@@ -364,7 +364,7 @@
           },
           {
             "name": "intId",
-            "description": "Integration Id",
+            "description": "Credential id",
             "in": "path",
             "required": true,
             "schema": {
@@ -373,7 +373,7 @@
           },
           {
             "name": "sdkCode",
-            "description": "the service sdkCode to query (e.g. AdobeAnalyticsSDK)",
+            "description": "The service sdk code (e.g. AdobeAnalyticsSDK)",
             "in": "path",
             "required": true,
             "schema": {
@@ -389,27 +389,48 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "licenseConfigs": {
+                    "sdkCode": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "sdkList": {
                       "type": "array",
-                      "description": "licenseConfigs",
                       "items": {
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string",
-                            "description": "licenseConfigs id"
+                            "type": "integer"
+                          },
+                          "code": {
+                            "type": "string"
                           },
                           "name": {
-                            "type": "string",
-                            "description": "licenseConfigs name"
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "licenseConfigs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
                           },
                           "productId": {
-                            "type": "string",
-                            "description": "licenseConfigs productId"
+                            "type": "string"
                           },
                           "description": {
-                            "type": "string",
-                            "description": "licenseConfigs description"
+                            "type": "string"
+                          },
+                          "selected": {
+                            "type": "boolean"
                           }
                         }
                       }

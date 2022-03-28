@@ -1233,7 +1233,7 @@ class CoreConsoleAPI {
     const parameters = { orgId: organizationId, intId: integrationId, sdkCode }
     const sdkDetails = { parameters }
     try {
-      const res = await this.sdk.apis.console
+      const res = await this.sdk.apis.Organizations
         .get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties(
           ...this.__createRequestOptions(parameters)
         )
