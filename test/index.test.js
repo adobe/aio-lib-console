@@ -842,57 +842,23 @@ test('getAtlasQuotaUsage', async () => {
 })
 
 test('getSDKProperties', async () => {
-  const sdkClient = await createSdkClient()
-  const sdkArgs = {
+  const sdkArgs = ['organizationId', 'integrationId', 'sdkCode']
+
+  const apiParameters = {
     orgId: 'organizationId',
     intId: 'integrationId',
     sdkCode: 'sdkCode'
   }
+  const apiOptions = createSwaggerOptions()
 
-  // test missing args
-  const messageValues = `missing one or more of "${sdkArgs.orgId}, ${sdkArgs.intId}, ${sdkArgs.sdkCode}" parameters`
-
-  await expect(sdkClient.getSDKProperties(undefined, undefined, undefined))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
-  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, undefined, undefined))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
-  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, undefined))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
-  await expect(sdkClient.getSDKProperties(undefined, sdkArgs.intId, sdkArgs.sdkCode))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues }))
-
-  // test request - success
-  const Swagger = require('swagger-client')
-  Swagger.http.mockResolvedValue({
-    body: 'success'
+  await standardTest({
+    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties',
+    sdkFunctionName: 'getSDKProperties',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_SDK_PROPERTIES
   })
-  await sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode)
-  expect(Swagger.http).toHaveBeenCalledTimes(1)
-  expect(Swagger.http).toHaveBeenCalledWith({
-    url: 'https://console.adobe.io/graphql',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': gApiKey,
-      Authorization: `Bearer ${gAccessToken}`
-    },
-    body: expect.any(String)
-  })
-
-  // failure cases
-  /// returns an error array
-  Swagger.http.mockReset()
-  Swagger.http.mockResolvedValue({
-    body: { errors: [{ err: 'fake error' }] }
-  })
-  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues: JSON.stringify({ err: 'fake error' }) }))
-  /// Swagger.http throws
-  Swagger.http.mockReset()
-  const err = new Error('some API error')
-  Swagger.http.mockRejectedValue(err)
-  await expect(sdkClient.getSDKProperties(sdkArgs.orgId, sdkArgs.intId, sdkArgs.sdkCode))
-    .rejects.toEqual(new codes.ERROR_GET_SDK_PROPERTIES({ messageValues: err }))
 })
 
 test('getAllExtensionPoints default xp Id', async () => {
