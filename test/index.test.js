@@ -852,7 +852,7 @@ test('getSDKProperties', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'console.get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties',
+    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties',
     sdkFunctionName: 'getSDKProperties',
     apiParameters,
     apiOptions,
