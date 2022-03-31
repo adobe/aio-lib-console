@@ -172,6 +172,10 @@
               "accepted": {
                 "type": "boolean",
                 "description": "Flag for accepted state"
+              },
+              "current": {
+                "type": "boolean",
+                "description": "Flag for current version of Developer Terms"
               }
             }
           },
