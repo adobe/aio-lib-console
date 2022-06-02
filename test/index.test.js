@@ -695,7 +695,7 @@ test('getBindingsForIntegration', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgId__integrations__intId__bindings',
+    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgId__integrations_entp__intId__bindings',
     sdkFunctionName: 'getBindingsForIntegration',
     apiParameters,
     apiOptions,
@@ -713,7 +713,7 @@ test('uploadAndBindCertificate', async () => {
   const apiOptions = createSwaggerOptions({ certificate: 'certificate' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations__intId__bindings',
+    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_entp__intId__bindings',
     sdkFunctionName: 'uploadAndBindCertificate',
     apiParameters,
     apiOptions,
@@ -733,7 +733,7 @@ test('deleteBinding', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.delete_console_organizations__orgId__integrations__intId__bindings__bindingId_',
+    fullyQualifiedApiName: 'Organizations.delete_console_organizations__orgId__integrations_entp__intId__bindings__bindingId_',
     sdkFunctionName: 'deleteBinding',
     apiParameters,
     apiOptions,
