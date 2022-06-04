@@ -57,6 +57,6 @@
     "validate": "node bin/validate_spec.js spec/api.json"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": "^14.18 || ^16.13 || >=18"
   }
 }
