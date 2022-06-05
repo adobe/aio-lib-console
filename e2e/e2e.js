@@ -456,20 +456,19 @@ describe('Workspace credential test', () => {
       expect(res.body.client_secrets).toBeDefined()
     })
 
-    // commented out because endpoint returns 404 - tracked internally at IOC-4292
-    // test('test uploadAndBindCertificate API', async () => {
-    //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
+    test('test uploadAndBindCertificate API', async () => {
+      expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
 
-    //   expect(orgId).toBeDefined()
+      expect(orgId).toBeDefined()
 
-    //   const keyPair = cert.generate('aio-lib-console-e2e-additional-certificate', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
-    //   const certFile = tmp.fileSync({ postfix: '.crt' })
-    //   fs.writeFileSync(certFile.fd, keyPair.cert)
-    //   const res = await sdkClient.uploadAndBindCertificate(orgId, credentialId, fs.createReadStream(certFile.name))
-    //   expect(res.ok).toBe(true)
-    //   expect(res.status).toBe(200)
-    //   expect(typeof (res.body)).toBe('object')
-    // })
+      const keyPair = cert.generate('aio-lib-console-e2e-additional-certificate', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
+      const certFile = tmp.fileSync({ postfix: '.crt' })
+      fs.writeFileSync(certFile.fd, keyPair.cert)
+      const res = await sdkClient.uploadAndBindCertificate(orgId, credentialId, fs.createReadStream(certFile.name))
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof (res.body)).toBe('object')
+    })
 
     // delete
     test('test deleteCredential API (integrationType: entp)', async () => {
