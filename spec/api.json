@@ -3797,7 +3797,7 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/integrations/{intId}/bindings": {
+    "/console/organizations/{orgId}/integrations/entp/{intId}/bindings": {
       "post": {
         "summary": "upload and bind certificate",
         "tags": [
@@ -3844,13 +3844,22 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "type": "file"
+                "type": "object",
+                "required": [
+                  "certificate"
+                ],
+                "properties": {
+                  "certificate": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
           },
-          "description": "certificate"
+          "description": "form data"
         },
         "responses": {
           "200": {
@@ -4048,7 +4057,7 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/integrations/{intId}/bindings/{bindingId}": {
+    "/console/organizations/{orgId}/integrations/entp/{intId}/bindings/{bindingId}": {
       "delete": {
         "summary": "delete binding",
         "tags": [
