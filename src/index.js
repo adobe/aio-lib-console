@@ -951,7 +951,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .get_console_organizations__orgId__integrations__intId__bindings(
+        .get_console_organizations__orgId__integrations_entp__intId__bindings(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -975,7 +975,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .post_console_organizations__orgId__integrations__intId__bindings(
+        .post_console_organizations__orgId__integrations_entp__intId__bindings(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -998,7 +998,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .delete_console_organizations__orgId__integrations__intId__bindings__bindingId_(
+        .delete_console_organizations__orgId__integrations_entp__intId__bindings__bindingId_(
           ...this.__createRequestOptions(parameters)
         )
       return res
