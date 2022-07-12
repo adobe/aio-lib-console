@@ -152,7 +152,7 @@ declare type ExtensionSubmissionDetails = {
  * @property additionalProp1 - additional property 1
  * @property additionalProp2 - additional property 2
  */
-declare type ExtensionWrokspaceEndpoints = {
+declare type ExtensionWorkspaceEndpoints = {
     additionalProp1: any;
     additionalProp2: any;
 };
@@ -182,13 +182,46 @@ declare type ExtensionWorkspaceServices = {
 declare type ExtensionWorkspaceDetails = {
     id: string;
     name: string;
-    endpoints: ExtensionWrokspaceEndpoints;
+    endpoints: ExtensionWorkspaceEndpoints;
     services: ExtensionWorkspaceServices;
     icon: ExtensionIcon;
     releaseNotes: string;
     technicalUserId: string;
     appId: string;
     publisherId: string;
+};
+
+/**
+ * @property sdkCode - the sdk code
+ * @property roles - the roles
+ * @property licenseConfigs - the license configs
+ */
+declare type ServiceInfo = {
+    sdkCode: string;
+    roles: Role[];
+    licenseConfigs: LicenseConfig[];
+};
+
+/**
+ * @property op - the operation (e.g. 'add')
+ * @property id - the license id
+ * @property productId - the product id
+ */
+declare type LicenseConfig = {
+    op: string;
+    id: string;
+    productId: string;
+};
+
+/**
+ * @property id - the role id
+ * @property code - the role code
+ * @property name - the role name
+ */
+declare type Role = {
+    id: number;
+    code: string;
+    name: string;
 };
 
 /**
@@ -359,7 +392,7 @@ declare class CoreConsoleAPI {
      * @param serviceInfo - Information about the services like SDK Codes, licenseConfig and roles
      * @returns the response
      */
-    subscribeCredentialToServices(organizationId: string, projectId: string, workspaceId: string, credentialType: string, credentialId: string, serviceInfo: any): Promise<Response>;
+    subscribeCredentialToServices(organizationId: string, projectId: string, workspaceId: string, credentialType: string, credentialId: string, serviceInfo: ServiceInfo[]): Promise<Response>;
     /**
      * Get the Workspace from a Credential ID
      * @param organizationId - Organization AMS ID
@@ -395,6 +428,23 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getServicesForOrg(organizationId: string): Promise<Response>;
+    /**
+     * Check developer terms acceptance
+     * @param organizationId - Organization AMS ID
+     * @returns the response
+     */
+    checkOrgDevTerms(organizationId: string): Promise<Response>;
+    /**
+     * Accept developer terms
+     * @param organizationId - Organization AMS ID
+     * @returns the response
+     */
+    acceptOrgDevTerms(organizationId: string): Promise<Response>;
+    /**
+     * Get developer terms
+     * @returns the response
+     */
+    getDevTerms(): Promise<Response>;
     /**
      * Create an Adobe I/O Runtime namespace in the given workspace
      * @param organizationId - Organization AMS ID
@@ -557,6 +607,6 @@ declare class CoreConsoleAPI {
      * @param sdkCode - the service sdkCode to query (e.g. AdobeAnalyticsSDK)
      * @returns the response
      */
-    getSDKProperties(organizationId: string, integrationId: string, sdkCode: string): Promise<ConsoleResponse>;
+    getSDKProperties(organizationId: string, integrationId: string, sdkCode: string): Promise<Response>;
 }
 
