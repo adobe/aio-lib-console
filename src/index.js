@@ -37,6 +37,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [description] Description
  * @property {string} type Type (default or jaeger)
  */
+
 /**
  * @typedef {object} WorkspaceDetails
  * @property {string} name Name
@@ -46,6 +47,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [type] Type
  * @property {string} [quotaRule] quotaRule
  */
+
 /**
  * @typedef {object} AdobeIdIntegrationDetails
  * @property {string} name Name
@@ -57,16 +59,19 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
  */
+
 /**
  * @typedef {object} ExtensionIcon
  * @property {string} id Id
  */
+
 /**
  * @typedef {object} ExtensionMedia
  * @property {string} id Id
  * @property {string} type Type
  * @property {string} order order
  */
+
 /**
  * @typedef {object} ExtensionDetails
  * @property {string} name Name
@@ -76,23 +81,27 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {ExtensionIcon} icon Icon
  * @property {Array.<ExtensionMedia>} media array of Media Objects
  */
+
 /**
  * @typedef {object} ExtensionSubmissionDetails
  * @property {string} appType app type
  * @property {string} id Id
  * @property {string} notes Notes
  */
+
 /**
  * @typedef {object} ExtensionWorkspaceEndpoints
  * @property {object} additionalProp1 additional property 1
  * @property {object} additionalProp2 additional property 2
  */
+
 /**
  * @typedef {object} ExtensionWorkspaceServices
  * @property {string} code Code
  * @property {string} name Name
  * @property {Array.<string>} licenseGroupIds License group Ids
  */
+
 /**
  * @typedef {object} ExtensionWorkspaceDetails
  * @property {string} id Id
@@ -104,6 +113,27 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} technicalUserId Technical user Id
  * @property {string} appId App Id
  * @property {string} publisherId Publisher Id
+ */
+
+/**
+ * @typedef {object} ServiceInfo
+ * @property {string} sdkCode the sdk code
+ * @property {Array<Role>} roles the roles
+ * @property {Array<LicenseConfig>} licenseConfigs the license configs
+ */
+
+/**
+ * @typedef {object} LicenseConfig
+ * @property {string} op the operation (e.g. 'add')
+ * @property {string} id the license id
+ * @property {string} productId the product id
+ */
+
+/**
+ * @typedef {object} Role
+ * @property {number} id the role id
+ * @property {string} code the role code
+ * @property {string} name the role name
  */
 
 const API_HOST = {
@@ -559,7 +589,7 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @param {string} credentialType Credential type (adobeid, analytics or entp)
    * @param {string} credentialId Credential ID
-   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @param {Array<ServiceInfo>} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
    * @returns {Promise<Response>} the response
    */
   async subscribeCredentialToServices (organizationId, projectId, workspaceId, credentialType, credentialId, serviceInfo) {
