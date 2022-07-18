@@ -915,6 +915,24 @@ test('getAllExtensionPoints using xp Id', async () => {
   })
 })
 
+test('getAllExtensionPoints using appId', async () => {
+  const sdkArgs = ['organizationId', 'appId']
+  const apiParameters = {
+    orgId: 'organizationId',
+    appId: 'appId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__xr_api_v1_app',
+    sdkFunctionName: 'getApplicationExtensions',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_APPLICATION_EXTENSIONS
+  })
+})
+
 test('getEndPointsInWorkspace', async () => {
   const sdkArgs = ['organizationId', 'projectId', 'workspaceId']
   const apiParameters = {

@@ -1194,6 +1194,27 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Get Extenions for an App Builder application
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId App Builder Application ID
+   * @returns {Promise<Response>} the response
+   */
+  async getApplicationExtensions (organizationId, applicationId) {
+    const parameters = { orgId: organizationId, appId: applicationId }
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.Extensions
+        .get_console_organizations__orgId__xr_api_v1_app(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_APPLICATION_EXTENSIONS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    *  Get endpoints in a workspace
    *
    * @param {string} organizationId Organization AMS ID
