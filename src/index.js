@@ -1194,7 +1194,7 @@ class CoreConsoleAPI {
   }
 
   /**
-   * Get Extenions for an App Builder application
+   * Get Extensions for an App Builder application
    *
    * @param {string} organizationId Organization AMS ID
    * @param {string} applicationId App Builder Application ID
