@@ -28,7 +28,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId, fromCredentialId
 
 const ts = new Date().getTime()
 
@@ -387,6 +387,7 @@ describe('Workspace credential test', () => {
       expect(Array.isArray(res.body)).toBe(true)
       expect(res.body[0].id_workspace).toEqual(workspaceId)
       expect(res.body[0].id_integration).toEqual(credentialId)
+      fromCredentialId = res.body[0].id_integration
       expect(res.body[0].flow_type).toEqual('entp')
       expect(res.body[0].integration_type).toEqual('service')
     })
@@ -457,20 +458,19 @@ describe('Workspace credential test', () => {
       expect(res.body.client_secrets).toBeDefined()
     })
 
-    // commented out because endpoint returns 404 - tracked internally at IOC-4292
-    // test('test uploadAndBindCertificate API', async () => {
-    //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
+    test('test uploadAndBindCertificate API', async () => {
+      expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
 
-    //   expect(orgId).toBeDefined()
+      expect(orgId).toBeDefined()
 
-    //   const keyPair = cert.generate('aio-lib-console-e2e-additional-certificate', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
-    //   const certFile = tmp.fileSync({ postfix: '.crt' })
-    //   fs.writeFileSync(certFile.fd, keyPair.cert)
-    //   const res = await sdkClient.uploadAndBindCertificate(orgId, credentialId, fs.createReadStream(certFile.name))
-    //   expect(res.ok).toBe(true)
-    //   expect(res.status).toBe(200)
-    //   expect(typeof (res.body)).toBe('object')
-    // })
+      const keyPair = cert.generate('aio-lib-console-e2e-additional-certificate', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
+      const certFile = tmp.fileSync({ postfix: '.crt' })
+      fs.writeFileSync(certFile.fd, keyPair.cert)
+      const res = await sdkClient.uploadAndBindCertificate(orgId, credentialId, fs.createReadStream(certFile.name))
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof (res.body)).toBe('object')
+    })
 
     // delete
     test('test deleteCredential API (integrationType: entp)', async () => {
@@ -709,6 +709,29 @@ describe('delete workspace/project', () => {
   })
 })
 
+describe('dev terms', () => {
+  test('get dev terms', async () => {
+    const res = await sdkClient.getDevTerms()
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+  test('check dev terms', async () => {
+    expect(orgId).toBeDefined()
+
+    const res = await sdkClient.checkOrgDevTerms(orgId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+  test('accept dev terms', async () => {
+    expect(orgId).toBeDefined()
+    const res = await sdkClient.acceptOrgDevTerms(orgId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+})
 // Test organization integrations (similar to workspace credentials), commented out
 // because delete integration is failing.. - tracked internally at IOC-4291
 
@@ -846,6 +869,18 @@ describe('delete workspace/project', () => {
 //     })
 //   })
 // })
+
+describe('getSDKProperties', () => {
+  test('getSDKProperties', async () => {
+    expect(orgId).toBeDefined()
+    expect(fromCredentialId).toBeDefined()
+    const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+    const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+})
 
 describe('create, edit, get, delete: test trailing spaces', () => {
   let trailingProjectId, trailingWorkspaceId

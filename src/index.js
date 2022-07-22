@@ -37,6 +37,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [description] Description
  * @property {string} type Type (default or jaeger)
  */
+
 /**
  * @typedef {object} WorkspaceDetails
  * @property {string} name Name
@@ -46,6 +47,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [type] Type
  * @property {string} [quotaRule] quotaRule
  */
+
 /**
  * @typedef {object} AdobeIdIntegrationDetails
  * @property {string} name Name
@@ -57,16 +59,19 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
  */
+
 /**
  * @typedef {object} ExtensionIcon
  * @property {string} id Id
  */
+
 /**
  * @typedef {object} ExtensionMedia
  * @property {string} id Id
  * @property {string} type Type
  * @property {string} order order
  */
+
 /**
  * @typedef {object} ExtensionDetails
  * @property {string} name Name
@@ -76,28 +81,32 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {ExtensionIcon} icon Icon
  * @property {Array.<ExtensionMedia>} media array of Media Objects
  */
+
 /**
  * @typedef {object} ExtensionSubmissionDetails
  * @property {string} appType app type
  * @property {string} id Id
  * @property {string} notes Notes
  */
+
 /**
- * @typedef {object} ExtensionWrokspaceEndpoints
+ * @typedef {object} ExtensionWorkspaceEndpoints
  * @property {object} additionalProp1 additional property 1
  * @property {object} additionalProp2 additional property 2
  */
+
 /**
  * @typedef {object} ExtensionWorkspaceServices
  * @property {string} code Code
  * @property {string} name Name
  * @property {Array.<string>} licenseGroupIds License group Ids
  */
+
 /**
  * @typedef {object} ExtensionWorkspaceDetails
  * @property {string} id Id
  * @property {string} name Name
- * @property {ExtensionWrokspaceEndpoints} endpoints Description
+ * @property {ExtensionWorkspaceEndpoints} endpoints Description
  * @property {ExtensionWorkspaceServices} services Services
  * @property {ExtensionIcon} icon Icon
  * @property {string} releaseNotes Release Notes
@@ -106,17 +115,31 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} publisherId Publisher Id
  */
 
+/**
+ * @typedef {object} ServiceInfo
+ * @property {string} sdkCode the sdk code
+ * @property {Array<Role>} roles the roles
+ * @property {Array<LicenseConfig>} licenseConfigs the license configs
+ */
+
+/**
+ * @typedef {object} LicenseConfig
+ * @property {string} op the operation (e.g. 'add')
+ * @property {string} id the license id
+ * @property {string} productId the product id
+ */
+
+/**
+ * @typedef {object} Role
+ * @property {number} id the role id
+ * @property {string} code the role code
+ * @property {string} name the role name
+ */
+
 const API_HOST = {
   prod: 'developers.adobe.io',
   stage: 'developers-stage.adobe.io'
 }
-
-const CONSOLE_GRAPHQL_ENDPOINT = {
-  stage: 'https://console-stage.adobe.io/graphql',
-  prod: 'https://console.adobe.io/graphql'
-}
-
-/* global ConsoleResponse */ // for linter
 
 /**
  * Returns a Promise that resolves with a new CoreConsoleAPI object
@@ -566,7 +589,7 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @param {string} credentialType Credential type (adobeid, analytics or entp)
    * @param {string} credentialId Credential ID
-   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @param {Array<ServiceInfo>} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
    * @returns {Promise<Response>} the response
    */
   async subscribeCredentialToServices (organizationId, projectId, workspaceId, credentialType, credentialId, serviceInfo) {
@@ -696,6 +719,67 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Check developer terms acceptance
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async checkOrgDevTerms (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .get_console_services_ims_organizations__orgId__terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_DEV_TERMS_ACCEPTANCE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Accept developer terms
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response
+   */
+  async acceptOrgDevTerms (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .post_console_services_ims_organizations__orgId__terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_POST_DEV_TERMS_ACCEPTANCE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get developer terms
+   *
+   * @returns {Promise<Response>} the response
+   */
+  async getDevTerms () {
+    const sdkDetails = {}
+    const parameters = {}
+
+    try {
+      const res = await this.sdk.apis.DevTerms
+        .get_console_services_ims_terms(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_DEV_TERMS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
@@ -897,7 +981,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .get_console_organizations__orgId__integrations__intId__bindings(
+        .get_console_organizations__orgId__integrations_entp__intId__bindings(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -921,7 +1005,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .post_console_organizations__orgId__integrations__intId__bindings(
+        .post_console_organizations__orgId__integrations_entp__intId__bindings(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -944,7 +1028,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .delete_console_organizations__orgId__integrations__intId__bindings__bindingId_(
+        .delete_console_organizations__orgId__integrations_entp__intId__bindings__bindingId_(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -1110,6 +1194,27 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Get Extensions for an App Builder application
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} applicationId App Builder Application ID
+   * @returns {Promise<Response>} the response
+   */
+  async getApplicationExtensions (organizationId, applicationId) {
+    const parameters = { orgId: organizationId, appId: applicationId }
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.Extensions
+        .get_console_organizations__orgId__xr_api_v1_app(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_APPLICATION_EXTENSIONS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    *  Get endpoints in a workspace
    *
    * @param {string} organizationId Organization AMS ID
@@ -1173,53 +1278,20 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @param {string} integrationId Integration ID
    * @param {string} sdkCode the service sdkCode to query (e.g. AdobeAnalyticsSDK)
-   * @returns {Promise<ConsoleResponse>} the response
+   * @returns {Promise<Response>} the response
    */
   async getSDKProperties (organizationId, integrationId, sdkCode) {
-    // this call is not part of the swagger api so we neead to expose it manually via the graphQL API
-    const sdkDetails = { orgId: organizationId, intId: integrationId, sdkCode }
-    if (organizationId === undefined || integrationId === undefined || sdkCode === undefined) {
-      throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: 'missing one or more of "organizationId, integrationId, sdkCode" parameters' })
-    }
-
-    let response
+    const parameters = { orgId: organizationId, intId: integrationId, sdkCode }
+    const sdkDetails = { parameters }
     try {
-      // graphql query
-      const query = `
-      query GetSdkProperties($orgId: String!, $intId: String!, $sdkCode: String!) {
-        getSdkProperties(orgId: $orgId, intId: $intId, sdkCode: $sdkCode) {
-          licenseConfigs { id name productId description selected __typename }
-          __typename
-        }
-      }`
-
-      // send the request
-      response = await Swagger.http({
-        url: CONSOLE_GRAPHQL_ENDPOINT[this.env],
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          Authorization: `Bearer ${this.accessToken}`
-        },
-        body: JSON.stringify({
-          operationName: 'GetSdkProperties',
-          query,
-          variables: { intId: integrationId, orgId: organizationId, sdkCode }
-        })
-      })
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgId__integrations_entp__intId__service__sdkCode__properties(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
     } catch (err) {
       throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: reduceError(err) })
     }
-
-    if (response.body.errors) {
-      // in case of errors the GraphQL api returns 200 with an errors array, so here the
-      // first error from the array is wrapped into an SDK error and thrown
-      const err = response.body.errors[0]
-      throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: JSON.stringify(err) })
-    }
-
-    return response
   }
 }
 

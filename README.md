@@ -103,11 +103,17 @@ with valid values for apiKey and accessToken</p>
 <dd></dd>
 <dt><a href="#ExtensionSubmissionDetails">ExtensionSubmissionDetails</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#ExtensionWrokspaceEndpoints">ExtensionWrokspaceEndpoints</a> : <code>object</code></dt>
+<dt><a href="#ExtensionWorkspaceEndpoints">ExtensionWorkspaceEndpoints</a> : <code>object</code></dt>
 <dd></dd>
 <dt><a href="#ExtensionWorkspaceServices">ExtensionWorkspaceServices</a> : <code>object</code></dt>
 <dd></dd>
 <dt><a href="#ExtensionWorkspaceDetails">ExtensionWorkspaceDetails</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#ServiceInfo">ServiceInfo</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#LicenseConfig">LicenseConfig</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#Role">Role</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
@@ -144,6 +150,9 @@ with valid values for apiKey and accessToken
     * [.deleteCredential(organizationId, projectId, workspaceId, credentialType, credentialId)](#CoreConsoleAPI+deleteCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getOrganizations()](#CoreConsoleAPI+getOrganizations) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getServicesForOrg(organizationId)](#CoreConsoleAPI+getServicesForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.checkOrgDevTerms(organizationId)](#CoreConsoleAPI+checkOrgDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.acceptOrgDevTerms(organizationId)](#CoreConsoleAPI+acceptOrgDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getDevTerms()](#CoreConsoleAPI+getDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createRuntimeNamespace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+createRuntimeNamespace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getPluginsForWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getPluginsForWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getIntegrationsForOrg(organizationId)](#CoreConsoleAPI+getIntegrationsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -164,7 +173,7 @@ with valid values for apiKey and accessToken
     * [.getAllExtensionPoints(organizationId, [xpId], [options])](#CoreConsoleAPI+getAllExtensionPoints) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getEndPointsInWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
+    * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -418,7 +427,7 @@ Subscribe a Workspace Credential to Services
 | workspaceId | <code>string</code> | Workspace ID |
 | credentialType | <code>string</code> | Credential type (adobeid, analytics or entp) |
 | credentialId | <code>string</code> | Credential ID |
-| serviceInfo | <code>object</code> | Information about the services like SDK Codes, licenseConfig and roles |
+| serviceInfo | [<code>Array.&lt;ServiceInfo&gt;</code>](#ServiceInfo) | Information about the services like SDK Codes, licenseConfig and roles |
 
 <a name="CoreConsoleAPI+getWorkspaceForCredential"></a>
 
@@ -481,6 +490,37 @@ Get all Services available to an Organization
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
 
+<a name="CoreConsoleAPI+checkOrgDevTerms"></a>
+
+### coreConsoleAPI.checkOrgDevTerms(organizationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Check developer terms acceptance
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+
+<a name="CoreConsoleAPI+acceptOrgDevTerms"></a>
+
+### coreConsoleAPI.acceptOrgDevTerms(organizationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Accept developer terms
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+
+<a name="CoreConsoleAPI+getDevTerms"></a>
+
+### coreConsoleAPI.getDevTerms() ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get developer terms
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
 <a name="CoreConsoleAPI+createRuntimeNamespace"></a>
 
 ### coreConsoleAPI.createRuntimeNamespace(organizationId, projectId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -751,11 +791,11 @@ Update endpoints in a workspace
 
 <a name="CoreConsoleAPI+getSDKProperties"></a>
 
-### coreConsoleAPI.getSDKProperties(organizationId, integrationId, sdkCode) ⇒ <code>Promise.&lt;ConsoleResponse&gt;</code>
+### coreConsoleAPI.getSDKProperties(organizationId, integrationId, sdkCode) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 Get details about a service (SDK) subscribed to an integration
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
-**Returns**: <code>Promise.&lt;ConsoleResponse&gt;</code> - the response  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -930,9 +970,9 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | id | <code>string</code> | Id |
 | notes | <code>string</code> | Notes |
 
-<a name="ExtensionWrokspaceEndpoints"></a>
+<a name="ExtensionWorkspaceEndpoints"></a>
 
-## ExtensionWrokspaceEndpoints : <code>object</code>
+## ExtensionWorkspaceEndpoints : <code>object</code>
 **Kind**: global typedef  
 **Properties**
 
@@ -963,13 +1003,49 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | --- | --- | --- |
 | id | <code>string</code> | Id |
 | name | <code>string</code> | Name |
-| endpoints | [<code>ExtensionWrokspaceEndpoints</code>](#ExtensionWrokspaceEndpoints) | Description |
+| endpoints | [<code>ExtensionWorkspaceEndpoints</code>](#ExtensionWorkspaceEndpoints) | Description |
 | services | [<code>ExtensionWorkspaceServices</code>](#ExtensionWorkspaceServices) | Services |
 | icon | [<code>ExtensionIcon</code>](#ExtensionIcon) | Icon |
 | releaseNotes | <code>string</code> | Release Notes |
 | technicalUserId | <code>string</code> | Technical user Id |
 | appId | <code>string</code> | App Id |
 | publisherId | <code>string</code> | Publisher Id |
+
+<a name="ServiceInfo"></a>
+
+## ServiceInfo : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| sdkCode | <code>string</code> | the sdk code |
+| roles | [<code>Array.&lt;Role&gt;</code>](#Role) | the roles |
+| licenseConfigs | [<code>Array.&lt;LicenseConfig&gt;</code>](#LicenseConfig) | the license configs |
+
+<a name="LicenseConfig"></a>
+
+## LicenseConfig : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| op | <code>string</code> | the operation (e.g. 'add') |
+| id | <code>string</code> | the license id |
+| productId | <code>string</code> | the product id |
+
+<a name="Role"></a>
+
+## Role : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | the role id |
+| code | <code>string</code> | the role code |
+| name | <code>string</code> | the role name |
 
 ### Debug Logs
 

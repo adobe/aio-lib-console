@@ -2,11 +2,12 @@
 
 ## Requirements
 
-To run the e2e test you'll need these env variables set:
+To run the e2e test you'll need these env variables set (copy `.env.example` to `.env`):
+
   1. `CONSOLEAPI_API_KEY`
   2. `CONSOLEAPI_ACCESS_TOKEN`
   3. `CONSOLEAPI_IMS_ORG_ID`
-  3. `CONSOLEAPI_ENV` (`prod` (default) or `stage`)
+  4. `CONSOLEAPI_ENV` (`prod` (default) or `stage`)
 
 ## Run
 
