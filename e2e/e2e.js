@@ -874,23 +874,6 @@ describe('dev terms', () => {
 //   })
 // })
 
-// describe('getSDKProperties', () => {
-//   test('getSDKProperties', async () => {
-//     expect(orgId).toBeDefined()
-//     expect(projectId).toBeDefined()
-//     expect(workspaceId).toBeDefined()
-
-//     const credRes = await sdkClient.getCredentials(orgId, projectId, workspaceId)
-//     const fromCredId = credRes.body[0].id_integration
-
-//     const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
-//     const res = await sdkClient.getSDKProperties(orgId, fromCredId, anyValidSDKCodeIsFine)
-//     expect(res.ok).toBe(true)
-//     expect(res.status).toBe(200)
-//     expect(res.statusText).toBe('OK')
-//   })
-// })
-
 describe('create, edit, get, delete: test trailing spaces', () => {
   let trailingProjectId, trailingWorkspaceId
   const trailingProjectName = 't' + fireflyProjectName
