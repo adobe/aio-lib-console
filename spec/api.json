@@ -2238,238 +2238,238 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                      "type": "object",
-                      "properties": {
-                        "appId": {
-                          "type": "string",
-                          "description": "application id"
-                        },
-                        "name": {
-                          "type": "string",
-                          "description": "application name"
-                        },
-                        "title": {
-                          "type": "string"
-                        },
-                        "publisherId": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "application status"
-                        },
-                        "isPrivate": {
-                          "type": "boolean"
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "application description"
-                        },
-                        "version": {
-                          "type":"string"
-                        },
-                        "workspaces": {
-                          "type": "array",
-                          "description": "list of workspaces in the application",
-                          "items": {
+                    "type": "object",
+                    "properties": {
+                      "appId": {
+                        "type": "string",
+                        "description": "application id"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "application name"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "publisherId": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "application status"
+                      },
+                      "isPrivate": {
+                        "type": "boolean"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "application description"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "workspaces": {
+                        "type": "array",
+                        "description": "list of workspaces in the application",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "workspace id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "workspace name"
+                            },
+                            "endPoint": {
+                              "type": "string"
+                            },
+                            "deepLink": {
+                              "type": "string"
+                            },
+                            "shellProps": {
+                              "type": "string"
+                            },
+                            "releaseNotes": {
+                              "type": "string"
+                            },
+                            "approveList": {
+                              "type": "object",
+                              "description": "list of approveList users & orgs",
+                              "properties": {
+                                "users": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "guid": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "orgs": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "orgId": {
+                                        "type": "string"
+                                      },
+                                      "orgName": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "lifecycle": {
+                        "type": "object",
+                        "properties": {
+                          "created": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "workspace id"
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "workspace name"
-                              },
-                              "endPoint": {
-                                "type": "string"
-                              },
-                              "deepLink": {
-                                "type": "string"
-                              },
-                              "shellProps": {
-                                "type": "string"
-                              },
-                              "releaseNotes": {
-                                "type": "string"
-                              },
-                              "approveList": {
+                              "by": {
                                 "type": "object",
-                                "description": "list of approveList users & orgs",
                                 "properties": {
-                                  "users": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "guid": {
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "orgs": {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "orgId": {
-                                          "type": "string"
-                                        },
-                                        "orgName": {
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
+                                  "guid": {
+                                    "type": "string"
                                   }
                                 }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "lastModified": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "submitted": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "published": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "reviewed": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "unpublished": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
                               }
                             }
                           }
-                        },
-                        "lifecycle": {
-                          "type": "object",
-                          "properties": {
-                            "created": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "lastModified": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "submitted": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "published": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "reviewed": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "unpublished": {
-                              "type": "object",
-                              "properties": {
-                                "by": {
-                                  "type": "object",
-                                  "properties": {
-                                    "guid": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "notes": {
-                                  "type": "string"
-                                },
-                                "on": {
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "support": {
-                          "type": "object",
-                          "description": "support information for the application",
-                          "properties": {
-                            "email": {
-                              "type": "string"
-                            },
-                            "contact": {
-                              "type": "string"
-                            },
-                            "website": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "icon": {
-                          "type": "string",
-                          "description": "URL for the icon"
-                        },
-                        "media": {
-                          "type": "string"
                         }
+                      },
+                      "support": {
+                        "type": "object",
+                        "description": "support information for the application",
+                        "properties": {
+                          "email": {
+                            "type": "string"
+                          },
+                          "contact": {
+                            "type": "string"
+                          },
+                          "website": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "icon": {
+                        "type": "string",
+                        "description": "URL for the icon"
+                      },
+                      "media": {
+                        "type": "string"
                       }
+                    }
                   }
                 }
               }

@@ -27,7 +27,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId, fromCredentialId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
 
@@ -355,7 +355,7 @@ describe('create, edit, get', () => {
 
 describe('Workspace credential test', () => {
   describe('Enterprise credentials', () => {
-    let credentialId
+    let credentialId, fromCredentialId
 
     test('test createEnterpriseCredential API', async () => {
       expect(orgId).toBeDefined()
@@ -388,6 +388,17 @@ describe('Workspace credential test', () => {
       fromCredentialId = res.body[0].id_integration
       expect(res.body[0].flow_type).toEqual('entp')
       expect(res.body[0].integration_type).toEqual('service')
+    })
+
+    test('getSDKProperties', async () => {
+      expect(orgId).toBeDefined()
+      expect(fromCredentialId).toBeDefined()
+
+      const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+      const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
     })
 
     test('test subscribeCredentialToServices API (AdobeIOManagementAPISDK)', async () => {
@@ -492,7 +503,7 @@ describe('Workspace credential test', () => {
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'apiKey', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof (res.body)).toBe('object')
@@ -515,7 +526,7 @@ describe('Workspace credential test', () => {
       expect(res.body[0].id_workspace).toEqual(workspaceId)
       expect(res.body[0].id_integration).toEqual(credentialId)
       expect(res.body[0].flow_type).toEqual('adobeid')
-      expect(res.body[0].integration_type).toEqual('oauthweb')
+      expect(res.body[0].integration_type).toEqual('apikey')
     })
 
     test('test subscribeCredentialToServices API (Adobe Stock)', async () => {
@@ -697,10 +708,8 @@ describe('delete workspace/project', () => {
     expect(fireflyProjectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.deleteProject(orgId, fireflyProjectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
+    // TODO: delete is not supported yet
+    await expect(sdkClient.deleteProject(orgId, fireflyProjectId)).rejects.toThrowError('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
   })
 })
 
@@ -865,17 +874,22 @@ describe('dev terms', () => {
 //   })
 // })
 
-describe('getSDKProperties', () => {
-  test('getSDKProperties', async () => {
-    expect(orgId).toBeDefined()
-    expect(fromCredentialId).toBeDefined()
-    const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
-    const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-})
+// describe('getSDKProperties', () => {
+//   test('getSDKProperties', async () => {
+//     expect(orgId).toBeDefined()
+//     expect(projectId).toBeDefined()
+//     expect(workspaceId).toBeDefined()
+
+//     const credRes = await sdkClient.getCredentials(orgId, projectId, workspaceId)
+//     const fromCredId = credRes.body[0].id_integration
+
+//     const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+//     const res = await sdkClient.getSDKProperties(orgId, fromCredId, anyValidSDKCodeIsFine)
+//     expect(res.ok).toBe(true)
+//     expect(res.status).toBe(200)
+//     expect(res.statusText).toBe('OK')
+//   })
+// })
 
 describe('create, edit, get, delete: test trailing spaces', () => {
   let trailingProjectId, trailingWorkspaceId
@@ -946,14 +960,12 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(trailingProjectId).toBeDefined()
     expect(trailingWorkspaceId).toBeDefined()
 
-    let res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    const res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
 
-    res = await sdkClient.deleteProject(orgId, trailingProjectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
+    // TODO: delete is not supported yet
+    await expect(sdkClient.deleteProject(orgId, trailingProjectId)).rejects.toThrowError('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
   })
 })
