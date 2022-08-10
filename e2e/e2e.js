@@ -648,7 +648,7 @@ describe('Extension API tests', () => {
     expect(workspaceId).toBeDefined()
     const endpoints = {
       endpoints: {
-        'firefly/excshell/1': {
+        'dx/excshell/1': {
           view: {
             href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
           }
