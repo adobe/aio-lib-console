@@ -403,7 +403,7 @@ test('createAdobeIdCredential', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeid',
+    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeId',
     sdkFunctionName: 'createAdobeIdCredential',
     apiParameters,
     apiOptions,
