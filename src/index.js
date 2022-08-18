@@ -547,7 +547,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.workspaces
-        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeid(
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeId(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -911,7 +911,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .put_console_organizations__orgId__integrations_adobeid(
+        .put_console_organizations__orgId__integrations_adobeid__intId_(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
