@@ -641,7 +641,7 @@ test('updateAdobeIdIntegration', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeid',
+    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeid__intId_',
     sdkFunctionName: 'updateAdobeIdIntegration',
     apiParameters,
     apiOptions,

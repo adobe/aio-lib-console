@@ -911,7 +911,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .put_console_organizations__orgId__integrations_adobeid(
+        .put_console_organizations__orgId__integrations_adobeid__intId_(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
