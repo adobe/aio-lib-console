@@ -623,7 +623,7 @@ test('createAdobeIdIntegration', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_adobeId',
+    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_adobeid',
     sdkFunctionName: 'createAdobeIdIntegration',
     apiParameters,
     apiOptions,
@@ -641,7 +641,7 @@ test('updateAdobeIdIntegration', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeId',
+    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeid__intId_',
     sdkFunctionName: 'updateAdobeIdIntegration',
     apiParameters,
     apiOptions,
