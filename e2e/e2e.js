@@ -503,7 +503,7 @@ describe('Workspace credential test', () => {
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'apiKey', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'WebApp', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof (res.body)).toBe('object')
@@ -526,7 +526,7 @@ describe('Workspace credential test', () => {
       expect(res.body[0].id_workspace).toEqual(workspaceId)
       expect(res.body[0].id_integration).toEqual(credentialId)
       expect(res.body[0].flow_type).toEqual('adobeid')
-      expect(res.body[0].integration_type).toEqual('apikey')
+      expect(res.body[0].integration_type).toEqual('oauthwebapp')
     })
 
     test('test subscribeCredentialToServices API (Adobe Stock)', async () => {
