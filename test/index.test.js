@@ -403,7 +403,7 @@ test('createAdobeIdCredential', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeid',
+    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_adobeId',
     sdkFunctionName: 'createAdobeIdCredential',
     apiParameters,
     apiOptions,
@@ -623,7 +623,7 @@ test('createAdobeIdIntegration', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_adobeid',
+    fullyQualifiedApiName: 'Organizations.post_console_organizations__orgId__integrations_adobeId',
     sdkFunctionName: 'createAdobeIdIntegration',
     apiParameters,
     apiOptions,
@@ -641,7 +641,7 @@ test('updateAdobeIdIntegration', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeid',
+    fullyQualifiedApiName: 'Organizations.put_console_organizations__orgId__integrations_adobeId',
     sdkFunctionName: 'updateAdobeIdIntegration',
     apiParameters,
     apiOptions,
