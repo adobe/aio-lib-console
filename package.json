@@ -1,6 +1,7 @@
 {
   "name": "@adobe/aio-lib-console",
-  "version": "3.2.3",
+  "version": "4.0.0",
+  "description": "Adobe I/O Lib for the Developer Console",
   "homepage": "https://github.com/adobe/aio-lib-console",
   "license": "Apache-2.0",
   "main": "src/index.js",
@@ -9,14 +10,12 @@
     "url": "https://github.com/adobe/aio-lib-console/issues"
   },
   "dependencies": {
-    "@adobe/aio-lib-core-errors": "^3.0.0",
-    "@adobe/aio-lib-core-logging": "^1.1.2",
-    "@adobe/aio-lib-env": "^1.0.0",
+    "@adobe/aio-lib-core-errors": "^3.1.0",
+    "@adobe/aio-lib-core-logging": "^2.0.0",
+    "@adobe/aio-lib-env": "^2.0.0",
     "form-data": "^3.0.0",
     "swagger-client": "3.13.1"
   },
-  "deprecated": false,
-  "description": "Adobe I/O Lib for the Developer Console",
   "devDependencies": {
     "@adobe/aio-cli-plugin-certificate": "^0.2.0",
     "@adobe/eslint-config-aio-lib-config": "^2.0.0",
