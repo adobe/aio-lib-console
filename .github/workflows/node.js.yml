@@ -5,10 +5,10 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-    uses: adobe/aio-resuable-workflows/.github/workflows/node.js.yml@main
+    uses: adobe/aio-reusable-workflows/.github/workflows/node.js.yml@main

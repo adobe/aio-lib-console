@@ -3,18 +3,18 @@ on:
   workflow_dispatch:
     inputs:
       pre-release-tag:
-        description: 'The pre-release tag use in the version'
+        description: "The pre-release tag use in the version"
         required: false
-        default: 'pre'
+        default: "pre"
       dist-tag:
-        description: 'The dist-tag use'
+        description: "The dist-tag use"
         required: false
-        default: 'next'
+        default: "next"
       dependencies-to-update:
-        description: 'csv of dependencies to update with the dist-tag'
+        description: "csv of dependencies to update with the dist-tag"
         required: false
-        default: '@adobe/aio-lib-core-errors,@adobe/aio-lib-core-logging,@adobe/aio-lib-env'
+        default: "@adobe/aio-lib-core-errors,@adobe/aio-lib-core-logging,@adobe/aio-lib-env"
 
 jobs:
   checkout:
-    uses: adobe/aio-resuable-workflows/.github/workflows/prerelease.yml@main
+    uses: adobe/aio-reusable-workflows/.github/workflows/prerelease.yml@main

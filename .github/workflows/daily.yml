@@ -3,8 +3,8 @@ name: Daily - Do npm install and run all unit tests
 on:
   schedule:
     # run daily at midnight
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   build:
-    uses: adobe/aio-resuable-workflows/.github/workflows/daily.yml@main
+    uses: adobe/aio-reusable-workflows/.github/workflows/daily.yml@main
