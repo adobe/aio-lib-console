@@ -1,4 +1,5 @@
 name: publish-prerelease
+
 on:
   workflow_dispatch:
     inputs:
