@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
+Copyright 2023 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -664,7 +664,7 @@ describe('Workspace credential test', () => {
       expect(res.body[0].id_integration).toEqual(credentialId)
       fromCredentialId = res.body[0].id_integration
       expect(res.body[0].flow_type).toEqual('entp')
-      expect(res.body[0].integration_type).toEqual('service')
+      expect(res.body[0].integration_type).toEqual('oauth_server_to_server')
     })
 
     test('getSDKProperties', async () => {
@@ -712,7 +712,7 @@ describe('Workspace credential test', () => {
       expect(res.body.project.workspace.id).toEqual(workspaceId)
       expect(Array.isArray(res.body.project.workspace.details.credentials)).toBe(true)
       expect(res.body.project.workspace.details.credentials[0].id).toEqual(credentialId)
-      expect(res.body.project.workspace.details.credentials[0].integration_type).toEqual('service')
+      expect(res.body.project.workspace.details.credentials[0].integration_type).toEqual('oauth_server_to_server')
       expect(Array.isArray(res.body.project.workspace.details.services)).toBe(true)
       expect(typeof (res.body.project.workspace.details.runtime)).toBe('object')
     })
@@ -743,7 +743,7 @@ describe('Workspace credential test', () => {
     })
 
     // delete
-    test('test deleteCredential API (integrationType: entp)', async () => {
+    test('test deleteCredential API (integrationType: oauth_server_to_server)', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -868,7 +868,6 @@ describe('dev terms', () => {
 describe.skip('Organization Integration tests', () => {
   describe('Enterprise integration', () => {
     let integrationId
-    const integrationNameEntp = 'entpIntegrationName'
 
     test('test createEnterpriseIntegration API', async () => {
       expect(orgId).toBeDefined()
@@ -876,7 +875,7 @@ describe.skip('Organization Integration tests', () => {
       const keyPair = cert.generate('aio-lib-console-e2e', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
       const certFile = tmp.fileSync({ postfix: '.crt' })
       fs.writeFileSync(certFile.fd, keyPair.cert)
-      const res = await sdkClient.createEnterpriseIntegration(orgId, fs.createReadStream(certFile.name), integrationNameEntp, 'just a desc')
+      const res = await sdkClient.createEnterpriseIntegration(orgId, fs.createReadStream(certFile.name), credentialNameEntp, 'just a desc')
       expect(typeof (res.body)).toBe('object')
       expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
       integrationId = res.body.id
@@ -895,7 +894,7 @@ describe.skip('Organization Integration tests', () => {
       expect(String(res.body.content[0].orgId)).toEqual(orgId)
       expect(String(res.body.content[0].id)).toEqual(integrationId)
       expect(res.body.content[0].type).toEqual('entp')
-      expect(res.body.content[0].name).toEqual(integrationNameEntp)
+      expect(res.body.content[0].name).toEqual(credentialNameEntp)
     })
 
     test('test subscribeIntegrationToServices API (AdobeIOManagementAPISDK)', async () => {
@@ -937,12 +936,11 @@ describe.skip('Organization Integration tests', () => {
 
   describe('AdobeID integration', () => {
     let integrationId
-    const integrationNameAdobeId = 'adobeIdIntegrationName'
 
     test('test createAdobeIdIntegration API', async () => {
       expect(orgId).toBeDefined()
 
-      const res = await sdkClient.createAdobeIdIntegration(orgId, { name: integrationNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      const res = await sdkClient.createAdobeIdIntegration(orgId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof (res.body)).toBe('object')
@@ -963,7 +961,7 @@ describe.skip('Organization Integration tests', () => {
       expect(String(res.body.content[0].orgId)).toEqual(orgId)
       expect(String(res.body.content[0].id)).toEqual(integrationId)
       expect(res.body.content[0].type).toEqual('adobeid')
-      expect(res.body.content[0].name).toEqual(integrationNameAdobeId)
+      expect(res.body.content[0].name).toEqual(credentialNameAdobeId)
     })
 
     test('test subscribeIntegrationToServices API (Adobe Stock)', async () => {
