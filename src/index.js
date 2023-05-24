@@ -206,7 +206,7 @@ class CoreConsoleAPI {
       // init swagger client
       const spec = require('../spec/api.json')
       const swagger = new Swagger({
-        spec: spec,
+        spec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
         usePromise: true
@@ -281,7 +281,7 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async getWorkspacesForProject (organizationId, projectId) {
-    const parameters = { orgId: organizationId, projectId: projectId }
+    const parameters = { orgId: organizationId, projectId }
     const sdkDetails = { parameters }
 
     try {
@@ -512,13 +512,13 @@ class CoreConsoleAPI {
    * @param {string} workspaceId Workspace ID
    * @returns {Promise<Response>} the response
    */
-  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId, certificate, name, description) {
+  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.workspaces
-        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth-server-to-server(
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth_server_to_server(
           ...this.__createRequestOptions(parameters)
         )
       return res
@@ -526,7 +526,6 @@ class CoreConsoleAPI {
       throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
-
 
   /**
    * Create a new Enterprise Credential for a Workspace
@@ -622,7 +621,7 @@ class CoreConsoleAPI {
       projectId,
       workspaceId,
       credentialId,
-      credentialType: credentialType
+      credentialType
     }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
@@ -1000,14 +999,14 @@ class CoreConsoleAPI {
    * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
    * @returns {Promise<Response>} the response
    */
-  async subscribeEnterpriseIntegrationToServices (organizationId, credentialId) {
+  async subscribeOAuthServerToServerIntegrationToServices (organizationId, credentialId, serviceInfo) {
     const parameters = { orgId: organizationId, credentialId }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = await this.sdk.apis.OAuth_server_to_server
-        .patch_console_organizations__orgId__credentials_oauth-server-to-server__credentialId__service__subscribe(
+      const res = await this.sdk.apis['OAuth server to server']
+        .patch_console_organizations__orgId__credentials_oauth_server_to_server__credentialId__service_subscribe(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
@@ -1015,7 +1014,6 @@ class CoreConsoleAPI {
       throw new codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
     }
   }
-
 
   /**
    * List certification bindings for an Integration
@@ -1272,7 +1270,7 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async getEndPointsInWorkspace (organizationId, projectId, workspaceId) {
-    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const parameters = { orgId: organizationId, projectId, workspaceId }
 
     const sdkDetails = { parameters }
     try {
@@ -1296,7 +1294,7 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async updateEndPointsInWorkspace (organizationId, projectId, workspaceId, endpointDetails) {
-    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = endpointDetails
     const sdkDetails = { parameters, requestBody }
     try {
@@ -1345,5 +1343,5 @@ class CoreConsoleAPI {
 }
 
 module.exports = {
-  init: init
+  init
 }
