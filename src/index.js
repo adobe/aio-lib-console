@@ -505,6 +505,30 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Create a new OAuth Server-to-Server Credential for a Workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @returns {Promise<Response>} the response
+   */
+  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId, certificate, name, description) {
+    const parameters = { orgId: organizationId, projectId, workspaceId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.workspaces
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth-server-to-server(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+
+  /**
    * Create a new Enterprise Credential for a Workspace
    *
    * @param {string} organizationId Organization AMS ID
