@@ -993,6 +993,31 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Subscribe Organization OAuth Server-to-Server Integration to Services
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} credentialId Credential ID
+   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @returns {Promise<Response>} the response
+   */
+  async subscribeEnterpriseIntegrationToServices (organizationId, credentialId) {
+    const parameters = { orgId: organizationId, credentialId }
+    const requestBody = serviceInfo
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis.OAuth_server_to_server
+        .patch_console_organizations__orgId__credentials_oauth-server-to-server__credentialId__service__subscribe(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+
+  /**
    * List certification bindings for an Integration
    *
    * @param {string} organizationId Organization AMS ID
