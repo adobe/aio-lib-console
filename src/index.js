@@ -684,15 +684,29 @@ class CoreConsoleAPI {
   /**
    * Delete a Workspace Credential
    *
+   * @deprecated Use deleteCredentialById
    * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {string} credentialType Credential type (adobeid, analytics or entp)
+   * @param {string} credentialType Credential type (adobeid, analytics or entp). Unused.
    * @param {string} credentialId Credential ID
    * @returns {Promise<Response>} the response
    */
   async deleteCredential (organizationId, projectId, workspaceId, credentialType, credentialId) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, credentialType, credentialId }
+    return this.deleteCredentialById(organizationId, projectId, workspaceId, credentialId)
+  }
+
+  /**
+   * Delete a Workspace Credential by credential id.
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {string} credentialId Credential ID
+   * @returns {Promise<Response>} the response
+   */
+  async deleteCredentialById (organizationId, projectId, workspaceId, credentialId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId, credentialId }
     const sdkDetails = { parameters }
 
     try {
