@@ -759,13 +759,7 @@ describe('Workspace credential test', () => {
   // missing analytics credentials tests
 })
 
-describe('Extension API tests', () => {
-  test('test get ALL ExtensionPoints API', async () => {
-    expect(orgId).toBeDefined()
-    const res = await sdkClient.getAllExtensionPoints(orgId, 'firefly')
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-  })
+describe('workspace API tests', () => {
   test('test update endpoints for workspace API', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -783,6 +777,7 @@ describe('Extension API tests', () => {
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
+
   test('test get endpoints for workspace API', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -791,9 +786,7 @@ describe('Extension API tests', () => {
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
-})
 
-describe('delete workspace/project', () => {
   test('test deleteWorkspace API', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -1064,6 +1057,7 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.body.title).toEqual(modifiedTitle)
     expect(res.body.description).toEqual(modifiedProjectDescription)
   })
+
   test('delete', async () => {
     expect(orgId).toBeDefined()
     expect(trailingProjectId).toBeDefined()

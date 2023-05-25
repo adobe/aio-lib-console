@@ -1229,53 +1229,6 @@ class CoreConsoleAPI {
   }
 
   /**
-   *  Get all available extension points
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} [xpId] xp ID, default 'firefly'
-   * @param {object} [options] Get options
-   * @param {number} [options.offset] Offset
-   * @param {number} [options.pageSize] page size
-   * @returns {Promise<Response>} the response
-   */
-  async getAllExtensionPoints (organizationId, xpId = 'firefly', options = {}) {
-    const parameters = options
-    parameters.orgId = organizationId
-    parameters.xpId = xpId
-    const sdkDetails = { parameters }
-    try {
-      const res = await this.sdk.apis.Extensions
-        .get_console_organizations__orgId__xp__xpId_(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_GET_ALL_EXTENSIONPOINTS({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
-   * Get Extensions for an App Builder application
-   *
-   * @param {string} organizationId Organization AMS ID
-   * @param {string} applicationId App Builder Application ID
-   * @returns {Promise<Response>} the response
-   */
-  async getApplicationExtensions (organizationId, applicationId) {
-    const parameters = { orgId: organizationId, appId: applicationId }
-    const sdkDetails = { parameters }
-    try {
-      const res = await this.sdk.apis.Extensions
-        .get_console_organizations__orgId__xr_api_v1_app(
-          ...this.__createRequestOptions(parameters)
-        )
-      return res
-    } catch (err) {
-      throw new codes.ERROR_GET_APPLICATION_EXTENSIONS({ sdkDetails, messageValues: reduceError(err) })
-    }
-  }
-
-  /**
    *  Get endpoints in a workspace
    *
    * @param {string} organizationId Organization AMS ID
@@ -1288,7 +1241,7 @@ class CoreConsoleAPI {
 
     const sdkDetails = { parameters }
     try {
-      const res = await this.sdk.apis.Extensions
+      const res = await this.sdk.apis.workspaces
         .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters)
         )
@@ -1312,7 +1265,7 @@ class CoreConsoleAPI {
     const requestBody = endpointDetails
     const sdkDetails = { parameters, requestBody }
     try {
-      const res = await this.sdk.apis.Extensions
+      const res = await this.sdk.apis.workspaces
         .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters, requestBody)
         )
