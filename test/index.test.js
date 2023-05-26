@@ -1038,3 +1038,40 @@ test('checkOrgDevTerms', async () => {
     ErrorClass: codes.ERROR_GET_DEV_TERMS_ACCEPTANCE
   })
 })
+
+test('createOAuthServerToServerCredential', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'name', 'description']
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId'
+  }
+  const apiOptions = createSwaggerOptions({ description: 'description', name: 'name' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth_server_to_server',
+    sdkFunctionName: 'createOAuthServerToServerCredential',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL
+  })
+})
+
+test('subscribeOAuthServerToServerIntegrationToServices', async () => {
+  const sdkArgs = ['organizationId', 'credentialId', { some: 'body' }]
+  const apiParameters = {
+    orgId: 'organizationId',
+    credentialId: 'credentialId'
+  }
+  const apiOptions = createSwaggerOptions({ some: 'body' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'OAuth server to server.put_console_organizations__orgId__credentials_oauth_server_to_server__credentialId__services',
+    sdkFunctionName: 'subscribeOAuthServerToServerIntegrationToServices',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES
+  })
+})
