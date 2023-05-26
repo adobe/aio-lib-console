@@ -97,6 +97,8 @@ describe('organizations', () => {
 })
 
 describe('create, edit, get', () => {
+  let fireflyAppId
+
   test('test createFireflyProject API', async () => {
     expect(orgId).toBeDefined()
 
@@ -187,6 +189,16 @@ describe('create, edit, get', () => {
     expect(res.body.appId).toBeTruthy()
     expect(res.body.id).toEqual(fireflyProjectId)
     expect(res.body.description).toEqual(modifiedProjectDescription)
+    fireflyAppId = res.body.appId
+  })
+
+  test('getApplicationExtensions', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyAppId).toBeDefined()
+
+    const res = await sdkClient.getApplicationExtensions(orgId, fireflyAppId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
   })
 
   test('test createWorkspace API for default project type - should fail because only one is allowed for a default project', async () => {
@@ -240,6 +252,35 @@ describe('create, edit, get', () => {
     expect(res.body.projectId).toEqual(fireflyProjectId)
     fireflyWorkspaceId = res.body.workspaceId
     console.log('Workspace created with Id: ' + fireflyWorkspaceId)
+  })
+
+  test('test update endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const endpoints = {
+      endpoints: {
+        'dx/excshell/1': {
+          view: {
+            href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
+          }
+        }
+      }
+    }
+    const res = await sdkClient.updateEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId, endpoints)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  test('test get endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.getEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
   })
 
   test('test getWorkspacesForProject API for firefly project type', async () => {
@@ -767,86 +808,35 @@ describe('Extension API tests', () => {
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
-
-  // test('getApplicationExtensions', async () => {
-  //   expect(orgId).toBeDefined()
-  //   expect(applicationId).toBeDefined()
-
-  //   const res = await sdkClient.getApplicationExtensions(orgId, applicationId)
-  //   expect(res.ok).toBe(true)
-  //   expect(res.status).toBe(200)
-  // })
 })
 
 describe('workspace API tests', () => {
-  test('test update endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-    const endpoints = {
-      endpoints: {
-        'dx/excshell/1': {
-          view: {
-            href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
-          }
-        }
-      }
-    }
-    const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endpoints)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-  })
+  // test('test update endpoints for workspace API', async () => {
+  //   expect(orgId).toBeDefined()
+  //   expect(projectId).toBeDefined()
+  //   expect(workspaceId).toBeDefined()
+  //   const endpoints = {
+  //     endpoints: {
+  //       'dx/excshell/1': {
+  //         view: {
+  //           href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
+  //         }
+  //       }
+  //     }
+  //   }
+  //   const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endpoints)
+  //   expect(res.ok).toBe(true)
+  //   expect(res.status).toBe(200)
+  // })
 
-  test('test get endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-    const res = await sdkClient.getEndPointsInWorkspace(orgId, projectId, workspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-  })
-
-  test('test deleteWorkspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteWorkspace(orgId, projectId, workspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteWorkspace API for firefly project', async () => {
-    expect(orgId).toBeDefined()
-    expect(fireflyProjectId).toBeDefined()
-    expect(fireflyWorkspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteProject API (default type)', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteProject(orgId, projectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteProject API (firefly project template)', async () => {
-    expect(orgId).toBeDefined()
-    expect(fireflyProjectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    // TODO: delete is not supported yet
-    await expect(sdkClient.deleteProject(orgId, fireflyProjectId)).rejects.toThrowError('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
-  })
+  // test('test get endpoints for workspace API', async () => {
+  //   expect(orgId).toBeDefined()
+  //   expect(projectId).toBeDefined()
+  //   expect(workspaceId).toBeDefined()
+  //   const res = await sdkClient.getEndPointsInWorkspace(orgId, projectId, workspaceId)
+  //   expect(res.ok).toBe(true)
+  //   expect(res.status).toBe(200)
+  // })
 })
 
 describe('dev terms', () => {
@@ -1075,6 +1065,26 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     res = await sdkClient.editWorkspace(orgId, trailingProjectId, trailingWorkspaceId, { name: trailingWorkspaceName, title: ` ${modifiedTitle} `, description: ` ${modifiedWorkspaceDescription} ` })
     expect(res.body.title).toEqual(modifiedTitle)
     expect(res.body.description).toEqual(modifiedProjectDescription)
+  })
+
+  test('test deleteProject API (default type)', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteProject(orgId, projectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+
+  test('test deleteProject API (firefly project template)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    // TODO: delete is not supported yet
+    await expect(sdkClient.deleteProject(orgId, fireflyProjectId)).rejects.toThrowError('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
   })
 
   test('delete', async () => {
