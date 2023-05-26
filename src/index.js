@@ -510,16 +510,19 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
+   * @param {string} name Credential name
+   * @param {string} description Credential description
    * @returns {Promise<Response>} the response
    */
-  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId) {
+  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
+    const requestBody = { name, description }
     const sdkDetails = { parameters }
 
     try {
       const res = await this.sdk.apis.workspaces
         .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth_server_to_server(
-          ...this.__createRequestOptions(parameters)
+          ...this.__createRequestOptions(parameters, requestBody)
         )
       return res
     } catch (err) {
@@ -1020,7 +1023,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis['OAuth server to server']
-        .patch_console_organizations__orgId__credentials_oauth_server_to_server__credentialId__service_subscribe(
+        .put_console_organizations__orgId__credentials_oauth_server_to_server__credentialId__services(
           ...this.__createRequestOptions(parameters, requestBody)
         )
       return res

@@ -488,13 +488,12 @@ test('getProjectForWorkspace', async () => {
   })
 })
 
-test('deleteCredential', async () => {
+test('deleteCredential (deprecated)', async () => {
   const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'credentialType', 'credentialId']
-  const apiParameters = {
+  const apiParameters = { // this will call deleteCredentialById
     orgId: 'organizationId',
     projectId: 'projectId',
     workspaceId: 'workspaceId',
-    credentialType: 'credentialType',
     credentialId: 'credentialId'
   }
   const apiOptions = createSwaggerOptions()
@@ -502,6 +501,26 @@ test('deleteCredential', async () => {
   await standardTest({
     fullyQualifiedApiName: 'workspaces.delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId_',
     sdkFunctionName: 'deleteCredential',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_DELETE_CREDENTIAL
+  })
+})
+
+test('deleteCredentialById', async () => {
+  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'credentialId']
+  const apiParameters = {
+    orgId: 'organizationId',
+    projectId: 'projectId',
+    workspaceId: 'workspaceId',
+    credentialId: 'credentialId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'workspaces.delete_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials__credentialId_',
+    sdkFunctionName: 'deleteCredentialById',
     apiParameters,
     apiOptions,
     sdkArgs,
@@ -943,7 +962,7 @@ test('getEndPointsInWorkspace', async () => {
   const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    fullyQualifiedApiName: 'workspaces.get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
     sdkFunctionName: 'getEndPointsInWorkspace',
     apiParameters,
     apiOptions,
@@ -962,7 +981,7 @@ test('updateEndPointsInWorkspace', async () => {
   const apiOptions = createSwaggerOptions({ some: 'body' })
 
   await standardTest({
-    fullyQualifiedApiName: 'Extensions.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
+    fullyQualifiedApiName: 'workspaces.put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints',
     sdkFunctionName: 'updateEndPointsInWorkspace',
     apiParameters,
     apiOptions,

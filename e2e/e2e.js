@@ -41,6 +41,7 @@ const workspaceDescription = 'WDESC' + ts
 const modifiedWorkspaceDescription = 'mod' + ts
 const credentialNameAdobeId = 'cred-oauth' + ts
 const credentialNameEntp = 'cred-entp' + ts
+const credentialNameOAuthS2S = 'cred-oauths2s' + ts
 
 beforeAll(async () => {
   sdkClient = await sdk.init(accessToken, apiKey, env)
@@ -642,7 +643,7 @@ describe('Workspace credential test', () => {
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createOAuthServerToServerCredential(orgId, projectId, workspaceId)
+      const res = await sdkClient.createOAuthServerToServerCredential(orgId, projectId, workspaceId, credentialNameOAuthS2S, 'just a desc')
       expect(typeof (res.body)).toBe('object')
       expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
       credentialId = res.body.id
@@ -727,7 +728,7 @@ describe('Workspace credential test', () => {
       expect(res.status).toBe(200)
       expect(res.body.id).toEqual(credentialId)
       expect(res.body.orgId).toEqual(orgId)
-      expect(res.body.name).toEqual(credentialNameEntp)
+      expect(res.body.name).toEqual(credentialNameOAuthS2S)
       expect(res.body.type).toEqual('entp')
     })
 
@@ -757,6 +758,24 @@ describe('Workspace credential test', () => {
   })
 
   // missing analytics credentials tests
+})
+
+describe('Extension API tests', () => {
+  test('getAllExtensionPoints', async () => {
+    expect(orgId).toBeDefined()
+    const res = await sdkClient.getAllExtensionPoints(orgId, 'firefly')
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  // test('getApplicationExtensions', async () => {
+  //   expect(orgId).toBeDefined()
+  //   expect(applicationId).toBeDefined()
+
+  //   const res = await sdkClient.getApplicationExtensions(orgId, applicationId)
+  //   expect(res.ok).toBe(true)
+  //   expect(res.status).toBe(200)
+  // })
 })
 
 describe('workspace API tests', () => {
