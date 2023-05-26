@@ -10675,6 +10675,338 @@
           }
         ]
       }
+    },
+    "/console/organizations/{orgId}/xr-api/v1/app": {
+      "get": {
+        "summary": "get Application Extensions by Id",
+        "tags": [
+          "Extensions"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "AMS Organization ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "description": "Application id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "appId": {
+                        "type": "string",
+                        "description": "application id"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "application name"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "publisherId": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "application status"
+                      },
+                      "isPrivate": {
+                        "type": "boolean"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "application description"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "workspaces": {
+                        "type": "array",
+                        "description": "list of workspaces in the application",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "workspace id"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "workspace name"
+                            },
+                            "endPoint": {
+                              "type": "string"
+                            },
+                            "deepLink": {
+                              "type": "string"
+                            },
+                            "shellProps": {
+                              "type": "string"
+                            },
+                            "releaseNotes": {
+                              "type": "string"
+                            },
+                            "approveList": {
+                              "type": "object",
+                              "description": "list of approveList users & orgs",
+                              "properties": {
+                                "users": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "guid": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "orgs": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "orgId": {
+                                        "type": "string"
+                                      },
+                                      "orgName": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "lifecycle": {
+                        "type": "object",
+                        "properties": {
+                          "created": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "lastModified": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "submitted": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "published": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "reviewed": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "unpublished": {
+                            "type": "object",
+                            "properties": {
+                              "by": {
+                                "type": "object",
+                                "properties": {
+                                  "guid": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "notes": {
+                                "type": "string"
+                              },
+                              "on": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "support": {
+                        "type": "object",
+                        "description": "support information for the application",
+                        "properties": {
+                          "email": {
+                            "type": "string"
+                          },
+                          "contact": {
+                            "type": "string"
+                          },
+                          "website": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "icon": {
+                        "type": "string",
+                        "description": "URL for the icon"
+                      },
+                      "media": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/apps/%7BappId%7D\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
     }
   },
   "servers": [
