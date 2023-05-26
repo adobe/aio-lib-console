@@ -810,35 +810,6 @@ describe('Extension API tests', () => {
   })
 })
 
-describe('workspace API tests', () => {
-  // test('test update endpoints for workspace API', async () => {
-  //   expect(orgId).toBeDefined()
-  //   expect(projectId).toBeDefined()
-  //   expect(workspaceId).toBeDefined()
-  //   const endpoints = {
-  //     endpoints: {
-  //       'dx/excshell/1': {
-  //         view: {
-  //           href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
-  //         }
-  //       }
-  //     }
-  //   }
-  //   const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endpoints)
-  //   expect(res.ok).toBe(true)
-  //   expect(res.status).toBe(200)
-  // })
-
-  // test('test get endpoints for workspace API', async () => {
-  //   expect(orgId).toBeDefined()
-  //   expect(projectId).toBeDefined()
-  //   expect(workspaceId).toBeDefined()
-  //   const res = await sdkClient.getEndPointsInWorkspace(orgId, projectId, workspaceId)
-  //   expect(res.ok).toBe(true)
-  //   expect(res.status).toBe(200)
-  // })
-})
-
 describe('dev terms', () => {
   test('get dev terms', async () => {
     const res = await sdkClient.getDevTerms()
