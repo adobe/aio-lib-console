@@ -942,7 +942,7 @@ describe.skip('Organization Integration tests', () => {
       expect(orgId).toBeDefined()
 
       const sdkCode = findSDKCode('Adobe Stock')
-      const res = await sdkClient.subscribeCredentialToServices(orgId, integrationId, [
+      const res = await sdkClient.subscribeIntegrationToServices(orgId, integrationId, [
         {
           sdkCode,
           licenseConfigs: null,
