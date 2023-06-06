@@ -54,7 +54,8 @@
     "test": "npm run lint && npm run unit-tests",
     "typings": "jsdoc -t node_modules/tsd-jsdoc/dist -r src/*.js -d .",
     "unit-tests": "jest --config test/jest.config.js --maxWorkers=2",
-    "validate": "node bin/validate_spec.js spec/api.json"
+    "validate": "node bin/validate_spec.js spec/api.json",
+    "patch-spec": "node spec/patch/run.js"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"
