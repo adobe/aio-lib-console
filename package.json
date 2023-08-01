@@ -14,7 +14,7 @@
     "@adobe/aio-lib-core-logging": "^2.0.0",
     "@adobe/aio-lib-env": "^2.0.0",
     "form-data": "^3.0.0",
-    "swagger-client": "3.13.1"
+    "swagger-client": "^3.20.0"
   },
   "devDependencies": {
     "@adobe/aio-cli-plugin-certificate": "^0.2.0",
@@ -53,7 +53,7 @@
     "lint": "eslint src test e2e",
     "test": "npm run lint && npm run unit-tests",
     "typings": "jsdoc -t node_modules/tsd-jsdoc/dist -r src/*.js -d .",
-    "unit-tests": "jest --config test/jest.config.js --maxWorkers=2",
+    "unit-tests": "jest --config test/jest.config.js --ci",
     "validate": "node bin/validate_spec.js spec/api.json",
     "patch-spec": "node spec/patch/run.js"
   },

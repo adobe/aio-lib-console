@@ -43,7 +43,7 @@ const createSdkClient = async (accessToken = gAccessToken, apiKey = gApiKey, env
 // /////////////////////////////////////////////
 
 beforeEach(() => {
-  jest.restoreAllMocks()
+  jest.clearAllMocks()
   libEnv.getCliEnv.mockReturnValue(PROD_ENV) // default
 })
 
