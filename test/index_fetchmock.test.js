@@ -27,7 +27,7 @@ const mockResponseWithMethod = (url, method, response) => {
   fetchMock.mock((u, opts) => u === url && opts.method === method, response)
 }
 
-test('test getOrganizations', async () => {
+test('getOrganizations', async () => {
   const url = `${endpointBaseURL}/organizations`
   const method = 'GET'
   const sdkClient = await sdk.init('accesstoken', { apiKey: 'apiKey' })
@@ -59,7 +59,7 @@ test('test getOrganizations', async () => {
   expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
 })
 
-test('test getOrganizations without apiKey', async () => {
+test('getOrganizations without apiKey', async () => {
   const url = `${endpointBaseURL}/organizations`
   const method = 'GET'
   const sdkClient = await sdk.init('accesstoken')

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
+Copyright 2023 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -27,7 +27,7 @@ const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
 const env = process.env.CONSOLEAPI_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId, fromCredentialId
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
 
@@ -41,6 +41,7 @@ const workspaceDescription = 'WDESC' + ts
 const modifiedWorkspaceDescription = 'mod' + ts
 const credentialNameAdobeId = 'cred-oauth' + ts
 const credentialNameEntp = 'cred-entp' + ts
+const credentialNameOAuthS2S = 'cred-oauths2s' + ts
 
 beforeAll(async () => {
   sdkClient = await sdk.init(accessToken, apiKey, env)
@@ -58,13 +59,13 @@ describe('init and input checks', () => {
     expect(['prod', 'stage']).toContain(sdkClient.env)
   })
 
-  test('test bad access token', async () => {
+  test('bad access token', async () => {
     const _sdkClient = await sdk.init('bad_access_token', apiKey, env)
     const promise = _sdkClient.getOrganizations()
     return expect(promise).rejects.toThrow('401')
   })
 
-  test('test bad api key', async () => {
+  test('bad api key', async () => {
     const _sdkClient = await sdk.init(accessToken, 'bad_api_key', env)
     const promise = _sdkClient.getOrganizations()
     return expect(promise).rejects.toThrow('403')
@@ -72,7 +73,7 @@ describe('init and input checks', () => {
 })
 
 describe('organizations', () => {
-  test('test getOrganizations API', async () => {
+  test('getOrganizations API', async () => {
     const res = await sdkClient.getOrganizations()
     expect(res.ok).toBe(true)
     expect(Array.isArray(res.body)).toBe(true)
@@ -85,7 +86,7 @@ describe('organizations', () => {
     }
   })
 
-  test('test getProjectsForOrg API', async () => {
+  test('getProjectsForOrg API', async () => {
     expect(orgId).toBeDefined()
 
     const res = await sdkClient.getProjectsForOrg(orgId)
@@ -96,7 +97,9 @@ describe('organizations', () => {
 })
 
 describe('create, edit, get', () => {
-  test('test createFireflyProject API', async () => {
+  let fireflyAppId
+
+  test('createFireflyProject API', async () => {
     expect(orgId).toBeDefined()
 
     const res = await sdkClient.createFireflyProject(orgId, { name: fireflyProjectName, title: 'E2ETestFireflyProjectTitle', description: projectDescription })
@@ -111,7 +114,7 @@ describe('create, edit, get', () => {
     console.log('Firefly Project created with Id: ' + fireflyProjectId)
   })
 
-  test('test createProject API (default project type)', async () => {
+  test('createProject API (default project type)', async () => {
     expect(orgId).toBeDefined()
 
     const projectType = 'default'
@@ -128,7 +131,7 @@ describe('create, edit, get', () => {
     console.log('Default workspace was created with Id: ' + defaultWorkspaceId)
   })
 
-  test('test editProject API (default project type)', async () => {
+  test('editProject API (default project type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -141,7 +144,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(projectId)
   })
 
-  test('test editProject API for firefly project', async () => {
+  test('editProject API for firefly project', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
 
@@ -159,7 +162,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(fireflyProjectId)
   })
 
-  test('test getProject API (default type)', async () => {
+  test('getProject API (default type)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -173,7 +176,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(projectId)
   })
 
-  test('test getProject API (firefly project type)', async () => {
+  test('getProject API (firefly project type)', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
 
@@ -186,9 +189,19 @@ describe('create, edit, get', () => {
     expect(res.body.appId).toBeTruthy()
     expect(res.body.id).toEqual(fireflyProjectId)
     expect(res.body.description).toEqual(modifiedProjectDescription)
+    fireflyAppId = res.body.appId
   })
 
-  test('test createWorkspace API for default project type - should fail because only one is allowed for a default project', async () => {
+  test('getApplicationExtensions', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyAppId).toBeDefined()
+
+    const res = await sdkClient.getApplicationExtensions(orgId, fireflyAppId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  test('createWorkspace API for default project type - should fail because only one is allowed for a default project', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
@@ -201,7 +214,7 @@ describe('create, edit, get', () => {
   })
 
   /*  This is required because "Only one workspace allowed for project type default" */
-  test('test deleteWorkspace API for default project type (to delete the default workspace)', async () => {
+  test('deleteWorkspace API for default project type (to delete the default workspace)', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
@@ -212,7 +225,7 @@ describe('create, edit, get', () => {
     expect(res.statusText).toBe('OK')
   })
 
-  test('test createWorkspace API for default project type', async () => {
+  test('createWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
@@ -227,7 +240,7 @@ describe('create, edit, get', () => {
     console.log('Workspace created with Id: ' + workspaceId)
   })
 
-  test('test createWorkspace API for firefly project type', async () => {
+  test('createWorkspace API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     const res = await sdkClient.createWorkspace(orgId, fireflyProjectId, { name: fireflyWorkspaceName, title: 'workspace title', description: workspaceDescription })
@@ -241,7 +254,36 @@ describe('create, edit, get', () => {
     console.log('Workspace created with Id: ' + fireflyWorkspaceId)
   })
 
-  test('test getWorkspacesForProject API for firefly project type', async () => {
+  test('update endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const endpoints = {
+      endpoints: {
+        'dx/excshell/1': {
+          view: {
+            href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
+          }
+        }
+      }
+    }
+    const res = await sdkClient.updateEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId, endpoints)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  test('get endpoints for workspace API', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(fireflyWorkspaceId).toBeDefined()
+
+    const res = await sdkClient.getEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+  })
+
+  test('getWorkspacesForProject API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
@@ -257,7 +299,7 @@ describe('create, edit, get', () => {
     expect(res.body.map(x => x.id)).toEqual(expect.arrayContaining([fireflyWorkspaceId]))
   })
 
-  test('test getWorkspacesForProject API for default project type', async () => {
+  test('getWorkspacesForProject API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -272,7 +314,7 @@ describe('create, edit, get', () => {
     expect(res.body[0].id).toEqual(workspaceId)
   })
 
-  test('test editWorkspace API for default project type', async () => {
+  test('editWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -284,7 +326,7 @@ describe('create, edit, get', () => {
     expect(res.body.description).toBe(modifiedWorkspaceDescription)
   })
 
-  test('test editWorkspace API for firefly project type', async () => {
+  test('editWorkspace API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
@@ -296,7 +338,7 @@ describe('create, edit, get', () => {
     expect(res.body.description).toBe(modifiedWorkspaceDescription)
   })
 
-  test('test getWorkspace API for default project type', async () => {
+  test('getWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -310,7 +352,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(workspaceId)
   })
 
-  test('test getWorkspace API for firefly project type', async () => {
+  test('getWorkspace API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
@@ -324,7 +366,7 @@ describe('create, edit, get', () => {
     expect(res.body.id).toEqual(fireflyWorkspaceId)
   })
 
-  test('test getProjectForWorkspace API for default project type', async () => {
+  test('getProjectForWorkspace API for default project type', async () => {
     expect(orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
@@ -338,7 +380,7 @@ describe('create, edit, get', () => {
     expect(res.body.workspaceId).toEqual(workspaceId)
   })
 
-  test('test getProjectForWorkspace API for firefly project type', async () => {
+  test('getProjectForWorkspace API for firefly project type', async () => {
     expect(orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
@@ -355,9 +397,9 @@ describe('create, edit, get', () => {
 
 describe('Workspace credential test', () => {
   describe('Enterprise credentials', () => {
-    let credentialId
+    let credentialId, fromCredentialId
 
-    test('test createEnterpriseCredential API', async () => {
+    test('createEnterpriseCredential API', async () => {
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
@@ -372,7 +414,7 @@ describe('Workspace credential test', () => {
       console.log('Entp integration created with Id: ', credentialId)
     })
 
-    test('test getCredentials API (service)', async () => {
+    test('getCredentials API (service)', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -390,7 +432,18 @@ describe('Workspace credential test', () => {
       expect(res.body[0].integration_type).toEqual('service')
     })
 
-    test('test subscribeCredentialToServices API (AdobeIOManagementAPISDK)', async () => {
+    test('getSDKProperties', async () => {
+      expect(orgId).toBeDefined()
+      expect(fromCredentialId).toBeDefined()
+
+      const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+      const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+    })
+
+    test('subscribeCredentialToServices API (AdobeIOManagementAPISDK)', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -411,7 +464,7 @@ describe('Workspace credential test', () => {
       expect(res.body).toEqual({ sdkList: [sdkCode] })
     })
 
-    test('test downloadWorkspaceJson API', async () => {
+    test('downloadWorkspaceJson API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -433,7 +486,7 @@ describe('Workspace credential test', () => {
 
     // organization integration APIs on workspace credentials
 
-    test('test getIntegration API', async () => {
+    test('getIntegration API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       const res = await sdkClient.getIntegration(orgId, credentialId)
@@ -445,7 +498,7 @@ describe('Workspace credential test', () => {
       expect(res.body.type).toEqual('entp')
     })
 
-    test('test getIntegrationSecrets API', async () => {
+    test('getIntegrationSecrets API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       const res = await sdkClient.getIntegrationSecrets(orgId, credentialId)
@@ -456,7 +509,7 @@ describe('Workspace credential test', () => {
       expect(res.body.client_secrets).toBeDefined()
     })
 
-    test('test uploadAndBindCertificate API', async () => {
+    test('uploadAndBindCertificate API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
 
       expect(orgId).toBeDefined()
@@ -471,7 +524,7 @@ describe('Workspace credential test', () => {
     })
 
     // delete
-    test('test deleteCredential API (integrationType: entp)', async () => {
+    test('deleteCredential API (integrationType: entp)', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -487,12 +540,12 @@ describe('Workspace credential test', () => {
   describe('AdobeID credentials', () => {
     let credentialId
 
-    test('test createAdobeIdCredential API', async () => {
+    test('createAdobeIdCredential API', async () => {
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'WebApp', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof (res.body)).toBe('object')
@@ -501,7 +554,7 @@ describe('Workspace credential test', () => {
       console.log('OAuth integration created with Id: ', credentialId)
     })
 
-    test('test getCredentials API (oauthweb)', async () => {
+    test('getCredentials API (oauthweb)', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -515,10 +568,10 @@ describe('Workspace credential test', () => {
       expect(res.body[0].id_workspace).toEqual(workspaceId)
       expect(res.body[0].id_integration).toEqual(credentialId)
       expect(res.body[0].flow_type).toEqual('adobeid')
-      expect(res.body[0].integration_type).toEqual('oauthweb')
+      expect(res.body[0].integration_type).toEqual('oauthwebapp')
     })
 
-    test('test subscribeCredentialToServices API (Adobe Stock)', async () => {
+    test('subscribeCredentialToServices API (Adobe Stock)', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -539,7 +592,7 @@ describe('Workspace credential test', () => {
       expect(res.body).toEqual({ sdkList: [sdkCode] })
     })
 
-    test('test getWorkspaceForCredential API', async () => {
+    test('getWorkspaceForCredential API', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -555,7 +608,7 @@ describe('Workspace credential test', () => {
     })
 
     // organization integration APIs on workspace credentials
-    test('test getIntegration API', async () => {
+    test('getIntegration API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       const res = await sdkClient.getIntegration(orgId, credentialId)
@@ -567,7 +620,7 @@ describe('Workspace credential test', () => {
       expect(res.body.type).toEqual('adobeid')
     })
 
-    test('test getIntegrationSecrets API', async () => {
+    test('getIntegrationSecrets API', async () => {
       expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
       expect(orgId).toBeDefined()
       const res = await sdkClient.getIntegrationSecrets(orgId, credentialId)
@@ -579,36 +632,38 @@ describe('Workspace credential test', () => {
     })
 
     // atlas policy apis - commented out because return 405 method not allowed ? - tracked internally at IOC-4290
-    // test('test getAtlasApplicationPolicy API', async () => {
-    //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
-    //   expect(orgId).toBeDefined()
-    //   const res = await sdkClient.getAtlasApplicationPolicy(orgId, credentialId)
-    //   expect(res.ok).toBe(true)
-    //   expect(res.status).toBe(200)
-    //   expect(typeof res.body).toBe('object')
-    //   expect(res.body.orgCode).toEqual(imsOrgId)
-    //   expect(res.body.appCode).toBeDefined()
-    //   expect(res.body.appPolicyCode).toBeDefined()
-    //   expect(res.body.quotaPolicyCode).toBeDefined()
-    // })
+    // eslint-disable-next-line jest/no-disabled-tests
+    test.skip('getAtlasApplicationPolicy API', async () => {
+      expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
+      const res = await sdkClient.getAtlasApplicationPolicy(orgId, credentialId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof res.body).toBe('object')
+      expect(res.body.orgCode).toEqual(imsOrgId)
+      expect(res.body.appCode).toBeDefined()
+      expect(res.body.appPolicyCode).toBeDefined()
+      expect(res.body.quotaPolicyCode).toBeDefined()
+    })
 
-    // test('test getAtlasQuotaUsage API', async () => {
-    //   expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
-    //   expect(orgId).toBeDefined()
-    //   const res = await sdkClient.getAtlasQuotaUsage(orgId, credentialId)
-    //   expect(res.ok).toBe(true)
-    //   expect(res.status).toBe(200)
-    //   expect(typeof res.body).toBe('object')
-    //   expect(res.body.orgCode).toEqual(imsOrgId)
-    //   expect(res.body.planCode).toBeDefined()
-    //   expect(res.body.policyType).toBeDefined()
-    //   expect(res.body.policyCode).toBeDefined()
-    //   expect(res.body.availableQuantity).toBeDefined()
-    //   expect(res.body.consumedQuantity).toBeDefined()
-    // })
+    // eslint-disable-next-line jest/no-disabled-tests
+    test.skip('getAtlasQuotaUsage API', async () => {
+      expect(credentialId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
+      const res = await sdkClient.getAtlasQuotaUsage(orgId, credentialId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof res.body).toBe('object')
+      expect(res.body.orgCode).toEqual(imsOrgId)
+      expect(res.body.planCode).toBeDefined()
+      expect(res.body.policyType).toBeDefined()
+      expect(res.body.policyCode).toBeDefined()
+      expect(res.body.availableQuantity).toBeDefined()
+      expect(res.body.consumedQuantity).toBeDefined()
+    })
 
     // delete
-    test('test deleteCredential API (integrationType: adobeid)', async () => {
+    test('deleteCredential API (integrationType: adobeid)', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
       expect(orgId).toBeDefined()
       expect(projectId).toBeDefined()
@@ -621,86 +676,137 @@ describe('Workspace credential test', () => {
     })
   })
 
+  describe('OAuth Server-to-Server credentials', () => {
+    let credentialId, fromCredentialId
+
+    test('createOAuthServerToServerCredential API', async () => {
+      expect(orgId).toBeDefined()
+      expect(projectId).toBeDefined()
+      expect(workspaceId).toBeDefined()
+
+      const res = await sdkClient.createOAuthServerToServerCredential(orgId, projectId, workspaceId, credentialNameOAuthS2S, 'just a desc')
+      expect(typeof (res.body)).toBe('object')
+      expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
+      credentialId = res.body.id
+      console.log('OAuth-Server-to-Server integration created with Id: ', credentialId)
+    })
+
+    test('getCredentials API (service)', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+      expect(projectId).toBeDefined()
+      expect(workspaceId).toBeDefined()
+
+      const res = await sdkClient.getCredentials(orgId, projectId, workspaceId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(Array.isArray(res.body)).toBe(true)
+      expect(res.body[0].id_workspace).toEqual(workspaceId)
+      expect(res.body[0].id_integration).toEqual(credentialId)
+      fromCredentialId = res.body[0].id_integration
+      expect(res.body[0].flow_type).toEqual('entp')
+      expect(res.body[0].integration_type).toEqual('oauth_server_to_server')
+    })
+
+    test('getSDKProperties', async () => {
+      expect(orgId).toBeDefined()
+      expect(fromCredentialId).toBeDefined()
+
+      const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
+      const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+    })
+
+    test('subscribeOAuthServerToServerIntegrationToServices API (AdobeIOManagementAPISDK)', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+
+      const sdkCode = findSDKCode('I/O Management API')
+      const res = await sdkClient.subscribeOAuthServerToServerIntegrationToServices(orgId, credentialId, [
+        {
+          sdkCode,
+          licenseConfigs: null,
+          roles: null
+        }
+      ])
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(typeof (res.body)).toBe('object')
+      expect(res.body).toEqual({ sdkList: [sdkCode] })
+    })
+
+    test('downloadWorkspaceJson API', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+      expect(projectId).toBeDefined()
+      expect(workspaceId).toBeDefined()
+
+      const res = await sdkClient.downloadWorkspaceJson(orgId, projectId, workspaceId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(typeof (res.body)).toBe('object')
+      expect(res.body.project.id).toEqual(projectId)
+      expect(res.body.project.workspace.id).toEqual(workspaceId)
+      expect(Array.isArray(res.body.project.workspace.details.credentials)).toBe(true)
+      expect(res.body.project.workspace.details.credentials[0].id).toEqual(credentialId)
+      expect(res.body.project.workspace.details.credentials[0].integration_type).toEqual('oauth_server_to_server')
+      expect(Array.isArray(res.body.project.workspace.details.services)).toBe(true)
+      expect(typeof (res.body.project.workspace.details.runtime)).toBe('object')
+    })
+
+    // organization integration APIs on workspace credentials
+
+    test('getIntegration API', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+      const res = await sdkClient.getIntegration(orgId, credentialId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.body.id).toEqual(credentialId)
+      expect(res.body.orgId).toEqual(orgId)
+      expect(res.body.name).toEqual(credentialNameOAuthS2S)
+      expect(res.body.type).toEqual('entp')
+    })
+
+    test('getIntegrationSecrets API', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+      const res = await sdkClient.getIntegrationSecrets(orgId, credentialId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof res.body).toBe('object')
+      expect(res.body.client_id).toBeDefined()
+      expect(res.body.client_secrets).toBeDefined()
+    })
+
+    // delete
+    test('deleteCredential API (integrationType: oauth_server_to_server)', async () => {
+      expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
+      expect(orgId).toBeDefined()
+      expect(projectId).toBeDefined()
+      expect(workspaceId).toBeDefined()
+
+      const res = await sdkClient.deleteCredentialById(orgId, projectId, workspaceId, credentialId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+    })
+  })
+
   // missing analytics credentials tests
 })
 
 describe('Extension API tests', () => {
-  test('test get ALL ExtensionPoints API', async () => {
+  test('getAllExtensionPoints', async () => {
     expect(orgId).toBeDefined()
     const res = await sdkClient.getAllExtensionPoints(orgId, 'firefly')
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
-  })
-  test('test update endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-    const endpoints = {
-      endpoints: {
-        'firefly/excshell/1': {
-          view: {
-            href: 'https://teste2e.adobeio-static.net/updatedapp-0.0.1/index.html'
-          }
-        }
-      }
-    }
-    const res = await sdkClient.updateEndPointsInWorkspace(orgId, projectId, workspaceId, endpoints)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-  })
-  test('test get endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-    const res = await sdkClient.getEndPointsInWorkspace(orgId, projectId, workspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-  })
-})
-
-describe('delete workspace/project', () => {
-  test('test deleteWorkspace API', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteWorkspace(orgId, projectId, workspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteWorkspace API for firefly project', async () => {
-    expect(orgId).toBeDefined()
-    expect(fireflyProjectId).toBeDefined()
-    expect(fireflyWorkspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteProject API (default type)', async () => {
-    expect(orgId).toBeDefined()
-    expect(projectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteProject(orgId, projectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
-  })
-
-  test('test deleteProject API (firefly project template)', async () => {
-    expect(orgId).toBeDefined()
-    expect(fireflyProjectId).toBeDefined()
-    expect(workspaceId).toBeDefined()
-
-    const res = await sdkClient.deleteProject(orgId, fireflyProjectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
   })
 })
 
@@ -727,153 +833,143 @@ describe('dev terms', () => {
     expect(res.statusText).toBe('OK')
   })
 })
+
 // Test organization integrations (similar to workspace credentials), commented out
 // because delete integration is failing.. - tracked internally at IOC-4291
 
-// describe('Organization Integration tests', () => {
-//   describe('Enterprise integration', () => {
-//     let integrationId
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('Organization Integration tests', () => {
+  describe('Enterprise integration', () => {
+    let integrationId
 
-//     test('test createEnterpriseIntegration API', async () => {
-//       expect(orgId).toBeDefined()
+    test('createEnterpriseIntegration API', async () => {
+      expect(orgId).toBeDefined()
 
-//       const keyPair = cert.generate('aio-lib-console-e2e', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
-//       const certFile = tmp.fileSync({ postfix: '.crt' })
-//       fs.writeFileSync(certFile.fd, keyPair.cert)
-//       const res = await sdkClient.createEnterpriseIntegration(orgId, fs.createReadStream(certFile.name), integrationNameEntp, 'just a desc')
-//       expect(typeof (res.body)).toBe('object')
-//       expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
-//       integrationId = res.body.id
-//       console.log('Entp integration created with Id: ', integrationId)
-//     })
+      const keyPair = cert.generate('aio-lib-console-e2e', 365, { country: 'US', state: 'CA', locality: 'SF', organization: 'Adobe', unit: 'AdobeIO' })
+      const certFile = tmp.fileSync({ postfix: '.crt' })
+      fs.writeFileSync(certFile.fd, keyPair.cert)
+      const res = await sdkClient.createEnterpriseIntegration(orgId, fs.createReadStream(certFile.name), credentialNameEntp, 'just a desc')
+      expect(typeof (res.body)).toBe('object')
+      expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
+      integrationId = res.body.id
+      console.log('Entp integration created with Id: ', integrationId)
+    })
 
-//     test('test getIntegrationsForOrg API (service)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
-//       expect(orgId).toBeDefined()
+    test('getIntegrationsForOrg API (service)', async () => {
+      expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
 
-//       const res = await sdkClient.getIntegrationsForOrg(orgId)
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//       expect(Array.isArray(res.body.content)).toBe(true)
-//       expect(String(res.body.content[0].orgId)).toEqual(orgId)
-//       expect(String(res.body.content[0].id)).toEqual(integrationId)
-//       expect(res.body.content[0].type).toEqual('entp')
-//       expect(res.body.content[0].name).toEqual(integrationNameEntp)
-//     })
+      const res = await sdkClient.getIntegrationsForOrg(orgId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(Array.isArray(res.body.content)).toBe(true)
+      expect(String(res.body.content[0].orgId)).toEqual(orgId)
+      expect(String(res.body.content[0].id)).toEqual(integrationId)
+      expect(res.body.content[0].type).toEqual('entp')
+      expect(res.body.content[0].name).toEqual(credentialNameEntp)
+    })
 
-//     test('test subscribeIntegrationToServices API (AdobeIOManagementAPISDK)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
-//       expect(orgId).toBeDefined()
-//       expect(projectId).toBeDefined()
-//       expect(workspaceId).toBeDefined()
+    test('subscribeIntegrationToServices API (AdobeIOManagementAPISDK)', async () => {
+      expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
+      expect(projectId).toBeDefined()
+      expect(workspaceId).toBeDefined()
 
-//       const sdkCode = findSDKCode('I/O Management API')
-//       const res = await sdkClient.subscribeEnterpriseIntegrationToServices(orgId, integrationId, [
-//         {
-//           sdkCode,
-//           licenseConfigs: null,
-//           roles: null
-//         }
-//       ])
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//       expect(typeof (res.body)).toBe('object')
-//       expect(res.body).toEqual({ sdkList: [sdkCode] })
-//     })
+      const sdkCode = findSDKCode('I/O Management API')
+      const res = await sdkClient.subscribeEnterpriseIntegrationToServices(orgId, integrationId, [
+        {
+          sdkCode,
+          licenseConfigs: null,
+          roles: null
+        }
+      ])
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(typeof (res.body)).toBe('object')
+      expect(res.body).toEqual({ sdkList: [sdkCode] })
+    })
 
-//     // add those like in credentials (refactor)
-//     // - get integration / getIntegration  secrets
-//     // - get bindings / upload bindings / delete binding
-//     // - atlas quota
+    // add those like in credentials (refactor)
+    // - get integration / getIntegration  secrets
+    // - get bindings / upload bindings / delete binding
+    // - atlas quota
 
-//     test('test deleteIntegration API (integrationType: entp)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
-//       expect(orgId).toBeDefined()
+    test('deleteIntegration API (integrationType: entp)', async () => {
+      expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
 
-//       const res = await sdkClient.deleteIntegration(orgId, integrationId)
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//     })
-//   })
+      const res = await sdkClient.deleteIntegration(orgId, integrationId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+    })
+  })
 
-//   describe.skip('AdobeID integration', () => {
-//     let integrationId
+  describe('AdobeID integration', () => {
+    let integrationId
 
-//     test('test createAdobeIdIntegration API', async () => {
-//       expect(orgId).toBeDefined()
+    test('createAdobeIdIntegration API', async () => {
+      expect(orgId).toBeDefined()
 
-//       const res = await sdkClient.createAdobeIdIntegration(orgId, { name: integrationNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(typeof (res.body)).toBe('object')
-//       expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
-//       integrationId = res.body.id
-//       console.log('OAuth integration created with Id: ', integrationId)
-//     })
+      const res = await sdkClient.createAdobeIdIntegration(orgId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'Web', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(typeof (res.body)).toBe('object')
+      expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
+      integrationId = res.body.id
+      console.log('OAuth integration created with Id: ', integrationId)
+    })
 
-//     test('test getIntegrationsForOrg API (oauthweb)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createAdobeIdCredential test failed
-//       expect(orgId).toBeDefined()
+    test('getIntegrationsForOrg API (oauthweb)', async () => {
+      expect(integrationId).toBeDefined() // if not, createAdobeIdCredential test failed
+      expect(orgId).toBeDefined()
 
-//       const res = await sdkClient.getIntegrationsForOrg(orgId)
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//       expect(Array.isArray(res.body.content)).toBe(true)
-//       expect(String(res.body.content[0].orgId)).toEqual(orgId)
-//       expect(String(res.body.content[0].id)).toEqual(integrationId)
-//       expect(res.body.content[0].type).toEqual('adobeid')
-//       expect(res.body.content[0].name).toEqual(integrationNameAdobeId)
-//     })
+      const res = await sdkClient.getIntegrationsForOrg(orgId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(Array.isArray(res.body.content)).toBe(true)
+      expect(String(res.body.content[0].orgId)).toEqual(orgId)
+      expect(String(res.body.content[0].id)).toEqual(integrationId)
+      expect(res.body.content[0].type).toEqual('adobeid')
+      expect(res.body.content[0].name).toEqual(credentialNameAdobeId)
+    })
 
-//     test('test subscribeIntegrationToServices API (Adobe Stock)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createAdobeIdCredential test failed
-//       expect(orgId).toBeDefined()
+    test('subscribeIntegrationToServices API (Adobe Stock)', async () => {
+      expect(integrationId).toBeDefined() // if not, createAdobeIdCredential test failed
+      expect(orgId).toBeDefined()
 
-//       const sdkCode = findSDKCode('Adobe Stock')
-//       const res = await sdkClient.subscribeCredentialToServices(orgId, integrationId, [
-//         {
-//           sdkCode,
-//           licenseConfigs: null,
-//           roles: null
-//         }
-//       ])
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//       expect(typeof (res.body)).toBe('object')
-//       expect(res.body).toEqual({ sdkList: [sdkCode] })
-//     })
+      const sdkCode = findSDKCode('Adobe Stock')
+      const res = await sdkClient.subscribeIntegrationToServices(orgId, integrationId, [
+        {
+          sdkCode,
+          licenseConfigs: null,
+          roles: null
+        }
+      ])
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+      expect(typeof (res.body)).toBe('object')
+      expect(res.body).toEqual({ sdkList: [sdkCode] })
+    })
 
-//     // add those like in credentials (refactor)
-//     // - get integration / getIntegration  secrets
-//     // - get bindings / upload bindings / delete binding
-//     // - atlas quota
+    // add those like in credentials (refactor)
+    // - get integration / getIntegration  secrets
+    // - get bindings / upload bindings / delete binding
+    // - atlas quota
 
-//     test('test deleteIntegration API (integrationType: adobeid)', async () => {
-//       expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
-//       expect(orgId).toBeDefined()
+    test('deleteIntegration API (integrationType: adobeid)', async () => {
+      expect(integrationId).toBeDefined() // if not, createEnterpriseIntegration test failed
+      expect(orgId).toBeDefined()
 
-//       const res = await sdkClient.deleteIntegration(orgId, integrationId)
-//       expect(res.ok).toBe(true)
-//       expect(res.status).toBe(200)
-//       expect(res.statusText).toBe('OK')
-//     })
-//   })
-// })
-
-describe('getSDKProperties', () => {
-  test('getSDKProperties', async () => {
-    expect(orgId).toBeDefined()
-    expect(fromCredentialId).toBeDefined()
-    const anyValidSDKCodeIsFine = 'AdobeAnalyticsSDK'
-    const res = await sdkClient.getSDKProperties(orgId, fromCredentialId, anyValidSDKCodeIsFine)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
+      const res = await sdkClient.deleteIntegration(orgId, integrationId)
+      expect(res.ok).toBe(true)
+      expect(res.status).toBe(200)
+      expect(res.statusText).toBe('OK')
+    })
   })
 })
 
@@ -882,7 +978,7 @@ describe('create, edit, get, delete: test trailing spaces', () => {
   const trailingProjectName = 't' + fireflyProjectName
   const trailingWorkspaceName = 't' + fireflyWorkspaceName
 
-  test('test trailing spaces for firefly project', async () => {
+  test('trailing spaces for firefly project', async () => {
     expect(orgId).toBeDefined()
 
     const projectDescriptionWithTrailingSpaces = ` ${projectDescription} `
@@ -912,7 +1008,7 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.body.description).toEqual(modifiedProjectDescription)
   })
 
-  test('test trailing spaces for firefly workspace', async () => {
+  test('trailing spaces for firefly workspace', async () => {
     expect(orgId).toBeDefined()
     expect(trailingProjectId).toBeDefined()
 
@@ -941,19 +1037,38 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.body.title).toEqual(modifiedTitle)
     expect(res.body.description).toEqual(modifiedProjectDescription)
   })
+
+  test('deleteProject API (default type)', async () => {
+    expect(orgId).toBeDefined()
+    expect(projectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    const res = await sdkClient.deleteProject(orgId, projectId)
+    expect(res.ok).toBe(true)
+    expect(res.status).toBe(200)
+    expect(res.statusText).toBe('OK')
+  })
+
+  test('deleteProject API (firefly project template)', async () => {
+    expect(orgId).toBeDefined()
+    expect(fireflyProjectId).toBeDefined()
+    expect(workspaceId).toBeDefined()
+
+    // TODO: delete is not supported yet
+    await expect(sdkClient.deleteProject(orgId, fireflyProjectId)).rejects.toThrow('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
+  })
+
   test('delete', async () => {
     expect(orgId).toBeDefined()
     expect(trailingProjectId).toBeDefined()
     expect(trailingWorkspaceId).toBeDefined()
 
-    let res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    const res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
 
-    res = await sdkClient.deleteProject(orgId, trailingProjectId)
-    expect(res.ok).toBe(true)
-    expect(res.status).toBe(200)
-    expect(res.statusText).toBe('OK')
+    // TODO: delete is not supported yet
+    await expect(sdkClient.deleteProject(orgId, trailingProjectId)).rejects.toThrow('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
   })
 })
