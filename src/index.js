@@ -206,7 +206,7 @@ class CoreConsoleAPI {
       // init swagger client
       const spec = require('../spec/api.json')
       const swagger = new Swagger({
-        spec: spec,
+        spec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
         usePromise: true
@@ -281,7 +281,7 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async getWorkspacesForProject (organizationId, projectId) {
-    const parameters = { orgId: organizationId, projectId: projectId }
+    const parameters = { orgId: organizationId, projectId }
     const sdkDetails = { parameters }
 
     try {
@@ -505,6 +505,32 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Create a new OAuth Server-to-Server Credential for a Workspace
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {string} name Credential name
+   * @param {string} description Credential description
+   * @returns {Promise<Response>} the response
+   */
+  async createOAuthServerToServerCredential (organizationId, projectId, workspaceId, name, description) {
+    const parameters = { orgId: organizationId, projectId, workspaceId }
+    const requestBody = { name, description }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.workspaces
+        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_oauth_server_to_server(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    * Create a new Enterprise Credential for a Workspace
    *
    * @param {string} organizationId Organization AMS ID
@@ -598,7 +624,7 @@ class CoreConsoleAPI {
       projectId,
       workspaceId,
       credentialId,
-      credentialType: credentialType
+      credentialType
     }
     const requestBody = serviceInfo
     const sdkDetails = { parameters, requestBody }
@@ -661,15 +687,29 @@ class CoreConsoleAPI {
   /**
    * Delete a Workspace Credential
    *
+   * @deprecated Use deleteCredentialById
    * @param {string} organizationId Organization AMS ID
    * @param {string} projectId Project ID
    * @param {string} workspaceId Workspace ID
-   * @param {string} credentialType Credential type (adobeid, analytics or entp)
+   * @param {string} credentialType Credential type (adobeid, analytics or entp). Unused.
    * @param {string} credentialId Credential ID
    * @returns {Promise<Response>} the response
    */
   async deleteCredential (organizationId, projectId, workspaceId, credentialType, credentialId) {
-    const parameters = { orgId: organizationId, projectId, workspaceId, credentialType, credentialId }
+    return this.deleteCredentialById(organizationId, projectId, workspaceId, credentialId)
+  }
+
+  /**
+   * Delete a Workspace Credential by credential id.
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} projectId Project ID
+   * @param {string} workspaceId Workspace ID
+   * @param {string} credentialId Credential ID
+   * @returns {Promise<Response>} the response
+   */
+  async deleteCredentialById (organizationId, projectId, workspaceId, credentialId) {
+    const parameters = { orgId: organizationId, projectId, workspaceId, credentialId }
     const sdkDetails = { parameters }
 
     try {
@@ -969,6 +1009,30 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Subscribe Organization OAuth Server-to-Server Integration to Services
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {string} credentialId Credential ID
+   * @param {object} serviceInfo Information about the services like SDK Codes, licenseConfig and roles
+   * @returns {Promise<Response>} the response
+   */
+  async subscribeOAuthServerToServerIntegrationToServices (organizationId, credentialId, serviceInfo) {
+    const parameters = { orgId: organizationId, credentialId }
+    const requestBody = serviceInfo
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis['OAuth server to server']
+        .put_console_organizations__orgId__credentials_oauth_server_to_server__credentialId__services(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    * List certification bindings for an Integration
    *
    * @param {string} organizationId Organization AMS ID
@@ -1223,11 +1287,11 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async getEndPointsInWorkspace (organizationId, projectId, workspaceId) {
-    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const parameters = { orgId: organizationId, projectId, workspaceId }
 
     const sdkDetails = { parameters }
     try {
-      const res = await this.sdk.apis.Extensions
+      const res = await this.sdk.apis.workspaces
         .get_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters)
         )
@@ -1247,11 +1311,11 @@ class CoreConsoleAPI {
    * @returns {Promise<Response>} the response
    */
   async updateEndPointsInWorkspace (organizationId, projectId, workspaceId, endpointDetails) {
-    const parameters = { orgId: organizationId, projectId: projectId, workspaceId: workspaceId }
+    const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = endpointDetails
     const sdkDetails = { parameters, requestBody }
     try {
-      const res = await this.sdk.apis.Extensions
+      const res = await this.sdk.apis.workspaces
         .put_console_organizations__orgId__projects__projectId__workspaces__workspaceId__endpoints(
           ...this.__createRequestOptions(parameters, requestBody)
         )
@@ -1296,5 +1360,5 @@ class CoreConsoleAPI {
 }
 
 module.exports = {
-  init: init
+  init
 }
