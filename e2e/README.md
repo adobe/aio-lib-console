@@ -4,9 +4,9 @@
 
 To run the e2e test you'll need these env variables set (copy `.env.example` to `.env`):
 
-  1. `CONSOLEAPI_API_KEY`
-  2. `CONSOLEAPI_ACCESS_TOKEN`
-  3. `CONSOLEAPI_IMS_ORG_ID`
+  1. `CONSOLEAPI_API_KEY` (this is the same IMS client id used by the cli)
+  2. `CONSOLEAPI_ACCESS_TOKEN` (this is the access token retrieved by an `aio login`)
+  3. `CONSOLEAPI_IMS_ORG_ID` (get this from the App Builder project's `.aio` file)
   4. `CONSOLEAPI_ENV` (`prod` (default) or `stage`)
 
 ## Run

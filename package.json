@@ -1,6 +1,6 @@
 {
   "name": "@adobe/aio-lib-console",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Adobe I/O Lib for the Developer Console",
   "homepage": "https://github.com/adobe/aio-lib-console",
   "license": "Apache-2.0",
@@ -14,27 +14,27 @@
     "@adobe/aio-lib-core-logging": "^2.0.0",
     "@adobe/aio-lib-env": "^2.0.0",
     "form-data": "^3.0.0",
-    "swagger-client": "3.13.1"
+    "swagger-client": "~3.18.5"
   },
   "devDependencies": {
     "@adobe/aio-cli-plugin-certificate": "^0.2.0",
-    "@adobe/eslint-config-aio-lib-config": "^2.0.0",
-    "@types/jest": "^26.0.15",
+    "@adobe/eslint-config-aio-lib-config": "^2.0.1",
+    "@types/jest": "^29.5.1",
     "@types/node-fetch": "^2.5.4",
     "babel-runtime": "^6.26.0",
     "dotenv": "^8.1.0",
     "eol": "^0.9.1",
-    "eslint": "^8",
-    "eslint-config-standard": "^17",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-jsdoc": "^37.5.1",
-    "eslint-plugin-n": "^15.2.4",
+    "eslint": "^8.46.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-jsdoc": "^42.0.0",
+    "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^4.0.1",
     "fetch-mock": "^9.3.1",
-    "jest": "^27",
+    "jest": "^29",
     "jest-fetch-mock": "^3.0.3",
     "jest-junit": "^16.0.0",
     "jest-plugin-fs": "^2.9.0",
@@ -44,7 +44,7 @@
     "stdout-stderr": "^0.1.13",
     "tmp": "^0.2.1",
     "tsd-jsdoc": "^2.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "e2e": "jest --config e2e/jest.config.js",
@@ -53,8 +53,9 @@
     "lint": "eslint src test e2e",
     "test": "npm run lint && npm run unit-tests",
     "typings": "jsdoc -t node_modules/tsd-jsdoc/dist -r src/*.js -d .",
-    "unit-tests": "jest --config test/jest.config.js --maxWorkers=2",
-    "validate": "node bin/validate_spec.js spec/api.json"
+    "unit-tests": "jest --config test/jest.config.js --ci",
+    "validate": "node bin/validate_spec.js spec/api.json",
+    "patch-spec": "node spec/patch/run.js"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"
