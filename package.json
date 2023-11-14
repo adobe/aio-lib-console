@@ -58,6 +58,6 @@
     "patch-spec": "node spec/patch/run.js"
   },
   "engines": {
-    "node": "^14.18 || ^16.13 || >=18"
+    "node": ">=18"
   }
 }
