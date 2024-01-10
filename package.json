@@ -10,14 +10,14 @@
     "url": "https://github.com/adobe/aio-lib-console/issues"
   },
   "dependencies": {
-    "@adobe/aio-lib-core-errors": "^3.1.0",
-    "@adobe/aio-lib-core-logging": "^2.0.0",
-    "@adobe/aio-lib-env": "^2.0.0",
+    "@adobe/aio-lib-core-errors": "^4",
+    "@adobe/aio-lib-core-logging": "^3",
+    "@adobe/aio-lib-env": "^3",
     "form-data": "^4.0.0",
     "swagger-client": "~3.18.5"
   },
   "devDependencies": {
-    "@adobe/aio-cli-plugin-certificate": "^0.2.0",
+    "@adobe/aio-cli-plugin-certificate": "^2",
     "@adobe/eslint-config-aio-lib-config": "^2.0.1",
     "@types/jest": "^29.5.1",
     "@types/node-fetch": "^2.5.4",
