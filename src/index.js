@@ -768,8 +768,8 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @returns {Promise<Response>} the response
    */
-  async getServicesForOrg (organizationId) {
-    const parameters = { orgId: organizationId }
+  async getServicesForOrg (organizationId, sdkCodes) {
+    const parameters = { orgId: organizationId, sdkCodes }
     const sdkDetails = { parameters }
 
     try {
