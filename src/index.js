@@ -531,6 +531,27 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Get the install config for an Adobe Developer Console project
+   *
+   * @param {string} projectId Project ID
+   * @returns {Promise<Response>} the response
+   */
+  async getProjectInstallConfig (projectId) {
+    const parameters = { projectId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Data
+        .get_console_data_projects__projectId__install_config(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECT_INSTALL_CONFIG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    * Create a new Enterprise Credential for a Workspace
    *
    * @param {string} organizationId Organization AMS ID
@@ -747,8 +768,8 @@ class CoreConsoleAPI {
    * @param {string} organizationId Organization AMS ID
    * @returns {Promise<Response>} the response
    */
-  async getServicesForOrg (organizationId) {
-    const parameters = { orgId: organizationId }
+  async getServicesForOrg (organizationId, sdkCodes) {
+    const parameters = { orgId: organizationId, sdkCodes }
     const sdkDetails = { parameters }
 
     try {
