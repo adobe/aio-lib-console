@@ -374,6 +374,23 @@ test('getCredentials', async () => {
   })
 })
 
+test('getProjectInstallConfig', async () => {
+  const sdkArgs = ['projectId']
+  const apiParameters = {
+    projectId: 'projectId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Data.get_console_data_projects__projectId__install_config',
+    sdkFunctionName: 'getProjectInstallConfig',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_PROJECT_INSTALL_CONFIG
+  })
+})
+
 test('createEnterpriseCredential', async () => {
   const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description']
   const apiParameters = {

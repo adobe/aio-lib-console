@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Transporter API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "This is the API layer for Adobe I/O Console."
   },
   "tags": [
@@ -2070,6 +2070,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "last_modified_after",
+            "description": "An optional timestamp in ISO-8601 format to filter the clients by last modified date. Only clients modified after this timestamp will be returned. Example timestamp - 2023-10-15T20:30:00.000-07:00",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2171,35 +2180,153 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients';\n\nlet options = {\n  method: 'GET',\n  qs: {\n    page: 'SOME_STRING_VALUE',\n    size: 'SOME_STRING_VALUE',\n    org_ids: 'SOME_STRING_VALUE'\n  },\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients';\n\nlet options = {\n  method: 'GET',\n  qs: {\n    page: 'SOME_STRING_VALUE',\n    size: 'SOME_STRING_VALUE',\n    org_ids: 'SOME_STRING_VALUE',\n    last_modified_after: 'SOME_STRING_VALUE'\n  },\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'page' => 'SOME_STRING_VALUE',\n  'size' => 'SOME_STRING_VALUE',\n  'org_ids' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'page' => 'SOME_STRING_VALUE',\n  'size' => 'SOME_STRING_VALUE',\n  'org_ids' => 'SOME_STRING_VALUE',\n  'last_modified_after' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/data/services/%7BserviceCode%7D/clients?page=SOME_STRING_VALUE&size=SOME_STRING_VALUE&org_ids=SOME_STRING_VALUE&last_modified_after=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/data/projects/{projectId}/install-config": {
+      "get": {
+        "summary": "Returns the install config for the given project id",
+        "tags": [
+          "Data"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Service token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Project id to be converted to install config",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "credentials": {
+                      "type": "array",
+                      "description": "The list of credentials in the project",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "description": "The type of the credential. One of OAUTH_SERVER_TO_SERVER, APIKEY, OAUTHWEBAPP, OAUTHNATIVEAPP, OAUTHSINGLEPAGEAPP"
+                          },
+                          "flowType": {
+                            "type": "string",
+                            "description": "The flow type of the credential. One of ADOBEID, ANALYTICS, ENTP"
+                          },
+                          "apis": {
+                            "type": "array",
+                            "description": "The list of APIs for the credential",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string",
+                                  "description": "The API code. Matches the sdk code in AMS."
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config';\n\nlet options = {\n  method: 'GET',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/data/projects/%7BprojectId%7D/install-config\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/data/projects/%7BprojectId%7D/install-config\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -3022,9 +3149,9 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/integrations/entp/{intId}/service": {
+    "/console/organizations/{orgId}/integrations/entp/{intId}/service/subscribe": {
       "post": {
-        "summary": "subscribe entp integration to service",
+        "summary": "Subscribe enterprise integration to service",
         "tags": [
           "Organizations"
         ],
@@ -3113,35 +3240,172 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'"
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service\"\n\n\tpayload := strings.NewReader(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe\"\n\n\tpayload := strings.NewReader(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/subscribe\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/organizations/{orgId}/integrations/entp/{intId}/service/unsubscribe": {
+      "post": {
+        "summary": "Unsubscribe enterprise integration from service",
+        "tags": [
+          "Organizations"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "intId",
+            "description": "integration id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sdkCode": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "description": "form data",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sdkList": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "errorList": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"sdkCode\":\"string\"}'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"sdkCode\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"sdkCode\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"sdkCode\\\":\\\"string\\\"}\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe\"\n\n\tpayload := strings.NewReader(\"{\\\"sdkCode\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"sdkCode\\\":\\\"string\\\"}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"sdkCode\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/%7BintId%7D/service/unsubscribe\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"sdkCode\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -3271,6 +3535,227 @@
           {
             "lang": "ruby",
             "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/integrations/entp/masterTechnicalAccount\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'multipart/form-data'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/organizations/{orgId}/events/providermetadata": {
+      "get": {
+        "summary": "List Provider Metadata For Org",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Organization ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Metadata List for org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Provider Metadata ID"
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "Provider Metadata Label"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Provider Metadata Description"
+                      },
+                      "group": {
+                        "type": "string",
+                        "description": "Provider Metadata Cloud Group"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Provider Metadata Authorization Type"
+                      },
+                      "has_multiple_providers": {
+                        "type": "boolean",
+                        "description": "If Provider Metadata has single or multiple providers associated to it"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error returning provider metadata for org"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata';\n\nlet options = {\n  method: 'GET',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/events/providermetadata\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providermetadata\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/organizations/{orgId}/events/providers": {
+      "get": {
+        "summary": "List Entitled & Enabled Providers For Org",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Organization ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "V2 Providers List for org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The ID of this Events Provider"
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "The label of this Events Provider, as shown on the Adobe I/O console"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "The description of this Events Provider, as shown on the Adobe I/O console"
+                      },
+                      "docs_url": {
+                        "type": "string",
+                        "description": "The documentation url of this Events Provider, as shown on the Adobe I/O console"
+                      },
+                      "instance_id": {
+                        "type": "string",
+                        "description": "The instance id of this Events Provider, can be null/NA"
+                      },
+                      "environment_type": {
+                        "type": "string",
+                        "description": "The instance environment type for aem native providers, will be null for other provider types"
+                      },
+                      "provider_metadata": {
+                        "type": "string",
+                        "description": "The provider_metadata of this Events Provider, reflecting its type/family"
+                      },
+                      "eventmetadata": {
+                        "type": "array",
+                        "description": "List of associated events metadata (event_code, label, desc) for this Provider.",
+                        "items": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error returning provider metadata for org"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers';\n\nlet options = {\n  method: 'GET',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/events/providers\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/events/providers\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -3924,14 +4409,25 @@
                           "expires_at": {
                             "type": "string"
                           },
-                          "expires_at_str": {
-                            "type": "string"
-                          },
-                          "last_used_at": {
+                          "created_at": {
                             "type": "string"
                           },
                           "uuid": {
                             "type": "string"
+                          },
+                          "secret_usages": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "last_used_at": {
+                                  "type": "string"
+                                },
+                                "grant_type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -4264,19 +4760,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "expires_at": {
+                    "client_id": {
                       "type": "string"
                     },
-                    "expires_at_str": {
-                      "type": "string"
-                    },
-                    "client_secret": {
-                      "type": "string"
+                    "client_secrets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "expires_at": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "uuid": {
+                            "type": "string"
+                          },
+                          "secret_usages": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "last_used_at": {
+                                  "type": "string"
+                                },
+                                "grant_type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -4285,7 +4809,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Credential Not Found"
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -4871,6 +5395,121 @@
         ]
       }
     },
+    "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/meshes/{meshId}/artifact": {
+      "get": {
+        "summary": "Get mesh artifact",
+        "tags": [
+          "Meshes"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Organization id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Project id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "meshId",
+            "description": "Mesh id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "description": "API key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get mesh success"
+          },
+          "401": {
+            "description": "Unauthorized - Oauth token is not valid"
+          },
+          "403": {
+            "description": "Forbidden - Oauth token is missing / User does not belong to organization"
+          },
+          "404": {
+            "description": "Specified mesh artifact not found"
+          },
+          "500": {
+            "description": "Error retrieving specified mesh artifact"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact';\n\nlet options = {\n  method: 'GET',\n  qs: {apiKey: 'SOME_STRING_VALUE'},\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'apiKey' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/meshes/%7BmeshId%7D/artifact?apiKey=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
     "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/meshes/describe": {
       "get": {
         "summary": "Describe mesh",
@@ -5307,35 +5946,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'"
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\"}'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -5446,35 +6085,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request PUT \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'"
+            "source": "curl --request PUT \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\"}'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D';\n\nlet options = {\n  method: 'PUT',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D';\n\nlet options = {\n  method: 'PUT',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D');\n$request->setMethod(HTTP_METH_PUT);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D');\n$request->setMethod(HTTP_METH_PUT);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.put(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.put(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PUT\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PUT\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"PUT\", \"/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"PUT\", \"/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\");\nvar request = new RestRequest(Method.PUT);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\");\nvar request = new RestRequest(Method.PUT);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Put.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Put.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -6198,121 +6837,6 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/credentials/oauth-server-to-server/{credentialId}/status": {
-      "get": {
-        "summary": "Get oauth server to server credential migration status",
-        "tags": [
-          "OAuth server to server"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "description": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-api-key",
-            "description": "API key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "orgId",
-            "description": "AMS org id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credentialId",
-            "description": "Credential id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "migrationStatus": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_STARTED",
-                        "STARTED",
-                        "COMPLETED",
-                        "NONE"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "shell",
-            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
-          },
-          {
-            "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status';\n\nlet options = {\n  method: 'GET',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
-          },
-          {
-            "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
-          },
-          {
-            "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
-          },
-          {
-            "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-          },
-          {
-            "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
-          },
-          {
-            "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
-          },
-          {
-            "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/oauth-server-to-server/%7BcredentialId%7D/status\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
-          }
-        ]
-      }
-    },
     "/console/organizations/{orgId}/credentials/oauth-server-to-server/{credentialId}/finalize": {
       "patch": {
         "summary": "The API finishes migration from JWT to oauth server to server credential",
@@ -6565,7 +7089,7 @@
           },
           {
             "name": "page",
-            "description": "page index",
+            "description": "page index starting at 0",
             "in": "query",
             "required": false,
             "schema": {
@@ -6574,7 +7098,7 @@
           },
           {
             "name": "size",
-            "description": "page size",
+            "description": "page size, maximum 50",
             "in": "query",
             "required": false,
             "schema": {
@@ -6741,6 +7265,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "sdkCodes",
+            "description": "Services comma separated list of sdk codes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -6833,35 +7366,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
+            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services';\n\nlet options = {\n  method: 'GET',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services';\n\nlet options = {\n  method: 'GET',\n  qs: {sdkCodes: 'SOME_STRING_VALUE'},\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'sdkCodes' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/services\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/services?sdkCodes=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -7328,6 +7861,60 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "pluginIds",
+            "description": "Comma separated plugin ids to filter project by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "projectType",
+            "description": "Project type to filter by (default, jaeger)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeCustomerIsv",
+            "description": "Returns projects that are not customer isv",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "includeCredentials",
+            "description": "Returns projects including workspace credentials",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "credentialFlowType",
+            "description": "Comma separated credential flow types (adobeid, entp, analytics) to filter projects by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "credentialType",
+            "description": "Comma separated credential types (service, oauth_server_to_server, oauthweb, oauthios, oauthandroid, oauthwebapp, oauthsinglepageapp, oauthnativeapp, apikey) to filter projects by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -7451,35 +8038,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
+            "source": "curl --request GET \\\n  --url 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE' \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects';\n\nlet options = {\n  method: 'GET',\n  qs: {\n    sortField: 'SOME_STRING_VALUE',\n    sortOrder: 'SOME_STRING_VALUE',\n    size: 'SOME_NUMBER_VALUE',\n    page: 'SOME_NUMBER_VALUE',\n    title: 'SOME_STRING_VALUE',\n    appType: 'SOME_STRING_VALUE',\n    appSubType: 'SOME_STRING_VALUE',\n    projectIds: 'SOME_STRING_VALUE'\n  },\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects';\n\nlet options = {\n  method: 'GET',\n  qs: {\n    sortField: 'SOME_STRING_VALUE',\n    sortOrder: 'SOME_STRING_VALUE',\n    size: 'SOME_NUMBER_VALUE',\n    page: 'SOME_NUMBER_VALUE',\n    title: 'SOME_STRING_VALUE',\n    appType: 'SOME_STRING_VALUE',\n    appSubType: 'SOME_STRING_VALUE',\n    projectIds: 'SOME_STRING_VALUE',\n    pluginIds: 'SOME_STRING_VALUE',\n    projectType: 'SOME_STRING_VALUE',\n    excludeCustomerIsv: 'SOME_BOOLEAN_VALUE',\n    includeCredentials: 'SOME_BOOLEAN_VALUE',\n    credentialFlowType: 'SOME_STRING_VALUE',\n    credentialType: 'SOME_STRING_VALUE'\n  },\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  }\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'sortField' => 'SOME_STRING_VALUE',\n  'sortOrder' => 'SOME_STRING_VALUE',\n  'size' => 'SOME_NUMBER_VALUE',\n  'page' => 'SOME_NUMBER_VALUE',\n  'title' => 'SOME_STRING_VALUE',\n  'appType' => 'SOME_STRING_VALUE',\n  'appSubType' => 'SOME_STRING_VALUE',\n  'projectIds' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setQueryData([\n  'sortField' => 'SOME_STRING_VALUE',\n  'sortOrder' => 'SOME_STRING_VALUE',\n  'size' => 'SOME_NUMBER_VALUE',\n  'page' => 'SOME_NUMBER_VALUE',\n  'title' => 'SOME_STRING_VALUE',\n  'appType' => 'SOME_STRING_VALUE',\n  'appSubType' => 'SOME_STRING_VALUE',\n  'projectIds' => 'SOME_STRING_VALUE',\n  'pluginIds' => 'SOME_STRING_VALUE',\n  'projectType' => 'SOME_STRING_VALUE',\n  'excludeCustomerIsv' => 'SOME_BOOLEAN_VALUE',\n  'includeCredentials' => 'SOME_BOOLEAN_VALUE',\n  'credentialFlowType' => 'SOME_STRING_VALUE',\n  'credentialType' => 'SOME_STRING_VALUE'\n]);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects?sortField=SOME_STRING_VALUE&sortOrder=SOME_STRING_VALUE&size=SOME_NUMBER_VALUE&page=SOME_NUMBER_VALUE&title=SOME_STRING_VALUE&appType=SOME_STRING_VALUE&appSubType=SOME_STRING_VALUE&projectIds=SOME_STRING_VALUE&pluginIds=SOME_STRING_VALUE&projectType=SOME_STRING_VALUE&excludeCustomerIsv=SOME_BOOLEAN_VALUE&includeCredentials=SOME_BOOLEAN_VALUE&credentialFlowType=SOME_STRING_VALUE&credentialType=SOME_STRING_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       },
@@ -7542,6 +8129,9 @@
                   },
                   "type": {
                     "type": "string"
+                  },
+                  "templateId": {
+                    "type": "string"
                   }
                 }
               }
@@ -7594,35 +8184,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\"}'"
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\",\"templateId\":\"string\"}'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\",\"templateId\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"title\":\"string\",\"who_created\":\"string\",\"description\":\"string\",\"type\":\"string\",\"templateId\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\"}\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\"}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"who_created\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -8033,6 +8623,159 @@
           {
             "lang": "ruby",
             "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/plugins\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"pluginId\\\":\\\"string\\\",\\\"hostApp\\\":\\\"string\\\",\\\"appType\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/organizations/{orgId}/projects_workspaces": {
+      "post": {
+        "summary": "Create project and workspaces",
+        "tags": [
+          "projects"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Organization ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectWorkspaces"
+              }
+            }
+          },
+          "description": "Project workspaces object",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Create project and workspaces success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "projectId": {
+                      "type": "string",
+                      "description": "Project id"
+                    },
+                    "appId": {
+                      "type": "string",
+                      "description": "App builder application id"
+                    },
+                    "projectType": {
+                      "type": "string",
+                      "description": "Project type either jaeger or default"
+                    },
+                    "runtime": {
+                      "type": "object",
+                      "description": "Runtime object",
+                      "properties": {
+                        "error": {
+                          "type": "boolean",
+                          "description": "Indicates if runtime was created successfully"
+                        },
+                        "details": {
+                          "type": "array",
+                          "description": "Runtime namespaces list",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "Runtime namespace name"
+                              },
+                              "auth": {
+                                "type": "string",
+                                "description": "Runtime namespace auth"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "workspaces": {
+                      "type": "array",
+                      "description": "Workspaces ids list",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "workspaceId": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Error creating project and workspaces"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"project\":{\"name\":\"string\",\"title\":\"string\",\"type\":\"string\",\"description\":\"string\",\"isvAppId\":\"string\",\"isvAppVersionId\":\"string\",\"templateId\":\"string\"},\"workspaces\":[{\"name\":\"string\",\"title\":\"string\",\"description\":\"string\",\"runtimeEnabled\":true}]}'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"project\":{\"name\":\"string\",\"title\":\"string\",\"type\":\"string\",\"description\":\"string\",\"isvAppId\":\"string\",\"isvAppVersionId\":\"string\",\"templateId\":\"string\"},\"workspaces\":[{\"name\":\"string\",\"title\":\"string\",\"description\":\"string\",\"runtimeEnabled\":true}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"project\":{\"name\":\"string\",\"title\":\"string\",\"type\":\"string\",\"description\":\"string\",\"isvAppId\":\"string\",\"isvAppVersionId\":\"string\",\"templateId\":\"string\"},\"workspaces\":[{\"name\":\"string\",\"title\":\"string\",\"description\":\"string\",\"runtimeEnabled\":true}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"project\\\":{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"isvAppId\\\":\\\"string\\\",\\\"isvAppVersionId\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"},\\\"workspaces\\\":[{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"runtimeEnabled\\\":true}]}\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces\"\n\n\tpayload := strings.NewReader(\"{\\\"project\\\":{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"isvAppId\\\":\\\"string\\\",\\\"isvAppVersionId\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"},\\\"workspaces\\\":[{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"runtimeEnabled\\\":true}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"project\\\":{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"isvAppId\\\":\\\"string\\\",\\\"isvAppVersionId\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"},\\\"workspaces\\\":[{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"runtimeEnabled\\\":true}]}\"\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects_workspaces\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"project\\\":{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"isvAppId\\\":\\\"string\\\",\\\"isvAppVersionId\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"},\\\"workspaces\\\":[{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"runtimeEnabled\\\":true}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects_workspaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"project\\\":{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"type\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"isvAppId\\\":\\\"string\\\",\\\"isvAppVersionId\\\":\\\"string\\\",\\\"templateId\\\":\\\"string\\\"},\\\"workspaces\\\":[{\\\"name\\\":\\\"string\\\",\\\"title\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"runtimeEnabled\\\":true}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -10643,35 +11386,35 @@
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'"
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\"}'"
           },
           {
             "lang": "node",
-            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\",\"technicalAccountName\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\"}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"technicalAccountName\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/oauth-server-to-server\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -11170,6 +11913,69 @@
       }
     },
     "schemas": {
+      "ProjectWorkspaces": {
+        "type": "object",
+        "required": [
+          "project",
+          "workspaces"
+        ],
+        "properties": {
+          "project": {
+            "type": "object",
+            "required": [
+              "name",
+              "title",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "isvAppId": {
+                "type": "string"
+              },
+              "isvAppVersionId": {
+                "type": "string"
+              },
+              "templateId": {
+                "type": "string"
+              }
+            }
+          },
+          "workspaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "runtimeEnabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
       "Adobeid": {
         "type": "object",
         "required": [
@@ -11262,9 +12068,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "technicalAccountName": {
             "type": "string"
           }
         }
