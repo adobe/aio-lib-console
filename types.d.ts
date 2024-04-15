@@ -90,6 +90,8 @@ declare type WorkspaceDetails = {
  * @property [defaultRedirectUri] - Default redirect URI
  * @property [domain] - domain
  * @property [approvalInfo] - approvalInfo
+ * @property [templateId] - templateId
+ * @property [services] - services
  */
 declare type AdobeIdIntegrationDetails = {
     name: string;
@@ -100,6 +102,8 @@ declare type AdobeIdIntegrationDetails = {
     defaultRedirectUri?: string;
     domain?: string;
     approvalInfo?: any;
+    templateId?: string;
+    services?: any;
 };
 
 /**
@@ -222,6 +226,19 @@ declare type Role = {
     id: number;
     code: string;
     name: string;
+};
+
+/**
+ * @property name - Name
+ * @property description - Description
+ * @property [templateId] - templateId
+ * @property [services] - services
+ */
+declare type OauthS2SIntegrationDetails = {
+    name: string;
+    description: string;
+    templateId?: string;
+    services?: any;
 };
 
 /**
@@ -608,5 +625,12 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getSDKProperties(organizationId: string, integrationId: string, sdkCode: string): Promise<Response>;
+    /**
+     * Create a new oauth server to server credential for an Organization
+     * @param organizationId - Organization AMS ID
+     * @param integrationDetails - Integration details
+     * @returns the response
+     */
+    createOauthS2SCredential(organizationId: string, integrationDetails: OauthS2SIntegrationDetails): Promise<Response>;
 }
 

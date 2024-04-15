@@ -90,6 +90,29 @@
                     },
                     "orgId": {
                       "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    },
+                    "subscriptionResult": {
+                      "type": "object",
+                      "properties": {
+                        "sdkList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "errorList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -5921,6 +5944,29 @@
                     },
                     "technicalAccountId": {
                       "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    },
+                    "subscriptionResult": {
+                      "type": "object",
+                      "properties": {
+                        "sdkList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "errorList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -12014,6 +12060,12 @@
           },
           "domain": {
             "type": "string"
+          },
+          "templateId": {
+            "type": "string"
+          },
+          "services": {
+            "$ref": "#/components/schemas/SubscribeToServices"
           }
         }
       },
@@ -12069,6 +12121,12 @@
           },
           "description": {
             "type": "string"
+          },
+          "templateId": {
+            "type": "string"
+          },
+          "services": {
+            "$ref": "#/components/schemas/SubscribeToServices"
           }
         }
       },

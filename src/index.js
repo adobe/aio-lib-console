@@ -58,6 +58,8 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [defaultRedirectUri] Default redirect URI
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
+ * @property {string} [templateId] - templateId
+ * @property {object} [services] - services
  */
 
 /**
@@ -134,6 +136,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {number} id the role id
  * @property {string} code the role code
  * @property {string} name the role name
+ */
+
+/**
+ * @typedef {object} OauthS2SIntegrationDetails
+ * @property {string} name Name
+ * @property {string} description Description
+ * @property {string} [templateId] - templateId
+ * @property {object} [services] - services
  */
 
 const API_HOST = {
@@ -1376,6 +1386,28 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create a new oauth server to server credential for an Organization
+   *
+   * @param {string} organizationId - Organization AMS ID
+   * @param {OauthS2SIntegrationDetails} integrationDetails - Integration details
+   * @returns {Promise<Response>} the response
+   */
+  async createOauthS2SCredential (organizationId, integrationDetails) {
+    const parameters = { orgId: organizationId }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      return this.sdk.apis.Organizations
+        .post_console_organizations__orgId__credentials_oauth_server_to_server(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+    } catch (err) {
+      throw new codes.ERROR_CREATE_OAUTH_S2S_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 }
