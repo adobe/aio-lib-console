@@ -1396,18 +1396,19 @@ class CoreConsoleAPI {
    * @param {OauthS2SIntegrationDetails} integrationDetails - Integration details
    * @returns {Promise<Response>} the response
    */
-  async createOauthS2SCredential (organizationId, integrationDetails) {
+  async createOauthS2SCredentialIntegration (organizationId, integrationDetails) {
     const parameters = { orgId: organizationId }
     const requestBody = integrationDetails
     const sdkDetails = { parameters, requestBody }
 
     try {
-      return this.sdk.apis.Organizations
+      const res = this.sdk.apis['OAuth server to server']
         .post_console_organizations__orgId__credentials_oauth_server_to_server(
           ...this.__createRequestOptions(parameters, requestBody)
         )
+      return res
     } catch (err) {
-      throw new codes.ERROR_CREATE_OAUTH_S2S_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 }

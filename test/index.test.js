@@ -1092,3 +1092,20 @@ test('subscribeOAuthServerToServerIntegrationToServices', async () => {
     ErrorClass: codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES
   })
 })
+
+test('createOauthS2SCredentialIntegration', async () => {
+  const sdkArgs = ['organizationId', { some: 'body' }]
+  const apiParameters = {
+    orgId: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions({ some: 'body' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'OAuth server to server.post_console_organizations__orgId__credentials_oauth_server_to_server',
+    sdkFunctionName: 'createOauthS2SCredentialIntegration',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION
+  })
+})

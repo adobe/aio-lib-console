@@ -631,6 +631,6 @@ declare class CoreConsoleAPI {
      * @param integrationDetails - Integration details
      * @returns the response
      */
-    createOauthS2SCredential(organizationId: string, integrationDetails: OauthS2SIntegrationDetails): Promise<Response>;
+    createOauthS2SCredentialIntegration(organizationId: string, integrationDetails: OauthS2SIntegrationDetails): Promise<Response>;
 }
 
