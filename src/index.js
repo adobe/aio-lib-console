@@ -1402,7 +1402,7 @@ class CoreConsoleAPI {
     const sdkDetails = { parameters, requestBody }
 
     try {
-      const res = this.sdk.apis['OAuth server to server']
+      const res = await this.sdk.apis['OAuth server to server']
         .post_console_organizations__orgId__credentials_oauth_server_to_server(
           ...this.__createRequestOptions(parameters, requestBody)
         )
