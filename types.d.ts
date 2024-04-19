@@ -103,7 +103,7 @@ declare type AdobeIdIntegrationDetails = {
     domain?: string;
     approvalInfo?: any;
     templateId?: string;
-    services?: any;
+    services?: SubscribeToServices[];
 };
 
 /**
@@ -207,6 +207,19 @@ declare type ServiceInfo = {
 };
 
 /**
+ * @property sdkCode - the sdk code
+ * @property atlasPlanCode - the atlas plan code
+ * @property roles - the roles
+ * @property licenseConfigs - the license configs
+ */
+declare type SubscribeToServices = {
+    sdkCode: string;
+    atlasPlanCode: string;
+    roles: Role[];
+    licenseConfigs: LicenseConfig[];
+};
+
+/**
  * @property op - the operation (e.g. 'add')
  * @property id - the license id
  * @property productId - the product id
@@ -238,7 +251,7 @@ declare type OauthS2SIntegrationDetails = {
     name: string;
     description: string;
     templateId?: string;
-    services?: any;
+    services?: SubscribeToServices[];
 };
 
 /**

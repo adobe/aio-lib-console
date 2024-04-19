@@ -59,7 +59,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
  * @property {string} [templateId] - templateId
- * @property {object} [services] - services
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 /**
@@ -125,6 +125,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  */
 
 /**
+ * @typedef {object} SubscribeToServices
+ * @property {string} sdkCode the sdk code
+ * @property {string} atlasPlanCode the atlas plan code
+ * @property {Array<Role>} roles the roles
+ * @property {Array<LicenseConfig>} licenseConfigs the license configs
+ */
+
+/**
  * @typedef {object} LicenseConfig
  * @property {string} op the operation (e.g. 'add')
  * @property {string} id the license id
@@ -143,7 +151,7 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} name Name
  * @property {string} description Description
  * @property {string} [templateId] - templateId
- * @property {object} [services] - services
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 const API_HOST = {
