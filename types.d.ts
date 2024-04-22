@@ -90,6 +90,8 @@ declare type WorkspaceDetails = {
  * @property [defaultRedirectUri] - Default redirect URI
  * @property [domain] - domain
  * @property [approvalInfo] - approvalInfo
+ * @property [templateId] - templateId
+ * @property [services] - services
  */
 declare type AdobeIdIntegrationDetails = {
     name: string;
@@ -100,6 +102,8 @@ declare type AdobeIdIntegrationDetails = {
     defaultRedirectUri?: string;
     domain?: string;
     approvalInfo?: any;
+    templateId?: string;
+    services?: SubscribeToServices[];
 };
 
 /**
@@ -203,6 +207,19 @@ declare type ServiceInfo = {
 };
 
 /**
+ * @property sdkCode - the sdk code
+ * @property atlasPlanCode - the atlas plan code
+ * @property roles - the roles
+ * @property licenseConfigs - the license configs
+ */
+declare type SubscribeToServices = {
+    sdkCode: string;
+    atlasPlanCode: string;
+    roles: Role[];
+    licenseConfigs: LicenseConfig[];
+};
+
+/**
  * @property op - the operation (e.g. 'add')
  * @property id - the license id
  * @property productId - the product id
@@ -222,6 +239,19 @@ declare type Role = {
     id: number;
     code: string;
     name: string;
+};
+
+/**
+ * @property name - Name
+ * @property description - Description
+ * @property [templateId] - templateId
+ * @property [services] - services
+ */
+declare type OauthS2SIntegrationDetails = {
+    name: string;
+    description: string;
+    templateId?: string;
+    services?: SubscribeToServices[];
 };
 
 /**
@@ -608,5 +638,12 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     getSDKProperties(organizationId: string, integrationId: string, sdkCode: string): Promise<Response>;
+    /**
+     * Create a new oauth server to server credential for an Organization
+     * @param organizationId - Organization AMS ID
+     * @param integrationDetails - Integration details
+     * @returns the response
+     */
+    createOauthS2SCredentialIntegration(organizationId: string, integrationDetails: OauthS2SIntegrationDetails): Promise<Response>;
 }
 

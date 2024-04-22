@@ -174,6 +174,7 @@ with valid values for apiKey and accessToken
     * [.getEndPointsInWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.createOauthS2SCredentialIntegration(organizationId, integrationDetails)](#CoreConsoleAPI+createOauthS2SCredentialIntegration) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -803,6 +804,19 @@ Get details about a service (SDK) subscribed to an integration
 | integrationId | <code>string</code> | Integration ID |
 | sdkCode | <code>string</code> | the service sdkCode to query (e.g. AdobeAnalyticsSDK) |
 
+<a name="CoreConsoleAPI+createOauthS2SCredentialIntegration"></a>
+
+### coreConsoleAPI.createOauthS2SCredentialIntegration(organizationId, integrationDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Create a new oauth server to server credential for an Organization
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response
+
+| Param | Type                                         | Description |
+| --- |----------------------------------------------| --- |
+| organizationId | <code>string</code>                          | Organization AMS ID |
+| integrationDetails | [<code>OauthS2SIntegrationDetails</code>](#OauthS2SIntegrationDetails) | Integration details |
+
 <a name="createRequestOptions"></a>
 
 ## createRequestOptions(apiKey, options) ⇒ <code>Array</code>
@@ -910,16 +924,18 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | Name |
-| description | <code>string</code> | Description |
-| platform | <code>string</code> | Platform |
-| [urlScheme] | <code>string</code> | url scheme |
-| [redirectUriList] | <code>object</code> | List of redirect URIs |
-| [defaultRedirectUri] | <code>string</code> | Default redirect URI |
-| [domain] | <code>string</code> | domain |
-| [approvalInfo] | <code>object</code> | approvalInfo |
+| Name | Type                             | Description |
+| --- |----------------------------------| --- |
+| name | <code>string</code>              | Name |
+| description | <code>string</code>              | Description |
+| platform | <code>string</code>              | Platform |
+| [urlScheme] | <code>string</code>              | url scheme |
+| [redirectUriList] | <code>object</code>              | List of redirect URIs |
+| [defaultRedirectUri] | <code>string</code>              | Default redirect URI |
+| [domain] | <code>string</code>              | domain |
+| [approvalInfo] | <code>object</code>              | approvalInfo |
+| [templateId] | <code>string</code>              | Template ID                           |
+| [services]   | [<code>Array.&lt;SubscribeToServices&gt;</code>](#SubscribeToServices)  | List of services/SDKs to subscribe to |
 
 <a name="ExtensionIcon"></a>
 
@@ -1023,6 +1039,19 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | roles | [<code>Array.&lt;Role&gt;</code>](#Role) | the roles |
 | licenseConfigs | [<code>Array.&lt;LicenseConfig&gt;</code>](#LicenseConfig) | the license configs |
 
+<a name="SubscribeToServices"></a>
+
+## SubscribeToServices : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name           | Type | Description         |
+|----------------| --- |---------------------|
+| sdkCode        | <code>string</code> | the sdk code        |
+| atlasPlanCode  | <code>string</code> | the atlas paln code |
+| roles          | [<code>Array.&lt;Role&gt;</code>](#Role) | the roles           |
+| licenseConfigs | [<code>Array.&lt;LicenseConfig&gt;</code>](#LicenseConfig) | the license configs |
+
 <a name="LicenseConfig"></a>
 
 ## LicenseConfig : <code>object</code>
@@ -1046,6 +1075,17 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | id | <code>number</code> | the role id |
 | code | <code>string</code> | the role code |
 | name | <code>string</code> | the role name |
+
+## OauthS2SIntegrationDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name         | Type                               | Description                           |
+|--------------|------------------------------------|---------------------------------------|
+| name         | <code>string</code>                | Name                                  |
+| description  | <code>string</code>                | Description                           |
+| [templateId] | <code>string</code>                | Template ID                           |
+| [services]   | [<code>Array.&lt;SubscribeToServices&gt;</code>](#SubscribeToServices) | List of services/SDKs to subscribe to |
 
 ### Debug Logs
 

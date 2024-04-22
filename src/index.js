@@ -58,6 +58,8 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [defaultRedirectUri] Default redirect URI
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
+ * @property {string} [templateId] - templateId
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 /**
@@ -123,6 +125,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  */
 
 /**
+ * @typedef {object} SubscribeToServices
+ * @property {string} sdkCode the sdk code
+ * @property {string} atlasPlanCode the atlas plan code
+ * @property {Array<Role>} roles the roles
+ * @property {Array<LicenseConfig>} licenseConfigs the license configs
+ */
+
+/**
  * @typedef {object} LicenseConfig
  * @property {string} op the operation (e.g. 'add')
  * @property {string} id the license id
@@ -134,6 +144,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {number} id the role id
  * @property {string} code the role code
  * @property {string} name the role name
+ */
+
+/**
+ * @typedef {object} OauthS2SIntegrationDetails
+ * @property {string} name Name
+ * @property {string} description Description
+ * @property {string} [templateId] - templateId
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 const API_HOST = {
@@ -1376,6 +1394,29 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create a new oauth server to server credential for an Organization
+   *
+   * @param {string} organizationId - Organization AMS ID
+   * @param {OauthS2SIntegrationDetails} integrationDetails - Integration details
+   * @returns {Promise<Response>} the response
+   */
+  async createOauthS2SCredentialIntegration (organizationId, integrationDetails) {
+    const parameters = { orgId: organizationId }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis['OAuth server to server']
+        .post_console_organizations__orgId__credentials_oauth_server_to_server(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 }
