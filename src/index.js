@@ -784,6 +784,7 @@ class CoreConsoleAPI {
    * Get all Services available to an Organization
    *
    * @param {string} organizationId Organization AMS ID
+   * @param {string} sdkCodes comma separated list of sdk codes
    * @returns {Promise<Response>} the response
    */
   async getServicesForOrg (organizationId, sdkCodes) {
@@ -798,6 +799,28 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get org services v2. Can be used for getting services for a user in an org irrespective of the user's role in the org.
+   * They should just be a member. Also includes the information needed for requesting access to services that support it.
+   * @param {string} imsOrgId IMS org id in format abc@AdobeOrg
+   * @param {string} sdkCodes comma separated list of sdk codes
+   * @returns {Promise<Response>} the response
+   */
+  async getServicesForOrgV2 (imsOrgId, sdkCodes) {
+    const parameters = { orgCode: imsOrgId, sdkCodes }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgCode__services__v2(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_SERVICES_FOR_ORG_V2({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
