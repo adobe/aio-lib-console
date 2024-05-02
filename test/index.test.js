@@ -577,6 +577,23 @@ test('getServicesForOrg', async () => {
   })
 })
 
+test('getServicesForOrgV2', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgCode: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgCode__services_v2',
+    sdkFunctionName: 'getServicesForOrgV2',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_SERVICES_FOR_ORG_V2
+  })
+})
+
 test('createRuntimeNamespace', async () => {
   const sdkArgs = ['organizationId', 'projectId', 'workspaceId']
   const apiParameters = {
