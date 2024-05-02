@@ -815,7 +815,7 @@ class CoreConsoleAPI {
 
     try {
       const res = await this.sdk.apis.Organizations
-        .get_console_organizations__orgCode__services__v2(
+        .get_console_organizations__orgCode__services_v2(
           ...this.__createRequestOptions(parameters)
         )
       return res
