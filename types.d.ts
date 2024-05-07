@@ -384,6 +384,22 @@ declare class CoreConsoleAPI {
      */
     getCredentials(organizationId: string, projectId: string, workspaceId: string): Promise<Response>;
     /**
+     * Create a new OAuth Server-to-Server Credential for a Workspace
+     * @param organizationId - Organization AMS ID
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
+     * @param name - Credential name
+     * @param description - Credential description
+     * @returns the response
+     */
+    createOAuthServerToServerCredential(organizationId: string, projectId: string, workspaceId: string, name: string, description: string): Promise<Response>;
+    /**
+     * Get the install config for an Adobe Developer Console project
+     * @param projectId - Project ID
+     * @returns the response
+     */
+    getProjectInstallConfig(projectId: string): Promise<Response>;
+    /**
      * Create a new Enterprise Credential for a Workspace
      * @param organizationId - Organization AMS ID
      * @param projectId - Project ID
@@ -442,11 +458,20 @@ declare class CoreConsoleAPI {
      * @param organizationId - Organization AMS ID
      * @param projectId - Project ID
      * @param workspaceId - Workspace ID
-     * @param credentialType - Credential type (adobeid, analytics or entp)
+     * @param credentialType - Credential type (adobeid, analytics or entp). Unused.
      * @param credentialId - Credential ID
      * @returns the response
      */
     deleteCredential(organizationId: string, projectId: string, workspaceId: string, credentialType: string, credentialId: string): Promise<Response>;
+    /**
+     * Delete a Workspace Credential by credential id.
+     * @param organizationId - Organization AMS ID
+     * @param projectId - Project ID
+     * @param workspaceId - Workspace ID
+     * @param credentialId - Credential ID
+     * @returns the response
+     */
+    deleteCredentialById(organizationId: string, projectId: string, workspaceId: string, credentialId: string): Promise<Response>;
     /**
      * Get all Organizations
      * @returns the response
@@ -455,9 +480,18 @@ declare class CoreConsoleAPI {
     /**
      * Get all Services available to an Organization
      * @param organizationId - Organization AMS ID
+     * @param sdkCodes - comma separated list of sdk codes
      * @returns the response
      */
-    getServicesForOrg(organizationId: string): Promise<Response>;
+    getServicesForOrg(organizationId: string, sdkCodes: string): Promise<Response>;
+    /**
+     * Get org services v2. Can be used for getting services for a user in an org irrespective of the user's role in the org.
+     * They should just be a member. Also includes the information needed for requesting access to services that support it.
+     * @param imsOrgId - IMS org id in format abc@AdobeOrg
+     * @param sdkCodes - comma separated list of sdk codes
+     * @returns the response
+     */
+    getServicesForOrgV2(imsOrgId: string, sdkCodes: string): Promise<Response>;
     /**
      * Check developer terms acceptance
      * @param organizationId - Organization AMS ID
@@ -538,6 +572,14 @@ declare class CoreConsoleAPI {
      */
     subscribeEnterpriseIntegrationToServices(organizationId: string, integrationId: string, serviceInfo: any): Promise<Response>;
     /**
+     * Subscribe Organization OAuth Server-to-Server Integration to Services
+     * @param organizationId - Organization AMS ID
+     * @param credentialId - Credential ID
+     * @param serviceInfo - Information about the services like SDK Codes, licenseConfig and roles
+     * @returns the response
+     */
+    subscribeOAuthServerToServerIntegrationToServices(organizationId: string, credentialId: string, serviceInfo: any): Promise<Response>;
+    /**
      * List certification bindings for an Integration
      * @param organizationId - Organization AMS ID
      * @param integrationId - Integration ID
@@ -613,6 +655,13 @@ declare class CoreConsoleAPI {
         offset?: number;
         pageSize?: number;
     }): Promise<Response>;
+    /**
+     * Get Extensions for an App Builder application
+     * @param organizationId - Organization AMS ID
+     * @param applicationId - App Builder Application ID
+     * @returns the response
+     */
+    getApplicationExtensions(organizationId: string, applicationId: string): Promise<Response>;
     /**
      * Get endpoints in a workspace
      * @param organizationId - Organization AMS ID
