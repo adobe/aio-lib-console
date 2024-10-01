@@ -12,6 +12,7 @@
   "dependencies": {
     "@adobe/aio-lib-core-errors": "^4",
     "@adobe/aio-lib-core-logging": "^3",
+    "@adobe/aio-lib-core-networking": "^5.0.2",
     "@adobe/aio-lib-env": "^3",
     "form-data": "^4.0.0",
     "swagger-client": "~3.18.5"
