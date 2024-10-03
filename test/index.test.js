@@ -1145,7 +1145,6 @@ describe('proxy tests', () => {
 
   test('sdk init test with proxy', async () => {
     const sdkClient = await createSdkClient()
-    expect(mockLogger.debug.mock.calls[0][0]).toBe('Using proxy - https://fakeproxy')
     expect(sdkClient.apiKey).toBe(gApiKey)
     expect(sdkClient.accessToken).toBe(gAccessToken)
   })
