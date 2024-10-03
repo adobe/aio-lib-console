@@ -13,6 +13,7 @@ const { codes } = require('../src/SDKErrors')
 const sdk = require('../src')
 const libEnv = require('@adobe/aio-lib-env')
 const { STAGE_ENV, PROD_ENV } = jest.requireActual('@adobe/aio-lib-env')
+const mockLogger = require('@adobe/aio-lib-core-logging')
 
 jest.mock('@adobe/aio-lib-env')
 
@@ -1124,5 +1125,27 @@ test('createOauthS2SCredentialIntegration', async () => {
     apiOptions,
     sdkArgs,
     ErrorClass: codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION
+  })
+})
+describe('proxy tests', () => {
+  let ORIGINAL_HTTPS_PROXY
+
+  beforeAll(() => {
+    ORIGINAL_HTTPS_PROXY = process.env.HTTPS_PROXY
+  })
+  afterAll(() => {
+    process.env.HTTPS_PROXY = ORIGINAL_HTTPS_PROXY
+  })
+
+  beforeEach(() => {
+    process.env.HTTPS_PROXY = 'https://fakeproxy'
+    mockLogger.mockReset()
+    jest.clearAllMocks()
+  })
+
+  test('sdk init test with proxy', async () => {
+    const sdkClient = await createSdkClient()
+    expect(sdkClient.apiKey).toBe(gApiKey)
+    expect(sdkClient.accessToken).toBe(gAccessToken)
   })
 })

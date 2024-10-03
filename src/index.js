@@ -15,6 +15,8 @@ const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provide
 const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
 const { codes } = require('./SDKErrors')
 const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
+const { createFetch } = require('@adobe/aio-lib-core-networking')
+const proxyFetch = createFetch()
 
 /**
  * @typedef {object} Response
@@ -223,12 +225,15 @@ class CoreConsoleAPI {
     } else {
       // init swagger client
       const spec = require('../spec/api.json')
-      const swagger = new Swagger({
+      const options = {
         spec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
-        usePromise: true
-      })
+        usePromise: true,
+        userFetch: proxyFetch
+      }
+      const swagger = new Swagger(options)
+
       /** @private */
       this.sdk = (await swagger)
     }

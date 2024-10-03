@@ -9,7 +9,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const fetchMock = require('fetch-mock')
+const mockFetch = jest.fn()
+jest.mock('@adobe/aio-lib-core-networking', () => ({
+  createFetch: jest.fn(() => mockFetch),
+  HttpExponentialBackoff: jest.fn()
+}))
 const sdk = require('../src')
 const fs = require('fs')
 const path = require('path')
@@ -23,8 +27,14 @@ const endpointBaseURL = apiSpecJSON.servers[0].url
 jest.unmock('swagger-client')
 
 const mockResponseWithMethod = (url, method, response) => {
-  fetchMock.reset()
-  fetchMock.mock((u, opts) => u === url && opts.method === method, response)
+  mockFetch.mockReset()
+  const mockBody = jest.fn(() => Promise.resolve(response))
+  const apaptedMockRes = {
+    ok: true,
+    statusText: 'success',
+    blob: { call: mockBody }
+  }
+  mockFetch.mockResolvedValue(apaptedMockRes)
 }
 
 test('getOrganizations', async () => {
@@ -55,8 +65,8 @@ test('getOrganizations', async () => {
   // check success response
   const res = await sdkClient.getOrganizations()
   expect(res.ok).toBe(true)
-  expect(Array.isArray(res.body)).toBe(true)
-  expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
+  expect(Array.isArray(res.data)).toBe(true)
+  expect(Object.keys(res.data[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
 })
 
 test('getOrganizations without apiKey', async () => {
