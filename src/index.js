@@ -229,11 +229,8 @@ class CoreConsoleAPI {
         spec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
-        usePromise: true
-      }
-      if (process.env.HTTPS_PROXY) {
-        logger.debug('Using proxy - ' + process.env.HTTPS_PROXY)
-        options.userFetch = proxyFetch
+        usePromise: true,
+        userFetch: proxyFetch
       }
       const swagger = new Swagger(options)
 
