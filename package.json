@@ -15,7 +15,7 @@
     "@adobe/aio-lib-core-networking": "^5.0.2",
     "@adobe/aio-lib-env": "^3",
     "form-data": "^4.0.0",
-    "swagger-client": "~3.18.5"
+    "swagger-client": "^3.31.0"
   },
   "devDependencies": {
     "@adobe/aio-cli-plugin-certificate": "^2",
