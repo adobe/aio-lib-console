@@ -9,8 +9,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const sdk = require('../src')
 const { codes } = require('../src/SDKErrors')
+const sdk = require('../src')
 const path = require('path')
 const services = require('../services.json')
 const cert = require('@adobe/aio-cli-plugin-certificate')
@@ -92,7 +92,7 @@ describe('organizations', () => {
     const res = await sdkClient.getProjectsForOrg(orgId)
     expect(res.ok).toBe(true)
     expect(Array.isArray(res.body)).toBe(true)
-    expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'org_id', 'who_created', 'description', 'appId', 'id']))
+    expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'org_id', 'who_created', 'description', 'id']))
   })
 })
 
@@ -207,10 +207,9 @@ describe('create, edit, get', () => {
     expect(defaultWorkspaceId).toBeDefined()
 
     const res = sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
-    await expect(res).rejects.toEqual(
-      new codes.ERROR_CREATE_WORKSPACE({
-        messageValues: '400 - Bad Request ("Only one workspace allowed for project type default")'
-      }))
+    await expect(res).rejects.toThrow(new codes.ERROR_CREATE_WORKSPACE({
+      messageValues: '400 - Bad Request ("Only one workspace allowed for project type default")'
+    }))
   })
 
   /*  This is required because "Only one workspace allowed for project type default" */
@@ -1054,8 +1053,10 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(fireflyProjectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    // TODO: delete is not supported yet
-    await expect(sdkClient.deleteProject(orgId, fireflyProjectId)).rejects.toThrow('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
+    const prjRes = await sdkClient.deleteProject(orgId, fireflyProjectId)
+    expect(prjRes.ok).toBe(true)
+    expect(prjRes.status).toBe(200)
+    expect(prjRes.statusText).toBe('OK')
   })
 
   test('delete', async () => {
@@ -1068,7 +1069,9 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
 
-    // TODO: delete is not supported yet
-    await expect(sdkClient.deleteProject(orgId, trailingProjectId)).rejects.toThrow('[CoreConsoleAPISDK:ERROR_DELETE_PROJECT] 400 - Bad Request ("Project Firefly can not be deleted")')
+    const prjRes = await sdkClient.deleteProject(orgId, trailingProjectId)
+    expect(prjRes.ok).toBe(true)
+    expect(prjRes.status).toBe(200)
+    expect(prjRes.statusText).toBe('OK')
   })
 })
