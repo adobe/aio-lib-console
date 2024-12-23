@@ -10,6 +10,8 @@ governing permissions and limitations under the License.
 */
 const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
+const axios = require('axios')
+const FormData = require('form-data')
 
 /**
  * Reduce an Error to a string
@@ -102,9 +104,40 @@ function responseInterceptor (res) {
   return res
 }
 
+/**
+ * Use axios lib to directly call console API to create credential
+ *
+ * @param {string} url URL string
+ * @param {string} accessToken Token to call the API
+ * @param {string} apiKey Api key
+ * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
+ * @param {string} name Credential name
+ * @param {string} description Credential description
+ * @returns {object} The response object
+ */
+async function createCredentialDirect (url, accessToken, apiKey, certificate, name, description) {
+  const data = new FormData()
+  data.append('certificate', certificate)
+  data.append('name', name)
+  data.append('description', description)
+
+  const config = {
+    method: 'post',
+    url,
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+      'content-type': 'multipart/form-data',
+      'x-api-key': apiKey
+    },
+    data
+  }
+  return await axios.request(config)
+}
+
 module.exports = {
   reduceError,
   requestInterceptorBuilder,
   responseInterceptor,
-  createRequestOptions
+  createRequestOptions,
+  createCredentialDirect
 }

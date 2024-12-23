@@ -10,6 +10,11 @@ governing permissions and limitations under the License.
 */
 const AioLogger = require('@adobe/aio-lib-core-logging')
 const helpers = require('../src/helpers')
+const axios = require('axios')
+jest.mock('axios')
+const stream = require('stream')
+const mockedStream = new stream.Readable()
+mockedStream._read = function (size) { /* do nothing */ }
 
 test('reduceError', () => {
   // no args produces empty object
@@ -114,5 +119,22 @@ describe('responseInterceptor', () => {
     helpers.responseInterceptor({ ok: false, text: Buffer.from('this is an error response') })
     expect(AioLogger.debug).toHaveBeenCalledWith(`RESPONSE:\n${JSON.stringify(res, null, 2)}`)
     expect(AioLogger.debug).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('createCredentialDirect', () => {
+  beforeEach(() => {
+    axios.mockReset()
+  })
+  test('API call', async () => {
+    const url = 'mockurl'
+    const accessToken = 'mockToken'
+    const apiKey = 'mockKey'
+    const name = 'mockName'
+    const desc = 'mock description'
+    axios.request.mockImplementation(() => Promise.resolve({ data: {} }))
+    const ret = await helpers.createCredentialDirect(url, accessToken, apiKey, mockedStream, name, desc)
+    expect(axios.request).toHaveBeenCalled()
+    expect(ret).toEqual({ data: {} })
   })
 })
