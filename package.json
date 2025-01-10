@@ -14,7 +14,8 @@
     "@adobe/aio-lib-core-logging": "^3",
     "@adobe/aio-lib-core-networking": "^5.0.2",
     "@adobe/aio-lib-env": "^3",
-    "form-data": "^4.0.0",
+    "axios": "^1.7.9",
+    "form-data": "^4.0.1",
     "swagger-client": "^3.31.0"
   },
   "devDependencies": {

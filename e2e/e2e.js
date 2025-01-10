@@ -9,7 +9,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { codes } = require('../src/SDKErrors')
 const sdk = require('../src')
 const path = require('path')
 const services = require('../services.json')
@@ -207,9 +206,7 @@ describe('create, edit, get', () => {
     expect(defaultWorkspaceId).toBeDefined()
 
     const res = sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
-    await expect(res).rejects.toThrow(new codes.ERROR_CREATE_WORKSPACE({
-      messageValues: '400 - Bad Request ("Only one workspace allowed for project type default")'
-    }))
+    await expect(res).rejects.toThrow('Only one workspace allowed for project type default')
   })
 
   /*  This is required because "Only one workspace allowed for project type default" */
