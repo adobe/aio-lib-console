@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 const Swagger = require('swagger-client')
 const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
-const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
+const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions, createCredentialDirect } = require('./helpers')
 const { codes } = require('./SDKErrors')
 const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
 const { createFetch } = require('@adobe/aio-lib-core-networking')
@@ -588,13 +588,11 @@ class CoreConsoleAPI {
   async createEnterpriseCredential (organizationId, projectId, workspaceId, certificate, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = { certificate, name, description }
-    const sdkDetails = { parameters, requestBody }
 
+    const sdkDetails = { parameters, requestBody }
     try {
-      const res = await this.sdk.apis.workspaces
-        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp(
-          ...this.__createRequestOptions(parameters, requestBody)
-        )
+      const url = 'https://' + API_HOST[this.env] + '/console/organizations/' + organizationId + '/projects/' + projectId + '/workspaces/' + workspaceId + '/credentials/entp'
+      const res = await createCredentialDirect(url, this.accessToken, this.apiKey, certificate, name, description)
       return res
     } catch (err) {
       throw new codes.ERROR_CREATE_ENTERPRISE_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })

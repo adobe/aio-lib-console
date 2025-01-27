@@ -11,14 +11,24 @@ governing permissions and limitations under the License.
 
 const { codes } = require('../src/SDKErrors')
 const sdk = require('../src')
+const helpers = require('../src/helpers')
 const libEnv = require('@adobe/aio-lib-env')
 const { STAGE_ENV, PROD_ENV } = jest.requireActual('@adobe/aio-lib-env')
 const mockLogger = require('@adobe/aio-lib-core-logging')
 
 jest.mock('@adobe/aio-lib-env')
-
 /* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect", "standardTest"] }] */
 // /////////////////////////////////////////////
+
+// only mock createCredentialDirect
+jest.mock('../src/helpers', () => {
+  const original = jest.requireActual('../src/helpers')
+  return {
+    ...original,
+    createCredentialDirect: jest.fn()
+  }
+})
+helpers.createCredentialDirect.mockImplementation(() => ({ mockedValue: 'success' }))
 
 const gApiKey = 'test-apikey'
 const gAccessToken = 'test-token'
@@ -393,22 +403,15 @@ test('getProjectInstallConfig', async () => {
 })
 
 test('createEnterpriseCredential', async () => {
-  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description']
-  const apiParameters = {
-    orgId: 'organizationId',
-    projectId: 'projectId',
-    workspaceId: 'workspaceId'
-  }
-  const apiOptions = createSwaggerOptions({ certificate: 'certificate', description: 'description', name: 'name' })
+  const sdkClient = await createSdkClient()
+  const ret = await sdkClient.createEnterpriseCredential('organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description')
+  expect(ret).toBeDefined()
+})
 
-  await standardTest({
-    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp',
-    sdkFunctionName: 'createEnterpriseCredential',
-    apiParameters,
-    apiOptions,
-    sdkArgs,
-    ErrorClass: codes.ERROR_CREATE_ENTERPRISE_CREDENTIAL
-  })
+test('createEnterpriseCredential to throw error', async () => {
+  const sdkClient = await createSdkClient()
+  helpers.createCredentialDirect.mockImplementation(() => { throw new Error('test') })
+  await expect(sdkClient.createEnterpriseCredential('organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description')).rejects.toThrow('test')
 })
 
 test('createAdobeIdCredential', async () => {
