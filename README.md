@@ -111,9 +111,13 @@ with valid values for apiKey and accessToken</p>
 <dd></dd>
 <dt><a href="#ServiceInfo">ServiceInfo</a> : <code>object</code></dt>
 <dd></dd>
+<dt><a href="#SubscribeToServices">SubscribeToServices</a> : <code>object</code></dt>
+<dd></dd>
 <dt><a href="#LicenseConfig">LicenseConfig</a> : <code>object</code></dt>
 <dd></dd>
 <dt><a href="#Role">Role</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#OauthS2SIntegrationDetails">OauthS2SIntegrationDetails</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
@@ -141,15 +145,19 @@ with valid values for apiKey and accessToken
     * [.getWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.deleteWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+deleteWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getCredentials(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getCredentials) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.createOAuthServerToServerCredential(organizationId, projectId, workspaceId, name, description)](#CoreConsoleAPI+createOAuthServerToServerCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getProjectInstallConfig(projectId)](#CoreConsoleAPI+getProjectInstallConfig) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createEnterpriseCredential(organizationId, projectId, workspaceId, certificate, name, description)](#CoreConsoleAPI+createEnterpriseCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createAdobeIdCredential(organizationId, projectId, workspaceId, credentialDetails)](#CoreConsoleAPI+createAdobeIdCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createAnalyticsCredential(organizationId, projectId, workspaceId, credentialDetails)](#CoreConsoleAPI+createAnalyticsCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.subscribeCredentialToServices(organizationId, projectId, workspaceId, credentialType, credentialId, serviceInfo)](#CoreConsoleAPI+subscribeCredentialToServices) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getWorkspaceForCredential(organizationId, credentialId)](#CoreConsoleAPI+getWorkspaceForCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getProjectForWorkspace(organizationId, workspaceId)](#CoreConsoleAPI+getProjectForWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.deleteCredential(organizationId, projectId, workspaceId, credentialType, credentialId)](#CoreConsoleAPI+deleteCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * ~~[.deleteCredential(organizationId, projectId, workspaceId, credentialType, credentialId)](#CoreConsoleAPI+deleteCredential) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)~~
+    * [.deleteCredentialById(organizationId, projectId, workspaceId, credentialId)](#CoreConsoleAPI+deleteCredentialById) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getOrganizations()](#CoreConsoleAPI+getOrganizations) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
-    * [.getServicesForOrg(organizationId)](#CoreConsoleAPI+getServicesForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getServicesForOrg(organizationId, sdkCodes)](#CoreConsoleAPI+getServicesForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getServicesForOrgV2(imsOrgId, sdkCodes)](#CoreConsoleAPI+getServicesForOrgV2) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.checkOrgDevTerms(organizationId)](#CoreConsoleAPI+checkOrgDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.acceptOrgDevTerms(organizationId)](#CoreConsoleAPI+acceptOrgDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getDevTerms()](#CoreConsoleAPI+getDevTerms) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -161,6 +169,7 @@ with valid values for apiKey and accessToken
     * [.updateAdobeIdIntegration(organizationId, integrationId, integrationDetails)](#CoreConsoleAPI+updateAdobeIdIntegration) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.subscribeAdobeIdIntegrationToServices(organizationId, integrationId, serviceInfo)](#CoreConsoleAPI+subscribeAdobeIdIntegrationToServices) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.subscribeEnterpriseIntegrationToServices(organizationId, integrationId, serviceInfo)](#CoreConsoleAPI+subscribeEnterpriseIntegrationToServices) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.subscribeOAuthServerToServerIntegrationToServices(organizationId, credentialId, serviceInfo)](#CoreConsoleAPI+subscribeOAuthServerToServerIntegrationToServices) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getBindingsForIntegration(organizationId, integrationId)](#CoreConsoleAPI+getBindingsForIntegration) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.uploadAndBindCertificate(organizationId, integrationId, certificate)](#CoreConsoleAPI+uploadAndBindCertificate) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.deleteBinding(organizationId, integrationId, bindingId)](#CoreConsoleAPI+deleteBinding) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -171,9 +180,11 @@ with valid values for apiKey and accessToken
     * [.getAtlasApplicationPolicy(organizationId, integrationId)](#CoreConsoleAPI+getAtlasApplicationPolicy) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAtlasQuotaUsage(organizationId, integrationId)](#CoreConsoleAPI+getAtlasQuotaUsage) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getAllExtensionPoints(organizationId, [xpId], [options])](#CoreConsoleAPI+getAllExtensionPoints) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getApplicationExtensions(organizationId, applicationId)](#CoreConsoleAPI+getApplicationExtensions) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getEndPointsInWorkspace(organizationId, projectId, workspaceId)](#CoreConsoleAPI+getEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.createOauthS2SCredentialIntegration(organizationId, integrationDetails)](#CoreConsoleAPI+createOauthS2SCredentialIntegration) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 
 <a name="CoreConsoleAPI+init"></a>
 
@@ -365,6 +376,34 @@ Get all credentials for a Workspace
 | projectId | <code>string</code> | Project ID |
 | workspaceId | <code>string</code> | Workspace ID |
 
+<a name="CoreConsoleAPI+createOAuthServerToServerCredential"></a>
+
+### coreConsoleAPI.createOAuthServerToServerCredential(organizationId, projectId, workspaceId, name, description) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Create a new OAuth Server-to-Server Credential for a Workspace
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
+| name | <code>string</code> | Credential name |
+| description | <code>string</code> | Credential description |
+
+<a name="CoreConsoleAPI+getProjectInstallConfig"></a>
+
+### coreConsoleAPI.getProjectInstallConfig(projectId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get the install config for an Adobe Developer Console project
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| projectId | <code>string</code> | Project ID |
+
 <a name="CoreConsoleAPI+createEnterpriseCredential"></a>
 
 ### coreConsoleAPI.createEnterpriseCredential(organizationId, projectId, workspaceId, certificate, name, description) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -457,7 +496,9 @@ Get the Project of a Workspace
 
 <a name="CoreConsoleAPI+deleteCredential"></a>
 
-### coreConsoleAPI.deleteCredential(organizationId, projectId, workspaceId, credentialType, credentialId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+### ~~coreConsoleAPI.deleteCredential(organizationId, projectId, workspaceId, credentialType, credentialId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)~~
+***Deprecated***
+
 Delete a Workspace Credential
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
@@ -468,7 +509,22 @@ Delete a Workspace Credential
 | organizationId | <code>string</code> | Organization AMS ID |
 | projectId | <code>string</code> | Project ID |
 | workspaceId | <code>string</code> | Workspace ID |
-| credentialType | <code>string</code> | Credential type (adobeid, analytics or entp) |
+| credentialType | <code>string</code> | Credential type (adobeid, analytics or entp). Unused. |
+| credentialId | <code>string</code> | Credential ID |
+
+<a name="CoreConsoleAPI+deleteCredentialById"></a>
+
+### coreConsoleAPI.deleteCredentialById(organizationId, projectId, workspaceId, credentialId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Delete a Workspace Credential by credential id.
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| projectId | <code>string</code> | Project ID |
+| workspaceId | <code>string</code> | Workspace ID |
 | credentialId | <code>string</code> | Credential ID |
 
 <a name="CoreConsoleAPI+getOrganizations"></a>
@@ -480,7 +536,7 @@ Get all Organizations
 **Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
 <a name="CoreConsoleAPI+getServicesForOrg"></a>
 
-### coreConsoleAPI.getServicesForOrg(organizationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+### coreConsoleAPI.getServicesForOrg(organizationId, sdkCodes) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 Get all Services available to an Organization
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
@@ -489,6 +545,21 @@ Get all Services available to an Organization
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
+| sdkCodes | <code>string</code> | comma separated list of sdk codes |
+
+<a name="CoreConsoleAPI+getServicesForOrgV2"></a>
+
+### coreConsoleAPI.getServicesForOrgV2(imsOrgId, sdkCodes) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get org services v2. Can be used for getting services for a user in an org irrespective of the user's role in the org.
+They should just be a member. Also includes the information needed for requesting access to services that support it.
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| imsOrgId | <code>string</code> | IMS org id in format abc@AdobeOrg |
+| sdkCodes | <code>string</code> | comma separated list of sdk codes |
 
 <a name="CoreConsoleAPI+checkOrgDevTerms"></a>
 
@@ -631,6 +702,20 @@ Subscribe Organization Enterprise Integration to Services
 | integrationId | <code>string</code> | Integration ID |
 | serviceInfo | <code>object</code> | Information about the services like SDK Codes, licenseConfig and roles |
 
+<a name="CoreConsoleAPI+subscribeOAuthServerToServerIntegrationToServices"></a>
+
+### coreConsoleAPI.subscribeOAuthServerToServerIntegrationToServices(organizationId, credentialId, serviceInfo) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Subscribe Organization OAuth Server-to-Server Integration to Services
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| credentialId | <code>string</code> | Credential ID |
+| serviceInfo | <code>object</code> | Information about the services like SDK Codes, licenseConfig and roles |
+
 <a name="CoreConsoleAPI+getBindingsForIntegration"></a>
 
 ### coreConsoleAPI.getBindingsForIntegration(organizationId, integrationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -760,6 +845,19 @@ Get all available extension points
 | [options.offset] | <code>number</code> |  | Offset |
 | [options.pageSize] | <code>number</code> |  | page size |
 
+<a name="CoreConsoleAPI+getApplicationExtensions"></a>
+
+### coreConsoleAPI.getApplicationExtensions(organizationId, applicationId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get Extensions for an App Builder application
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| applicationId | <code>string</code> | App Builder Application ID |
+
 <a name="CoreConsoleAPI+getEndPointsInWorkspace"></a>
 
 ### coreConsoleAPI.getEndPointsInWorkspace(organizationId, projectId, workspaceId) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -802,6 +900,19 @@ Get details about a service (SDK) subscribed to an integration
 | organizationId | <code>string</code> | Organization AMS ID |
 | integrationId | <code>string</code> | Integration ID |
 | sdkCode | <code>string</code> | the service sdkCode to query (e.g. AdobeAnalyticsSDK) |
+
+<a name="CoreConsoleAPI+createOauthS2SCredentialIntegration"></a>
+
+### coreConsoleAPI.createOauthS2SCredentialIntegration(organizationId, integrationDetails) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Create a new oauth server to server credential for an Organization
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| integrationDetails | [<code>OauthS2SIntegrationDetails</code>](#OauthS2SIntegrationDetails) | Integration details |
 
 <a name="createRequestOptions"></a>
 
@@ -920,6 +1031,8 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | [defaultRedirectUri] | <code>string</code> | Default redirect URI |
 | [domain] | <code>string</code> | domain |
 | [approvalInfo] | <code>object</code> | approvalInfo |
+| [templateId] | <code>string</code> | templateId |
+| [services] | [<code>Array.&lt;SubscribeToServices&gt;</code>](#SubscribeToServices) | services |
 
 <a name="ExtensionIcon"></a>
 
@@ -1023,6 +1136,19 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | roles | [<code>Array.&lt;Role&gt;</code>](#Role) | the roles |
 | licenseConfigs | [<code>Array.&lt;LicenseConfig&gt;</code>](#LicenseConfig) | the license configs |
 
+<a name="SubscribeToServices"></a>
+
+## SubscribeToServices : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| sdkCode | <code>string</code> | the sdk code |
+| atlasPlanCode | <code>string</code> | the atlas plan code |
+| roles | [<code>Array.&lt;Role&gt;</code>](#Role) | the roles |
+| licenseConfigs | [<code>Array.&lt;LicenseConfig&gt;</code>](#LicenseConfig) | the license configs |
+
 <a name="LicenseConfig"></a>
 
 ## LicenseConfig : <code>object</code>
@@ -1046,6 +1172,19 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | id | <code>number</code> | the role id |
 | code | <code>string</code> | the role code |
 | name | <code>string</code> | the role name |
+
+<a name="OauthS2SIntegrationDetails"></a>
+
+## OauthS2SIntegrationDetails : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Name |
+| description | <code>string</code> | Description |
+| [templateId] | <code>string</code> | templateId |
+| [services] | [<code>Array.&lt;SubscribeToServices&gt;</code>](#SubscribeToServices) | services |
 
 ### Debug Logs
 

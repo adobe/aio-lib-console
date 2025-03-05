@@ -11,13 +11,24 @@ governing permissions and limitations under the License.
 
 const { codes } = require('../src/SDKErrors')
 const sdk = require('../src')
+const helpers = require('../src/helpers')
 const libEnv = require('@adobe/aio-lib-env')
 const { STAGE_ENV, PROD_ENV } = jest.requireActual('@adobe/aio-lib-env')
+const mockLogger = require('@adobe/aio-lib-core-logging')
 
 jest.mock('@adobe/aio-lib-env')
-
 /* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect", "standardTest"] }] */
 // /////////////////////////////////////////////
+
+// only mock createCredentialDirect
+jest.mock('../src/helpers', () => {
+  const original = jest.requireActual('../src/helpers')
+  return {
+    ...original,
+    createCredentialDirect: jest.fn()
+  }
+})
+helpers.createCredentialDirect.mockImplementation(() => ({ mockedValue: 'success' }))
 
 const gApiKey = 'test-apikey'
 const gAccessToken = 'test-token'
@@ -374,23 +385,33 @@ test('getCredentials', async () => {
   })
 })
 
-test('createEnterpriseCredential', async () => {
-  const sdkArgs = ['organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description']
+test('getProjectInstallConfig', async () => {
+  const sdkArgs = ['projectId']
   const apiParameters = {
-    orgId: 'organizationId',
-    projectId: 'projectId',
-    workspaceId: 'workspaceId'
+    projectId: 'projectId'
   }
-  const apiOptions = createSwaggerOptions({ certificate: 'certificate', description: 'description', name: 'name' })
+  const apiOptions = createSwaggerOptions()
 
   await standardTest({
-    fullyQualifiedApiName: 'workspaces.post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp',
-    sdkFunctionName: 'createEnterpriseCredential',
+    fullyQualifiedApiName: 'Data.get_console_data_projects__projectId__install_config',
+    sdkFunctionName: 'getProjectInstallConfig',
     apiParameters,
     apiOptions,
     sdkArgs,
-    ErrorClass: codes.ERROR_CREATE_ENTERPRISE_CREDENTIAL
+    ErrorClass: codes.ERROR_GET_PROJECT_INSTALL_CONFIG
   })
+})
+
+test('createEnterpriseCredential', async () => {
+  const sdkClient = await createSdkClient()
+  const ret = await sdkClient.createEnterpriseCredential('organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description')
+  expect(ret).toBeDefined()
+})
+
+test('createEnterpriseCredential to throw error', async () => {
+  const sdkClient = await createSdkClient()
+  helpers.createCredentialDirect.mockImplementation(() => { throw new Error('test') })
+  await expect(sdkClient.createEnterpriseCredential('organizationId', 'projectId', 'workspaceId', 'certificate', 'name', 'description')).rejects.toThrow('test')
 })
 
 test('createAdobeIdCredential', async () => {
@@ -557,6 +578,23 @@ test('getServicesForOrg', async () => {
     apiOptions,
     sdkArgs,
     ErrorClass: codes.ERROR_GET_SERVICES_FOR_ORG
+  })
+})
+
+test('getServicesForOrgV2', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = {
+    orgCode: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'Organizations.get_console_organizations__orgCode__services_v2',
+    sdkFunctionName: 'getServicesForOrgV2',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_SERVICES_FOR_ORG_V2
   })
 })
 
@@ -1073,5 +1111,44 @@ test('subscribeOAuthServerToServerIntegrationToServices', async () => {
     apiOptions,
     sdkArgs,
     ErrorClass: codes.ERROR_SUBSCRIBE_OAUTH_SERVER_TO_SERVER_INTEGRATION_TO_SERVICES
+  })
+})
+
+test('createOauthS2SCredentialIntegration', async () => {
+  const sdkArgs = ['organizationId', { some: 'body' }]
+  const apiParameters = {
+    orgId: 'organizationId'
+  }
+  const apiOptions = createSwaggerOptions({ some: 'body' })
+
+  await standardTest({
+    fullyQualifiedApiName: 'OAuth server to server.post_console_organizations__orgId__credentials_oauth_server_to_server',
+    sdkFunctionName: 'createOauthS2SCredentialIntegration',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION
+  })
+})
+describe('proxy tests', () => {
+  let ORIGINAL_HTTPS_PROXY
+
+  beforeAll(() => {
+    ORIGINAL_HTTPS_PROXY = process.env.HTTPS_PROXY
+  })
+  afterAll(() => {
+    process.env.HTTPS_PROXY = ORIGINAL_HTTPS_PROXY
+  })
+
+  beforeEach(() => {
+    process.env.HTTPS_PROXY = 'https://fakeproxy'
+    mockLogger.mockReset()
+    jest.clearAllMocks()
+  })
+
+  test('sdk init test with proxy', async () => {
+    const sdkClient = await createSdkClient()
+    expect(sdkClient.apiKey).toBe(gApiKey)
+    expect(sdkClient.accessToken).toBe(gAccessToken)
   })
 })

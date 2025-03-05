@@ -12,9 +12,11 @@ governing permissions and limitations under the License.
 const Swagger = require('swagger-client')
 const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
-const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions } = require('./helpers')
+const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions, createCredentialDirect } = require('./helpers')
 const { codes } = require('./SDKErrors')
 const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
+const { createFetch } = require('@adobe/aio-lib-core-networking')
+const proxyFetch = createFetch()
 
 /**
  * @typedef {object} Response
@@ -58,6 +60,8 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {string} [defaultRedirectUri] Default redirect URI
  * @property {string} [domain] domain
  * @property {object} [approvalInfo] approvalInfo
+ * @property {string} [templateId] - templateId
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 /**
@@ -123,6 +127,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  */
 
 /**
+ * @typedef {object} SubscribeToServices
+ * @property {string} sdkCode the sdk code
+ * @property {string} atlasPlanCode the atlas plan code
+ * @property {Array<Role>} roles the roles
+ * @property {Array<LicenseConfig>} licenseConfigs the license configs
+ */
+
+/**
  * @typedef {object} LicenseConfig
  * @property {string} op the operation (e.g. 'add')
  * @property {string} id the license id
@@ -134,6 +146,14 @@ const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
  * @property {number} id the role id
  * @property {string} code the role code
  * @property {string} name the role name
+ */
+
+/**
+ * @typedef {object} OauthS2SIntegrationDetails
+ * @property {string} name Name
+ * @property {string} description Description
+ * @property {string} [templateId] - templateId
+ * @property {Array<SubscribeToServices>} [services] - services
  */
 
 const API_HOST = {
@@ -205,12 +225,15 @@ class CoreConsoleAPI {
     } else {
       // init swagger client
       const spec = require('../spec/api.json')
-      const swagger = new Swagger({
+      const options = {
         spec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
-        usePromise: true
-      })
+        usePromise: true,
+        userFetch: proxyFetch
+      }
+      const swagger = new Swagger(options)
+
       /** @private */
       this.sdk = (await swagger)
     }
@@ -531,6 +554,27 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Get the install config for an Adobe Developer Console project
+   *
+   * @param {string} projectId Project ID
+   * @returns {Promise<Response>} the response
+   */
+  async getProjectInstallConfig (projectId) {
+    const parameters = { projectId }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Data
+        .get_console_data_projects__projectId__install_config(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECT_INSTALL_CONFIG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    * Create a new Enterprise Credential for a Workspace
    *
    * @param {string} organizationId Organization AMS ID
@@ -544,13 +588,11 @@ class CoreConsoleAPI {
   async createEnterpriseCredential (organizationId, projectId, workspaceId, certificate, name, description) {
     const parameters = { orgId: organizationId, projectId, workspaceId }
     const requestBody = { certificate, name, description }
-    const sdkDetails = { parameters, requestBody }
 
+    const sdkDetails = { parameters, requestBody }
     try {
-      const res = await this.sdk.apis.workspaces
-        .post_console_organizations__orgId__projects__projectId__workspaces__workspaceId__credentials_entp(
-          ...this.__createRequestOptions(parameters, requestBody)
-        )
+      const url = 'https://' + API_HOST[this.env] + '/console/organizations/' + organizationId + '/projects/' + projectId + '/workspaces/' + workspaceId + '/credentials/entp'
+      const res = await createCredentialDirect(url, this.accessToken, this.apiKey, certificate, name, description)
       return res
     } catch (err) {
       throw new codes.ERROR_CREATE_ENTERPRISE_CREDENTIAL({ sdkDetails, messageValues: reduceError(err) })
@@ -745,10 +787,11 @@ class CoreConsoleAPI {
    * Get all Services available to an Organization
    *
    * @param {string} organizationId Organization AMS ID
+   * @param {string} sdkCodes comma separated list of sdk codes
    * @returns {Promise<Response>} the response
    */
-  async getServicesForOrg (organizationId) {
-    const parameters = { orgId: organizationId }
+  async getServicesForOrg (organizationId, sdkCodes) {
+    const parameters = { orgId: organizationId, sdkCodes }
     const sdkDetails = { parameters }
 
     try {
@@ -759,6 +802,28 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SERVICES_FOR_ORG({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get org services v2. Can be used for getting services for a user in an org irrespective of the user's role in the org.
+   * They should just be a member. Also includes the information needed for requesting access to services that support it.
+   * @param {string} imsOrgId IMS org id in format abc@AdobeOrg
+   * @param {string} sdkCodes comma separated list of sdk codes
+   * @returns {Promise<Response>} the response
+   */
+  async getServicesForOrgV2 (imsOrgId, sdkCodes) {
+    const parameters = { orgCode: imsOrgId, sdkCodes }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.Organizations
+        .get_console_organizations__orgCode__services_v2(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_SERVICES_FOR_ORG_V2({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
@@ -1355,6 +1420,29 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_SDK_PROPERTIES({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Create a new oauth server to server credential for an Organization
+   *
+   * @param {string} organizationId - Organization AMS ID
+   * @param {OauthS2SIntegrationDetails} integrationDetails - Integration details
+   * @returns {Promise<Response>} the response
+   */
+  async createOauthS2SCredentialIntegration (organizationId, integrationDetails) {
+    const parameters = { orgId: organizationId }
+    const requestBody = integrationDetails
+    const sdkDetails = { parameters, requestBody }
+
+    try {
+      const res = await this.sdk.apis['OAuth server to server']
+        .post_console_organizations__orgId__credentials_oauth_server_to_server(
+          ...this.__createRequestOptions(parameters, requestBody)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 }

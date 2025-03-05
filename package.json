@@ -1,6 +1,6 @@
 {
   "name": "@adobe/aio-lib-console",
-  "version": "4.1.0",
+  "version": "5.3.2",
   "description": "Adobe I/O Lib for the Developer Console",
   "homepage": "https://github.com/adobe/aio-lib-console",
   "license": "Apache-2.0",
@@ -10,28 +10,30 @@
     "url": "https://github.com/adobe/aio-lib-console/issues"
   },
   "dependencies": {
-    "@adobe/aio-lib-core-errors": "^3.1.0",
-    "@adobe/aio-lib-core-logging": "^2.0.0",
-    "@adobe/aio-lib-env": "^2.0.0",
-    "form-data": "^4.0.0",
-    "swagger-client": "~3.24.5"
+    "@adobe/aio-lib-core-errors": "^4",
+    "@adobe/aio-lib-core-logging": "^3",
+    "@adobe/aio-lib-core-networking": "^5.0.2",
+    "@adobe/aio-lib-env": "^3",
+    "axios": "^1.7.9",
+    "form-data": "^4.0.1",
+    "swagger-client": "^3.31.0"
   },
   "devDependencies": {
-    "@adobe/aio-cli-plugin-certificate": "^0.2.0",
-    "@adobe/eslint-config-aio-lib-config": "^2.0.1",
+    "@adobe/aio-cli-plugin-certificate": "^2",
+    "@adobe/eslint-config-aio-lib-config": "^4.0.0",
     "@types/jest": "^29.5.1",
     "@types/node-fetch": "^2.5.4",
     "babel-runtime": "^6.26.0",
     "dotenv": "^8.1.0",
     "eol": "^0.9.1",
-    "eslint": "^8.46.0",
+    "eslint": "^8.57.1",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.28.0",
-    "eslint-plugin-jest": "^27.2.3",
-    "eslint-plugin-jsdoc": "^42.0.0",
-    "eslint-plugin-n": "^15.7",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-jsdoc": "^48.11.0",
+    "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-standard": "^5.0.0",
     "fetch-mock": "^9.3.1",
     "jest": "^29",
@@ -58,6 +60,6 @@
     "patch-spec": "node spec/patch/run.js"
   },
   "engines": {
-    "node": "^14.18 || ^16.13 || >=18"
+    "node": ">=18"
   }
 }
