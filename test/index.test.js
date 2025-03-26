@@ -1130,6 +1130,25 @@ test('createOauthS2SCredentialIntegration', async () => {
     ErrorClass: codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION
   })
 })
+
+test('getWorkspaceInfoForRuntimeNamespace', async () => {
+  const sdkArgs = ['organizationId', 'namespace']
+  const apiParameters = {
+    orgId: 'organizationId',
+    namespace: 'namespace'
+  }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'runtime.get_console_organizations__orgId__namespaces__namespace__workspace',
+    sdkFunctionName: 'getWorkspaceInfoForRuntimeNamespace',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_WORKSPACE_INFO_FOR_RUNTIME_NAMESPACE
+  })
+})
+
 describe('proxy tests', () => {
   let ORIGINAL_HTTPS_PROXY
 

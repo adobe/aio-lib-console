@@ -1445,6 +1445,27 @@ class CoreConsoleAPI {
       throw new codes.ERROR_CREATE_OAUTH_SERVER_TO_SERVER_CREDENTIAL_INTEGRATION({ sdkDetails, messageValues: reduceError(err) })
     }
   }
+
+  /**
+   * Returns workspace info for runtime namespace
+   *
+   * @param {string} organizationId - Organization AMS ID
+   * @param {OauthS2SIntegrationDetails} namespace - Runtime namespace
+   * @returns {Promise<Response>} the response
+   */
+  async getWorkspaceInfoForRuntimeNamespace (organizationId, namespace) {
+    const parameters = { orgId: organizationId, namespace }
+    const sdkDetails = { parameters }
+    try {
+      const res = await this.sdk.apis.runtime
+        .get_console_organizations__orgId__namespaces__namespace__workspace(
+          ...this.__createRequestOptions(parameters)
+        )
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_WORKSPACE_INFO_FOR_RUNTIME_NAMESPACE({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
 }
 
 module.exports = {

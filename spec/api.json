@@ -36,6 +36,268 @@
     }
   ],
   "paths": {
+    "/console/organizations/{orgId}/credentials/admin_entp": {
+      "post": {
+        "summary": "Create admin enterprise credential",
+        "tags": [
+          "Admin enterprise credentials"
+        ],
+        "parameters": [
+          {
+            "name": "orgId",
+            "description": "Org ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AdminEnterprise"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "apiKey": {
+                      "type": "string"
+                    },
+                    "orgId": {
+                      "type": "string"
+                    },
+                    "technicalAccountId": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    },
+                    "subscriptionResult": {
+                      "type": "object",
+                      "properties": {
+                        "sdkList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "errorList": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, ERR_MSG_QUOTA_EXCEEDED"
+          },
+          "409": {
+            "description": "Conflict, ERR_MSG_DUPLICATE_NAME"
+          },
+          "500": {
+            "description": "Error creating admin enterprise credential"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/credentials/admin_entp\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
+    "/console/organizations/{orgId}/credentials/admin_entp/{credentialId}/service/unsubscribe": {
+      "patch": {
+        "summary": "Unsubscribe admin enterprise credential from service",
+        "tags": [
+          "Admin enterprise credentials"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "AMS org id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "credentialId",
+            "description": "Credential id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Unsubscribeitem"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sdkList": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "errorList": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request PATCH \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\nHttpRequest::methodRegister('PATCH');\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe');\n$request->setMethod(HttpRequest::HTTP_METH_PATCH);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"id\":\"string\",\"name\":\"string\",\"productId\":\"string\",\"description\":\"string\",\"selected\":true}],\"roles\":[{\"id\":\"string\",\"code\":\"string\",\"name\":\"string\"}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.patch(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe\"\n\n\tpayload := strings.NewReader(\"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"PATCH\", \"/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe\");\nvar request = new RestRequest(Method.PATCH);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/credentials/admin_entp/%7BcredentialId%7D/service/unsubscribe\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"id\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"productId\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"selected\\\":true}],\\\"roles\\\":[{\\\"id\\\":\\\"string\\\",\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
     "/console/organizations/{orgId}/integrations/adobeid": {
       "post": {
         "summary": "adobeid create integration",
@@ -3217,7 +3479,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/SubscribeItem"
+          "$ref": "#/components/requestBodies/Unsubscribeitem"
         },
         "responses": {
           "200": {
@@ -4155,22 +4417,14 @@
                     "apikey": {
                       "type": "string"
                     },
-                    "description": {
+                    "technicalAccountId": {
                       "type": "string"
                     },
-                    "eventProviders": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "integer"
-                          }
-                        }
-                      }
+                    "technicalAccountEmail": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
                     },
                     "id": {
                       "type": "string"
@@ -4178,24 +4432,30 @@
                     "name": {
                       "type": "string"
                     },
-                    "orgCode": {
-                      "type": "string"
-                    },
                     "orgId": {
-                      "type": "string"
-                    },
-                    "orgName": {
                       "type": "string"
                     },
                     "platform": {
                       "type": "string"
                     },
+                    "domain": {
+                      "type": "string"
+                    },
                     "production": {
                       "type": "boolean"
                     },
-                    "requestState": {
-                      "type": "string",
-                      "description": "enum [WAITING, APPROVED, REJECTED, RESET]"
+                    "readOnly": {
+                      "type": "boolean"
+                    },
+                    "redirectUriList": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "redirect uri"
+                      }
+                    },
+                    "defaultRedirectUri": {
+                      "type": "string"
                     },
                     "sdkList": {
                       "type": "array",
@@ -4204,10 +4464,79 @@
                         "description": "sdk code"
                       }
                     },
+                    "serviceProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sdkCode": {
+                            "type": "string",
+                            "description": "sdk code"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "sdk name"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string",
+                                  "description": "scope code"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "scope description"
+                                }
+                              }
+                            }
+                          },
+                          "scopes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "scope code"
+                            }
+                          },
+                          "licenseConfigs": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "license id"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "license name"
+                                },
+                                "productId": {
+                                  "type": "string",
+                                  "description": "product id"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "description": "product description"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
                     "status": {
                       "type": "string"
                     },
                     "type": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "lastModifiedDate": {
                       "type": "string"
                     }
                   }
@@ -6680,7 +7009,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/SubscribeItem"
+          "$ref": "#/components/requestBodies/Unsubscribeitem"
         },
         "responses": {
           "200": {
@@ -6804,7 +7133,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/SubscribeItem"
+          "$ref": "#/components/requestBodies/Unsubscribeitem"
         },
         "responses": {
           "200": {
@@ -7508,7 +7837,7 @@
     },
     "/console/organizations/{orgCode}/services/v2": {
       "get": {
-        "summary": "list services for an organization v2",
+        "summary": "list services for an organization",
         "tags": [
           "Organizations"
         ],
@@ -8128,7 +8457,7 @@
           },
           {
             "name": "credentialFlowType",
-            "description": "Comma separated credential flow types (adobeid, entp, analytics) to filter projects by",
+            "description": "Comma separated credential flow types (adobeid, entp, analytics, admin_entp) to filter projects by",
             "in": "query",
             "required": false,
             "schema": {
@@ -8137,7 +8466,7 @@
           },
           {
             "name": "credentialType",
-            "description": "Comma separated credential types (service, oauth_server_to_server, oauthweb, oauthios, oauthandroid, oauthwebapp, oauthsinglepageapp, oauthnativeapp, apikey) to filter projects by",
+            "description": "Comma separated credential types (service, oauth_server_to_server, oauthweb, oauthios, oauthandroid, oauthwebapp, oauthsinglepageapp, oauthnativeapp, apikey, enterprisewebapp) to filter projects by",
             "in": "query",
             "required": false,
             "schema": {
@@ -9579,6 +9908,112 @@
         ]
       }
     },
+    "/console/organizations/{orgId}/namespaces/{namespace}/workspace": {
+      "get": {
+        "summary": "Returns workspace info for runtime namespace",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Service token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgId",
+            "description": "Organization ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "description": "Runtime namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "workspaceId": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "shell",
+            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+          },
+          {
+            "lang": "node",
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace';\n\nlet options = {\n  method: 'GET',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          },
+          {
+            "lang": "php",
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+          },
+          {
+            "lang": "java",
+            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+          },
+          {
+            "lang": "go",
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          },
+          {
+            "lang": "python",
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+          },
+          {
+            "lang": "csharp",
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "ruby",
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/namespaces/%7Bnamespace%7D/workspace\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+          }
+        ]
+      }
+    },
     "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}": {
       "patch": {
         "summary": "Edit Workspace",
@@ -10633,7 +11068,7 @@
           },
           {
             "name": "credentialType",
-            "description": "Type of credential (adobeid, analytics, entp)",
+            "description": "Type of credential (adobeid, analytics, entp, oauth-server-to-server (or oauth_server_to_server))",
             "in": "path",
             "required": true,
             "schema": {
@@ -11647,16 +12082,16 @@
         ]
       }
     },
-    "/console/organizations/{orgId}/xr-api/v1/app": {
-      "get": {
-        "summary": "get Application Extensions by Id",
+    "/console/organizations/{orgId}/projects/{projectId}/workspaces/{workspaceId}/credentials/admin_entp": {
+      "post": {
+        "summary": "Create admin enterprise credential",
         "tags": [
-          "Extensions"
+          "workspaces"
         ],
         "parameters": [
           {
             "name": "orgId",
-            "description": "AMS Organization ID",
+            "description": "Org ID",
             "in": "path",
             "required": true,
             "schema": {
@@ -11664,9 +12099,18 @@
             }
           },
           {
-            "name": "appId",
-            "description": "Application id",
-            "in": "query",
+            "name": "projectId",
+            "description": "Project ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspaceId",
+            "description": "Workspace ID",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
@@ -11674,7 +12118,16 @@
           },
           {
             "name": "Authorization",
-            "description": "Authorization",
+            "description": "Access token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "description": "API key",
             "in": "header",
             "required": true,
             "schema": {
@@ -11682,245 +12135,25 @@
             }
           }
         ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AdminEnterprise"
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "appId": {
-                        "type": "string",
-                        "description": "application id"
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "application name"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "publisherId": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "string",
-                        "description": "application status"
-                      },
-                      "isPrivate": {
-                        "type": "boolean"
-                      },
-                      "description": {
-                        "type": "string",
-                        "description": "application description"
-                      },
-                      "version": {
-                        "type": "string"
-                      },
-                      "workspaces": {
-                        "type": "array",
-                        "description": "list of workspaces in the application",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "description": "workspace id"
-                            },
-                            "name": {
-                              "type": "string",
-                              "description": "workspace name"
-                            },
-                            "endPoint": {
-                              "type": "string"
-                            },
-                            "deepLink": {
-                              "type": "string"
-                            },
-                            "shellProps": {
-                              "type": "string"
-                            },
-                            "releaseNotes": {
-                              "type": "string"
-                            },
-                            "approveList": {
-                              "type": "object",
-                              "description": "list of approveList users & orgs",
-                              "properties": {
-                                "users": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "guid": {
-                                        "type": "string"
-                                      }
-                                    }
-                                  }
-                                },
-                                "orgs": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "orgId": {
-                                        "type": "string"
-                                      },
-                                      "orgName": {
-                                        "type": "string"
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "lifecycle": {
-                        "type": "object",
-                        "properties": {
-                          "created": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "lastModified": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "submitted": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "published": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "reviewed": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "unpublished": {
-                            "type": "object",
-                            "properties": {
-                              "by": {
-                                "type": "object",
-                                "properties": {
-                                  "guid": {
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "notes": {
-                                "type": "string"
-                              },
-                              "on": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "support": {
-                        "type": "object",
-                        "description": "support information for the application",
-                        "properties": {
-                          "email": {
-                            "type": "string"
-                          },
-                          "contact": {
-                            "type": "string"
-                          },
-                          "website": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      "icon": {
-                        "type": "string",
-                        "description": "URL for the icon"
-                      },
-                      "media": {
-                        "type": "string"
-                      }
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "apiKey": {
+                      "type": "string"
+                    },
+                    "orgId": {
+                      "type": "string"
                     }
                   }
                 }
@@ -11936,45 +12169,42 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not Found"
-          },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error creating admin enterprise credential"
           }
         },
         "x-codeSamples": [
           {
             "lang": "shell",
-            "source": "curl --request GET \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json'"
+            "source": "curl --request POST \\\n  --url https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'accept: application/json' \\\n  --header 'content-type: application/json' \\\n  --header 'x-api-key: SOME_STRING_VALUE' \\\n  --data '{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}'"
           },
           {
             "lang": "node",
-            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D',\n  headers: {'content-type': 'application/json', Authorization: 'SOME_STRING_VALUE'}\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+            "source": "const fetch = require('node-fetch');\n\nlet url = 'https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    accept: 'application/json',\n    'content-type': 'application/json',\n    Authorization: 'SOME_STRING_VALUE',\n    'x-api-key': 'SOME_STRING_VALUE'\n  },\n  body: '{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
           },
           {
             "lang": "php",
-            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D');\n$request->setMethod(HTTP_METH_GET);\n\n$request->setHeaders([\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE'\n]);\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
+            "source": "<?php\n\n$request = new HttpRequest();\n$request->setUrl('https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp');\n$request->setMethod(HTTP_METH_POST);\n\n$request->setHeaders([\n  'accept' => 'application/json',\n  'content-type' => 'application/json',\n  'Authorization' => 'SOME_STRING_VALUE',\n  'x-api-key' => 'SOME_STRING_VALUE'\n]);\n\n$request->setBody('{\"name\":\"string\",\"description\":\"string\",\"redirectUriPattern\":\"string\",\"defaultRedirectUri\":\"string\",\"services\":[{\"sdkCode\":\"string\",\"atlasPlanCode\":\"string\",\"licenseConfigs\":[{\"productId\":\"string\",\"id\":\"string\",\"op\":\"string\"}],\"roles\":[{\"id\":0,\"code\":\"string\",\"name\":\"string\"}]}]}');\n\ntry {\n  $response = $request->send();\n\n  echo $response->getBody();\n} catch (HttpException $ex) {\n  echo $ex;\n}"
           },
           {
             "lang": "java",
-            "source": "HttpResponse<String> response = Unirest.get(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .asString();"
+            "source": "HttpResponse<String> response = Unirest.post(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"Authorization\", \"SOME_STRING_VALUE\")\n  .header(\"x-api-key\", \"SOME_STRING_VALUE\")\n  .body(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\")\n  .asString();"
           },
           {
             "lang": "go",
-            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+            "source": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"accept\", \"application/json\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\treq.Header.Add(\"Authorization\", \"SOME_STRING_VALUE\")\n\treq.Header.Add(\"x-api-key\", \"SOME_STRING_VALUE\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
           },
           {
             "lang": "python",
-            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\nheaders = {\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"GET\", \"/console/organizations/%7BorgId%7D/apps/%7BappId%7D\", headers=headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
+            "source": "import http.client\n\nconn = http.client.HTTPSConnection(\"developers-stage.adobe.io\")\n\npayload = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\"\n\nheaders = {\n    'accept': \"application/json\",\n    'content-type': \"application/json\",\n    'Authorization': \"SOME_STRING_VALUE\",\n    'x-api-key': \"SOME_STRING_VALUE\"\n    }\n\nconn.request(\"POST\", \"/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp\", payload, headers)\n\nres = conn.getresponse()\ndata = res.read()\n\nprint(data.decode(\"utf-8\"))"
           },
           {
             "lang": "csharp",
-            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+            "source": "var client = new RestClient(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"accept\", \"application/json\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-api-key\", \"SOME_STRING_VALUE\");\nrequest.AddParameter(\"application/json\", \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
           },
           {
             "lang": "ruby",
-            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/apps/%7BappId%7D\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\n\nresponse = http.request(request)\nputs response.read_body"
+            "source": "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://developers-stage.adobe.io/console/organizations/%7BorgId%7D/projects/%7BprojectId%7D/workspaces/%7BworkspaceId%7D/credentials/admin_entp\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"accept\"] = 'application/json'\nrequest[\"content-type\"] = 'application/json'\nrequest[\"Authorization\"] = 'SOME_STRING_VALUE'\nrequest[\"x-api-key\"] = 'SOME_STRING_VALUE'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"description\\\":\\\"string\\\",\\\"redirectUriPattern\\\":\\\"string\\\",\\\"defaultRedirectUri\\\":\\\"string\\\",\\\"services\\\":[{\\\"sdkCode\\\":\\\"string\\\",\\\"atlasPlanCode\\\":\\\"string\\\",\\\"licenseConfigs\\\":[{\\\"productId\\\":\\\"string\\\",\\\"id\\\":\\\"string\\\",\\\"op\\\":\\\"string\\\"}],\\\"roles\\\":[{\\\"id\\\":0,\\\"code\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
           }
         ]
       }
@@ -12009,7 +12239,7 @@
         "description": "oauth server to server credential object",
         "required": true
       },
-      "SubscribeItem": {
+      "Unsubscribeitem": {
         "content": {
           "application/json": {
             "schema": {
@@ -12137,6 +12367,17 @@
           }
         },
         "description": "form data",
+        "required": true
+      },
+      "AdminEnterprise": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AdminEnterprise"
+            }
+          }
+        },
+        "description": "Admin enterprise credential object",
         "required": true
       }
     },
@@ -12312,6 +12553,32 @@
           }
         }
       },
+      "AdminEnterprise": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "defaultRedirectUri",
+          "redirectUriPattern"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "redirectUriPattern": {
+            "type": "string"
+          },
+          "defaultRedirectUri": {
+            "type": "string"
+          },
+          "services": {
+            "$ref": "#/components/schemas/SubscribeToServices"
+          }
+        }
+      },
       "SubscribeToServices": {
         "type": "array",
         "items": {
@@ -12390,6 +12657,9 @@
           "description": {
             "type": "string"
           },
+          "deprecated": {
+            "type": "boolean"
+          },
           "properties": {
             "type": "object",
             "properties": {
@@ -12435,10 +12705,13 @@
                 "USER_MISSING_PRODUCT_PROFILES",
                 "ORG_MISSING_PRODUCT_PROFILES",
                 "USER_MISSING_ADMIN_ROLE",
+                "USER_MISSING_ADMIN_OR_DEVELOPER_ROLE",
                 "ORG_MISSING_FIS",
                 "ORG_MISSING_TARGET_TENANT_ID",
                 "USER_MISSING_PUBLIC_BETA",
                 "UNSUPPORTED_ORG_TYPE",
+                "ORG_NOT_ALLOWLISTED",
+                "DEPRECATED",
                 "EXCEPTION"
               ]
             }
