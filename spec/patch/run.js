@@ -11,7 +11,7 @@ async function main () {
     apiJson[destinationKey] = { ...apiJson[destinationKey], ...keyData }
   }
 
-  return fs.writeFile('../api.json', JSON.stringify(apiJson, null, 2))
+  return fs.writeFile(`${__dirname}/../api.json`, JSON.stringify(apiJson, null, 2))
 }
 
 main()
