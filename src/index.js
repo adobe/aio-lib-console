@@ -171,13 +171,14 @@ const API_HOST = {
  *      other than `prod` or `stage` it is assumed to be the default
  *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
  *      (which defaults to `prod` as well if not set)
+ * @param {object} swaggerSpec the swagger spec for the API (optional)
  * @returns {Promise<CoreConsoleAPI>} a Promise with a CoreConsoleAPI object
  */
-function init (accessToken, apiKey, env = getCliEnv()) {
+function init (accessToken, apiKey, env = getCliEnv(), swaggerSpec) {
   return new Promise((resolve, reject) => {
     const clientWrapper = new CoreConsoleAPI()
 
-    clientWrapper.init(accessToken, apiKey, env)
+    clientWrapper.init(accessToken, apiKey, env, swaggerSpec)
       .then(initializedSDK => {
         logger.debug('sdk initialized successfully')
         resolve(initializedSDK)
@@ -205,12 +206,16 @@ class CoreConsoleAPI {
    *      other than `prod` or `stage` it is assumed to be the default
    *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
    *      (which defaults to `prod` as well if not set)
+   * @param {object} swaggerSpec the swagger spec for the API (optional)
    * @returns {Promise<CoreConsoleAPI>} a CoreConsoleAPI object
    */
-  async init (accessToken, apiKey, env) {
+  async init (accessToken, apiKey, env, swaggerSpec) {
     const initErrors = []
     if (!accessToken) {
       initErrors.push('accessToken')
+    }
+    if (!swaggerSpec) {
+      swaggerSpec = require('../spec/api.json')
     }
 
     let apiHost = API_HOST[env]
@@ -224,9 +229,8 @@ class CoreConsoleAPI {
       throw new codes.ERROR_SDK_INITIALIZATION({ sdkDetails, messageValues: `${initErrors.join(', ')}` })
     } else {
       // init swagger client
-      const spec = require('../spec/api.json')
       const options = {
-        spec,
+        spec: swaggerSpec,
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
         usePromise: true,
