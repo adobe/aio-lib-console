@@ -130,6 +130,7 @@ async function standardTest ({
     sdkFunctionName = apiFunction
   }
   const fn = sdkClient[sdkFunctionName]
+  expect(typeof fn).toEqual('function')
   let mockFn
 
   // success case

@@ -26,7 +26,7 @@ const endpointBaseURL = apiSpecJSON.servers[0].url
 
 jest.unmock('swagger-client')
 
-const mockResponseWithMethod = (url, method, response) => {
+const mockResponseWithMethodOnce = (url, method, response) => {
   mockFetch.mockReset()
   const mockBody = jest.fn(() => Promise.resolve(response))
   const apaptedMockRes = {
@@ -34,47 +34,74 @@ const mockResponseWithMethod = (url, method, response) => {
     statusText: 'success',
     blob: { call: mockBody }
   }
-  mockFetch.mockResolvedValue(apaptedMockRes)
+  mockFetch.mockResolvedValueOnce(apaptedMockRes)
 }
 
-test('getOrganizations', async () => {
-  const url = `${endpointBaseURL}/organizations`
-  const method = 'GET'
-  const sdkClient = await sdk.init('accesstoken', { apiKey: 'apiKey' })
+describe('getOrganizations', () => {
+  test('with apikey', async () => {
+    const url = `${endpointBaseURL}/organizations`
+    const method = 'GET'
+    const sdkClient = await sdk.init('accesstoken', 'apiKey')
 
-  mockResponseWithMethod(url, method, [
-    {
-      id: '918',
-      code: '048F5DE85620B4D8',
-      name: 'MAC New Feature Testing',
-      description: null,
-      type: 'entp',
-      roles: [
-        {
-          principal: '048F5DE85620B4D8',
-          organization: '048F5DE85620B4D8',
-          target: '048F5DE85620B4D8',
-          named_role: 'org_admin',
-          target_type: 'TRG_ORG',
-          target_data: {}
-        }
-      ],
-      role: 'ADMIN'
-    }
-  ])
-  // check success response
-  const res = await sdkClient.getOrganizations()
-  expect(res.ok).toBe(true)
-  expect(Array.isArray(res.data)).toBe(true)
-  expect(Object.keys(res.data[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
+    mockResponseWithMethodOnce(url, method, [
+      {
+        id: '918',
+        code: '048F5DE85620B4D8',
+        name: 'MAC New Feature Testing',
+        description: null,
+        type: 'entp',
+        roles: [
+          {
+            principal: '048F5DE85620B4D8',
+            organization: '048F5DE85620B4D8',
+            target: '048F5DE85620B4D8',
+            named_role: 'org_admin',
+            target_type: 'TRG_ORG',
+            target_data: {}
+          }
+        ],
+        role: 'ADMIN'
+      }
+    ])
+    // check success response
+    const res = await sdkClient.getOrganizations()
+    expect(res.ok).toBe(true)
+    expect(Array.isArray(res.data)).toBe(true)
+    expect(Object.keys(res.data[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
+  })
+
+  test('without apiKey', async () => {
+    const url = `${endpointBaseURL}/organizations`
+    const method = 'GET'
+    const sdkClient = await sdk.init('accesstoken')
+
+    mockResponseWithMethodOnce(url, method, [{}])
+    // check success response
+    await expect(sdkClient.getOrganizations()).rejects.toThrow('[CoreConsoleAPISDK:ERROR_GET_ORGANIZATIONS] Error: Required parameter x-api-key is not provided')
+  })
 })
 
-test('getOrganizations without apiKey', async () => {
-  const url = `${endpointBaseURL}/organizations`
-  const method = 'GET'
-  const sdkClient = await sdk.init('accesstoken')
+describe('getApplicationExtensions (xr api)', () => {
+  test('spec is missing', async () => {
+    // remove getApplicationExtensions spec path
+    const swaggerSpec = structuredClone(require('../spec/api.json'))
+    delete swaggerSpec.paths['/console/organizations/{orgId}/xr-api/v1/app']
+    expect(swaggerSpec.paths['/console/organizations/{orgId}/xr-api/v1/app']).not.toBeDefined()
 
-  mockResponseWithMethod(url, method, [{}])
-  // check success response
-  await expect(sdkClient.getOrganizations()).rejects.toThrow('[CoreConsoleAPISDK:ERROR_GET_ORGANIZATIONS] Error: Required parameter x-api-key is not provided')
+    const sdkClient = await sdk.init('accesstoken', 'apiKey', undefined, swaggerSpec)
+    expect(typeof sdkClient.sdk.apis.Extensions.get_console_organizations__orgId__xr_api_v1_app).not.toEqual('function')
+
+    await expect(sdkClient.getApplicationExtensions('orgId', 'appId'))
+      .rejects
+      .toThrow('[CoreConsoleAPISDK:ERROR_GET_APPLICATION_EXTENSIONS] TypeError: this.sdk.apis.Extensions.get_console_organizations__orgId__xr_api_v1_app is not a function')
+  })
+
+  test('spec is available', async () => {
+    const sdkClient = await sdk.init('accesstoken', 'apiKey')
+    expect(typeof sdkClient.sdk.apis.Extensions.get_console_organizations__orgId__xr_api_v1_app).toEqual('function')
+
+    const res = await sdkClient.getApplicationExtensions('orgId', 'appId')
+    expect(res.ok).toBe(true)
+    expect(Array.isArray(res.data)).toBe(true)
+  })
 })
