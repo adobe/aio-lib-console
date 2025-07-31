@@ -1454,7 +1454,7 @@ class CoreConsoleAPI {
    * Returns workspace info for runtime namespace
    *
    * @param {string} organizationId - Organization AMS ID
-   * @param {OauthS2SIntegrationDetails} namespace - Runtime namespace
+   * @param {string} namespace - Runtime namespace
    * @returns {Promise<Response>} the response
    */
   async getWorkspaceInfoForRuntimeNamespace (organizationId, namespace) {
