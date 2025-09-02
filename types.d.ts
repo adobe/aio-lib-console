@@ -27,6 +27,18 @@ declare function requestInterceptorBuilder(coreConsoleAPIInstance: any, apihost:
 declare function responseInterceptor(res: any): any;
 
 /**
+ * Use axios lib to directly call console API to create credential
+ * @param url - URL string
+ * @param accessToken - Token to call the API
+ * @param apiKey - Api key
+ * @param certificate - A Readable stream with certificate content. eg: fs.createReadStream()
+ * @param name - Credential name
+ * @param description - Credential description
+ * @returns The response object
+ */
+declare function createCredentialDirect(url: string, accessToken: string, apiKey: string, certificate: any, name: string, description: string): any;
+
+/**
  * @property url - requested url
  * @property ok - response ok indicator
  * @property status - response status code
@@ -263,9 +275,10 @@ declare type OauthS2SIntegrationDetails = {
  *      other than `prod` or `stage` it is assumed to be the default
  *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
  *      (which defaults to `prod` as well if not set)
+ * @param swaggerSpec - the swagger spec for the API (optional)
  * @returns a Promise with a CoreConsoleAPI object
  */
-declare function init(accessToken: string, apiKey: string, env: string): Promise<CoreConsoleAPI>;
+declare function init(accessToken: string, apiKey: string, env: string, swaggerSpec: any): Promise<CoreConsoleAPI>;
 
 /**
  * This class provides methods to call your CoreConsoleAPI APIs.
@@ -282,9 +295,10 @@ declare class CoreConsoleAPI {
      *      other than `prod` or `stage` it is assumed to be the default
      *      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env
      *      (which defaults to `prod` as well if not set)
+     * @param swaggerSpec - the swagger spec for the API (optional)
      * @returns a CoreConsoleAPI object
      */
-    init(accessToken: string, apiKey: string, env: string): Promise<CoreConsoleAPI>;
+    init(accessToken: string, apiKey: string, env: string, swaggerSpec: any): Promise<CoreConsoleAPI>;
     /**
      * Get all Projects in an Organization
      * @param organizationId - Organization AMS ID
@@ -694,5 +708,12 @@ declare class CoreConsoleAPI {
      * @returns the response
      */
     createOauthS2SCredentialIntegration(organizationId: string, integrationDetails: OauthS2SIntegrationDetails): Promise<Response>;
+    /**
+     * Returns workspace info for runtime namespace
+     * @param organizationId - Organization AMS ID
+     * @param namespace - Runtime namespace
+     * @returns the response
+     */
+    getWorkspaceInfoForRuntimeNamespace(organizationId: string, namespace: string): Promise<Response>;
 }
 

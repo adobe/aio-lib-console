@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 [![Version](https://img.shields.io/npm/v/@adobe/aio-lib-console.svg)](https://npmjs.org/package/@adobe/aio-lib-console)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/aio-lib-console.svg)](https://npmjs.org/package/@adobe/aio-lib-console)
-![Node.js CI](https://github.com/adobe/aio-lib-console/workflows/Node.js%20CI/badge.svg)
+[![Build Status](https://travis-ci.com/adobe/aio-lib-console.svg?branch=master)](https://travis-ci.com/adobe/aio-lib-console)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-lib-console/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-lib-console/)
 
@@ -79,7 +79,10 @@ with valid values for apiKey and accessToken</p>
 <dt><a href="#responseInterceptor">responseInterceptor(res)</a> ⇒ <code>object</code></dt>
 <dd><p>A swagger response interceptor for the console sdk</p>
 </dd>
-<dt><a href="#init">init(accessToken, apiKey, env)</a> ⇒ <code><a href="#CoreConsoleAPI">Promise.&lt;CoreConsoleAPI&gt;</a></code></dt>
+<dt><a href="#createCredentialDirect">createCredentialDirect(url, accessToken, apiKey, certificate, name, description)</a> ⇒ <code>object</code></dt>
+<dd><p>Use axios lib to directly call console API to create credential</p>
+</dd>
+<dt><a href="#init">init(accessToken, apiKey, env, swaggerSpec)</a> ⇒ <code><a href="#CoreConsoleAPI">Promise.&lt;CoreConsoleAPI&gt;</a></code></dt>
 <dd><p>Returns a Promise that resolves with a new CoreConsoleAPI object</p>
 </dd>
 </dl>
@@ -131,7 +134,7 @@ with valid values for apiKey and accessToken
 **Kind**: global class  
 
 * [CoreConsoleAPI](#CoreConsoleAPI)
-    * [.init(accessToken, apiKey, env)](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+    * [.init(accessToken, apiKey, env, swaggerSpec)](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
     * [.getProjectsForOrg(organizationId)](#CoreConsoleAPI+getProjectsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createFireflyProject(organizationId, projectDetails)](#CoreConsoleAPI+createFireflyProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createProject(organizationId, projectDetails)](#CoreConsoleAPI+createProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -185,10 +188,11 @@ with valid values for apiKey and accessToken
     * [.updateEndPointsInWorkspace(organizationId, projectId, workspaceId, endpointDetails)](#CoreConsoleAPI+updateEndPointsInWorkspace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getSDKProperties(organizationId, integrationId, sdkCode)](#CoreConsoleAPI+getSDKProperties) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createOauthS2SCredentialIntegration(organizationId, integrationDetails)](#CoreConsoleAPI+createOauthS2SCredentialIntegration) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getWorkspaceInfoForRuntimeNamespace(organizationId, namespace)](#CoreConsoleAPI+getWorkspaceInfoForRuntimeNamespace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
 
 <a name="CoreConsoleAPI+init"></a>
 
-### coreConsoleAPI.init(accessToken, apiKey, env) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+### coreConsoleAPI.init(accessToken, apiKey, env, swaggerSpec) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
 Initializes a CoreConsoleAPI object and returns it
 
 **Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
@@ -199,6 +203,7 @@ Initializes a CoreConsoleAPI object and returns it
 | accessToken | <code>string</code> | the access token corresponding to an integration or user token |
 | apiKey | <code>string</code> | api key to access the Developer Console |
 | env | <code>string</code> | The name of the environment. `prod` and `stage`      are the only values supported. `prod` is default and any value      other than `prod` or `stage` it is assumed to be the default      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env      (which defaults to `prod` as well if not set) |
+| swaggerSpec | <code>object</code> | the swagger spec for the API (optional) |
 
 <a name="CoreConsoleAPI+getProjectsForOrg"></a>
 
@@ -914,6 +919,19 @@ Create a new oauth server to server credential for an Organization
 | organizationId | <code>string</code> | Organization AMS ID |
 | integrationDetails | [<code>OauthS2SIntegrationDetails</code>](#OauthS2SIntegrationDetails) | Integration details |
 
+<a name="CoreConsoleAPI+getWorkspaceInfoForRuntimeNamespace"></a>
+
+### coreConsoleAPI.getWorkspaceInfoForRuntimeNamespace(organizationId, namespace) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Returns workspace info for runtime namespace
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| organizationId | <code>string</code> | Organization AMS ID |
+| namespace | <code>string</code> | Runtime namespace |
+
 <a name="createRequestOptions"></a>
 
 ## createRequestOptions(apiKey, options) ⇒ <code>Array</code>
@@ -954,9 +972,26 @@ A swagger response interceptor for the console sdk
 | --- | --- | --- |
 | res | <code>object</code> | the response object |
 
+<a name="createCredentialDirect"></a>
+
+## createCredentialDirect(url, accessToken, apiKey, certificate, name, description) ⇒ <code>object</code>
+Use axios lib to directly call console API to create credential
+
+**Kind**: global function  
+**Returns**: <code>object</code> - The response object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| url | <code>string</code> | URL string |
+| accessToken | <code>string</code> | Token to call the API |
+| apiKey | <code>string</code> | Api key |
+| certificate | <code>object</code> | A Readable stream with certificate content. eg: fs.createReadStream() |
+| name | <code>string</code> | Credential name |
+| description | <code>string</code> | Credential description |
+
 <a name="init"></a>
 
-## init(accessToken, apiKey, env) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
+## init(accessToken, apiKey, env, swaggerSpec) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
 Returns a Promise that resolves with a new CoreConsoleAPI object
 
 **Kind**: global function  
@@ -967,6 +1002,7 @@ Returns a Promise that resolves with a new CoreConsoleAPI object
 | accessToken | <code>string</code> | the access token corresponding to an integration or user token |
 | apiKey | <code>string</code> | api key to access the Developer Console |
 | env | <code>string</code> | The name of the environment. `prod` and `stage`      are the only values supported. `prod` is default and any value      other than `prod` or `stage` it is assumed to be the default      value of `prod`. If not set, it will get the global cli env value. See https://github.com/adobe/aio-lib-env      (which defaults to `prod` as well if not set) |
+| swaggerSpec | <code>object</code> | the swagger spec for the API (optional) |
 
 <a name="Response"></a>
 
