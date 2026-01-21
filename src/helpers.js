@@ -24,7 +24,11 @@ function reduceError (error = {}) {
   const response = error.response
   if (response) {
     if (response.status && response.statusText && response.body) {
-      return `${response.status} - ${response.statusText} (${JSON.stringify(response.body)})`
+      let msg = `${response.status} - ${response.statusText} (${JSON.stringify(response.body)})`
+      if (response.headers) {
+        msg += ` - Headers: ${JSON.stringify(response.headers)}`
+      }
+      return msg
     }
   }
 

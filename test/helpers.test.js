@@ -40,6 +40,19 @@ test('reduceError', () => {
     }
   }
   expect(helpers.reduceError(expectedError)).toEqual("500 - Something went gang aft agley. ({\"error_code\":500101,\"message\":\"I'm giving it all I got, cap'n\"})")
+
+  const expectedErrorWithHeaders = {
+    response: {
+      status: 418,
+      statusText: 'Tried making coffee in a teapot!',
+      body: {
+        error_code: 418001,
+        message: 'Reinstall beans and try again.'
+      },
+      headers: { 'x-coffee-error': 'true', 'x-request-id': 'uuid-abc-def-ghi-123' }
+    }
+  }
+  expect(helpers.reduceError(expectedErrorWithHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."}) - Headers: {"x-coffee-error":"true","x-request-id":"uuid-abc-def-ghi-123"}')
 })
 
 describe('createRequestOptions', () => {
