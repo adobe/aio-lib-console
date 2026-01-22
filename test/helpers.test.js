@@ -66,6 +66,19 @@ test('reduceError', () => {
     }
   }
   expect(helpers.reduceError(expectedErrorWithNoRelevantHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."})')
+
+  const expectedErrorWithEmptyHeaders = {
+    response: {
+      status: 418,
+      statusText: 'Tried making coffee in a teapot!',
+      body: {
+        error_code: 418001,
+        message: 'Reinstall beans and try again.'
+      },
+      headers: { }
+    }
+  }
+  expect(helpers.reduceError(expectedErrorWithEmptyHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."})')
 })
 
 describe('createRequestOptions', () => {
