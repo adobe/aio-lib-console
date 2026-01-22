@@ -24,14 +24,23 @@ function reduceError (error = {}) {
   const response = error.response
   if (response) {
     if (response.status && response.statusText && response.body) {
+      const allowedHeaders = ['x-request-id'] // update as needed
       let msg = `${response.status} - ${response.statusText} (${JSON.stringify(response.body)})`
-      if (response.headers) {
-        msg += ` - Headers: ${JSON.stringify(response.headers)}`
+      let headersMsg = ' - Headers: [ '
+      if (response.headers && Object.keys(response.headers).length > 0) {
+        const headerParts = allowedHeaders
+          .filter(header => response.headers[header])
+          .map(header => `${header}=${response.headers[header]}`)
+        headersMsg += headerParts.join('; ')
       }
+      headersMsg += ' ]'
+      if (headersMsg !== ' - Headers: [  ]') {
+        msg += headersMsg
+      }
+
       return msg
     }
   }
-
   return error
 }
 

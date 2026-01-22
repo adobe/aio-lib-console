@@ -52,7 +52,20 @@ test('reduceError', () => {
       headers: { 'x-coffee-error': 'true', 'x-request-id': 'uuid-abc-def-ghi-123' }
     }
   }
-  expect(helpers.reduceError(expectedErrorWithHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."}) - Headers: {"x-coffee-error":"true","x-request-id":"uuid-abc-def-ghi-123"}')
+  expect(helpers.reduceError(expectedErrorWithHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."}) - Headers: [ x-request-id=uuid-abc-def-ghi-123 ]')
+
+  const expectedErrorWithNoRelevantHeaders = {
+    response: {
+      status: 418,
+      statusText: 'Tried making coffee in a teapot!',
+      body: {
+        error_code: 418001,
+        message: 'Reinstall beans and try again.'
+      },
+      headers: { 'x-coffee-error': 'true' }
+    }
+  }
+  expect(helpers.reduceError(expectedErrorWithNoRelevantHeaders)).toEqual('418 - Tried making coffee in a teapot! ({"error_code":418001,"message":"Reinstall beans and try again."})')
 })
 
 describe('createRequestOptions', () => {
