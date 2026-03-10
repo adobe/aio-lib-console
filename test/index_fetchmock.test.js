@@ -12,7 +12,9 @@ governing permissions and limitations under the License.
 const mockFetch = jest.fn()
 jest.mock('@adobe/aio-lib-core-networking', () => ({
   createFetch: jest.fn(() => mockFetch),
-  HttpExponentialBackoff: jest.fn()
+  HttpExponentialBackoff: jest.fn().mockImplementation(() => ({
+    exponentialBackoff: (url, options) => mockFetch(url, options)
+  }))
 }))
 const sdk = require('../src')
 const fs = require('fs')

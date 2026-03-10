@@ -15,8 +15,9 @@ const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provide
 const { reduceError, requestInterceptorBuilder, responseInterceptor, createRequestOptions, createCredentialDirect } = require('./helpers')
 const { codes } = require('./SDKErrors')
 const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
-const { createFetch } = require('@adobe/aio-lib-core-networking')
-const proxyFetch = createFetch()
+const { HttpExponentialBackoff } = require('@adobe/aio-lib-core-networking')
+const _httpBackoff = new HttpExponentialBackoff()
+const fetchWithRetry = (url, options) => _httpBackoff.exponentialBackoff(url, options)
 
 /**
  * @typedef {object} Response
@@ -234,7 +235,7 @@ class CoreConsoleAPI {
         requestInterceptor: requestInterceptorBuilder(this, apiHost),
         responseInterceptor,
         usePromise: true,
-        userFetch: proxyFetch
+        userFetch: fetchWithRetry
       }
       const swagger = new Swagger(options)
 
