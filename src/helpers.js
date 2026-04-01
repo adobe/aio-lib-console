@@ -10,8 +10,6 @@ governing permissions and limitations under the License.
 */
 const loggerNamespace = '@adobe/aio-lib-console'
 const logger = require('@adobe/aio-lib-core-logging')(loggerNamespace, { provider: 'debug', level: process.env.LOG_LEVEL || 'debug' })
-const axios = require('axios')
-const FormData = require('form-data')
 
 /**
  * Reduce an Error to a string
@@ -118,7 +116,7 @@ function responseInterceptor (res) {
 }
 
 /**
- * Use axios lib to directly call console API to create credential
+ * Use fetch to directly call console API to create credential
  *
  * @param {string} url URL string
  * @param {string} accessToken Token to call the API
@@ -126,25 +124,26 @@ function responseInterceptor (res) {
  * @param {object} certificate A Readable stream with certificate content. eg: fs.createReadStream()
  * @param {string} name Credential name
  * @param {string} description Credential description
- * @returns {object} The response object
+ * @returns {Promise<Response>} The response object
  */
 async function createCredentialDirect (url, accessToken, apiKey, certificate, name, description) {
+  const chunks = []
+  for await (const chunk of certificate) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  }
   const data = new FormData()
-  data.append('certificate', certificate)
+  data.append('certificate', new Blob([Buffer.concat(chunks)]))
   data.append('name', name)
   data.append('description', description)
 
-  const config = {
-    method: 'post',
-    url,
+  return fetch(url, {
+    method: 'POST',
     headers: {
       Authorization: 'Bearer ' + accessToken,
-      'content-type': 'multipart/form-data',
       'x-api-key': apiKey
     },
-    data
-  }
-  return await axios.request(config)
+    body: data
+  })
 }
 
 module.exports = {
