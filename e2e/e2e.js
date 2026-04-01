@@ -19,11 +19,17 @@ const tmp = require('tmp')
 // load .env values in the e2e folder, if any
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 
+const missingEnvVars = ['CONSOLE_API_API_KEY', 'CONSOLE_API_ACCESS_TOKEN', 'CONSOLE_API_IMS_ORG_ID']
+  .filter(v => !process.env[v])
+if (missingEnvVars.length > 0) {
+  throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`)
+}
+
 let sdkClient = {}
-const apiKey = process.env.CONSOLEAPI_API_KEY
-const accessToken = process.env.CONSOLEAPI_ACCESS_TOKEN
-const imsOrgId = process.env.CONSOLEAPI_IMS_ORG_ID
-const env = process.env.CONSOLEAPI_ENV || 'prod'
+const apiKey = process.env.CONSOLE_API_API_KEY
+const accessToken = process.env.CONSOLE_API_ACCESS_TOKEN
+const imsOrgId = process.env.CONSOLE_API_IMS_ORG_ID
+const env = process.env.CONSOLE_API_ENV || 'prod'
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
 let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
