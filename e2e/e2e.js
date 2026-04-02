@@ -9,6 +9,13 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+// Issues to keep track that will affect these tests:
+// IOC-10064 Transporter API: list organizations does not return 403 on a bad api key
+// IOC-10065 Transporter API: create workspace returns HTTP 200 instead of 201
+// IOC-10066 Transporter API: edit workspace - incorrect required parameters
+// IOC-10068 Transporter API: create workspace - runtime_enabled property is not documented
+// The trailing/leading spaces tests for project/workspace names and titles - tickets are pending (to define exact behavior)
+
 const sdk = require('../src')
 const path = require('path')
 const services = require('../services.json')
@@ -16,23 +23,20 @@ const services = require('../services.json')
 // load .env values in the e2e folder, if any
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 
-const missingEnvVars = ['CONSOLE_API_API_KEY', 'CONSOLE_API_ACCESS_TOKEN', 'CONSOLE_API_IMS_ORG_ID']
-  .filter(v => !process.env[v]?.trim())
-if (missingEnvVars.length > 0) {
-  throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`)
-}
+// VARS ////////////////////////////
 
 let sdkClient = {}
-const apiKey = process.env.CONSOLE_API_API_KEY
-const accessToken = process.env.CONSOLE_API_ACCESS_TOKEN
-const imsOrgId = process.env.CONSOLE_API_IMS_ORG_ID
-const env = process.env.CONSOLE_API_ENV || 'prod'
+const {
+  CONSOLE_API_API_KEY: apiKey,
+  CONSOLE_API_ACCESS_TOKEN: accessToken,
+  CONSOLE_API_IMS_ORG_ID: imsOrgId,
+  CONSOLE_API_ENV: env = 'prod'
+} = process.env
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
 let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
-
 const projectName = 'PN' + ts
 const fireflyProjectName = 'FPN' + ts
 const projectDescription = 'PDESC' + ts
@@ -48,7 +52,15 @@ const defaultProjectTitle = 'E2ETestProjectTitle' + ts
 const modifiedFireflyProjectTitle = 'mod' + fireflyProjectTitle
 const modifiedDefaultProjectTitle = 'mod' + defaultProjectTitle
 
+// LIFECYCLE ////////////////////////////
+
 beforeAll(async () => {
+  const missingEnvVars = ['CONSOLE_API_API_KEY', 'CONSOLE_API_ACCESS_TOKEN', 'CONSOLE_API_IMS_ORG_ID']
+    .filter(v => !process.env[v]?.trim())
+  if (missingEnvVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`)
+  }
+
   sdkClient = await sdk.init(accessToken, apiKey, env)
 })
 
@@ -56,32 +68,40 @@ afterAll(async () => {
   // Best-effort cleanup: delete projects created during the test run.
   // These deletes are also performed in the final describe block, but this
   // ensures cleanup even if the suite aborts before reaching those tests.
-  const deleteIfDefined = async (id, label) => {
-    if (!id || !orgId) {
+  const deleteIfDefined = async (projectId, label) => {
+    if (!projectId || !orgId) {
       return
     }
 
     try {
-      await sdkClient.deleteProject(orgId, id)
+      console.log(`Cleaning up ${label} with id ${projectId}...`)
+      await sdkClient.deleteProject(orgId, projectId)
+      console.log(`Project ${label} deleted.`)
     } catch (e) {
-      console.warn(`afterAll: could not delete ${label} (${id}):`, e.message)
+      console.log(`Project ${label}(${projectId}) was not deleted (best effort basis).`)
     }
   }
   await deleteIfDefined(projectId, 'default project')
   await deleteIfDefined(fireflyProjectId, 'firefly project')
 })
 
-const findSDKCode = (sdkName) => {
+// HELPERS ////////////////////////////
+
+/** @private */
+function findSDKCode (sdkName) {
   const service = services.find(service => service.name === sdkName)
   return service ? service.code : null
 }
 
-const expectOkResponse = (res) => {
+/** @private */
+function expectOkResponse (res) {
   expect(res.ok).toBe(true)
   expect(res.status).toBe(200)
   expect(res.statusText).toBe('OK')
   expect(typeof res.body).toBe('object')
 }
+
+// TESTS ////////////////////////////
 
 describe('init and input checks', () => {
   test('sdk init test', async () => {

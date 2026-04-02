@@ -21,34 +21,53 @@ const cert = require('@adobe/aio-cli-plugin-certificate')
 const fs = require('fs')
 const tmp = require('tmp')
 
+require('dotenv').config({ path: path.join(__dirname, '.env') })
+
+// VARS ////////////////////////////
+
 const ts = new Date().getTime()
 const credentialNameAdobeId = 'cred-oauth' + ts
 const credentialNameEntp = 'cred-entp-skip' + ts
 
-require('dotenv').config({ path: path.join(__dirname, '.env') })
+let orgId, projectId, workspaceId, credentialId, fromCredentialId
 
-const apiKey = process.env.CONSOLE_API_API_KEY
-const accessToken = process.env.CONSOLE_API_ACCESS_TOKEN
-const imsOrgId = process.env.CONSOLE_API_IMS_ORG_ID
-const env = process.env.CONSOLE_API_ENV || 'prod'
+let sdkClient = {}
+const {
+  CONSOLE_API_API_KEY: apiKey,
+  CONSOLE_API_ACCESS_TOKEN: accessToken,
+  CONSOLE_API_IMS_ORG_ID: imsOrgId,
+  CONSOLE_API_ENV: env = 'prod'
+} = process.env
 
-const findSDKCode = (sdkName) => {
+// HELPERS ////////////////////////////
+
+/** @private */
+function findSDKCode (sdkName) {
   const service = services.find(service => service.name === sdkName)
   return service ? service.code : null
 }
 
-let sdkClient = {}
-let orgId, projectId, workspaceId, credentialId, fromCredentialId
+// LIFECYCLE ////////////////////////////
 
 beforeAll(async () => {
+  const missingEnvVars = ['CONSOLE_API_API_KEY', 'CONSOLE_API_ACCESS_TOKEN', 'CONSOLE_API_IMS_ORG_ID']
+    .filter(v => !process.env[v]?.trim())
+  if (missingEnvVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`)
+  }
+
   sdkClient = await sdk.init(accessToken, apiKey, env)
 
   // Get orgId from IMS org ID
   const orgsRes = await sdkClient.getOrganizations()
   const org = orgsRes.body.find(item => item.code === imsOrgId)
-  if (org) orgId = org.id
+  if (org) {
+    orgId = org.id
+  }
 
-  if (!orgId) return
+  if (!orgId) {
+    return
+  }
 
   // Create a default project for credential tests
   const projName = 'CredentialsPN' + ts
@@ -68,12 +87,16 @@ beforeAll(async () => {
 afterAll(async () => {
   if (projectId && orgId) {
     try {
+      console.log(`Cleaning up project id ${projectId}...`)
       await sdkClient.deleteProject(orgId, projectId)
+      console.log(`Project ${projectId} deleted.`)
     } catch (e) {
-      console.warn(`afterAll: could not delete project (${projectId}):`, e.message)
+      console.log(`Project ${projectId} was not deleted (best effort basis).`)
     }
   }
 })
+
+// TESTS ////////////////////////////
 
 describe('Enterprise credentials', () => {
   test('createEnterpriseCredential API', async () => {
