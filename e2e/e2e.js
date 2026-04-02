@@ -82,7 +82,7 @@ describe('init and input checks', () => {
   test('bad api key', async () => {
     const _sdkClient = await sdk.init(global.accessToken, 'bad_api_key', global.env)
     const promise = _sdkClient.getOrganizations()
-    return expect(promise).rejects.toThrow('403')
+    return expect(promise).rejects.toThrow('403') // see IOC-10064
   })
 })
 
@@ -633,10 +633,7 @@ describe('create, edit, get, delete: test trailing spaces', () => {
 
     let res = await global.sdkClient.createWorkspace(global.orgId, trailingProjectId, { name: trailingWorkspaceName, title: workspaceTitleWithTrailingSpaces, description: workspaceDescriptionWithTrailingSpaces })
     expect(res.ok).toBe(true)
-    // TODO: decide if it should be 200 or 201 for create workspace api and align with that in sdk and tests
-    expect(res.status).toBe(200)
-    // TODO: decide if it should be 'OK' or 'Created' for create workspace api and align with that in sdk and tests
-    // expect(res.statusText).toBe('Created')
+    expect(res.status).toBe(200) // see IOC-10065
     expect(res.statusText).toBe('OK')
     expect(typeof (res.body)).toBe('object')
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'workspaceId']))
@@ -651,6 +648,7 @@ describe('create, edit, get, delete: test trailing spaces', () => {
     expect(res.body.description).toEqual(workspaceDescriptionWithTrailingSpaces)
 
     const titleWithTrailingSpaces = ' some other title '
+    // see IOC-10066, title should not be required if you want to just edit description
     res = await global.sdkClient.editWorkspace(global.orgId, trailingProjectId, trailingWorkspaceId, { name: trailingWorkspaceName, title: titleWithTrailingSpaces, description: ` ${modifiedWorkspaceDescription} ` })
     expect(res.body.title).toEqual(titleWithTrailingSpaces)
     expect(res.body.description).toEqual(` ${modifiedWorkspaceDescription} `)
