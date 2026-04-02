@@ -74,7 +74,6 @@ describe('init and input checks', () => {
     return expect(promise).rejects.toThrow('401')
   })
 
-  // TODO: this is a change in the API where it resolves instead of 403 for bad api key. confirm if this is expected and update the test name accordingly
   test('bad api key', async () => {
     const _sdkClient = await sdk.init(accessToken, 'bad_api_key', env)
     const promise = _sdkClient.getOrganizations()
