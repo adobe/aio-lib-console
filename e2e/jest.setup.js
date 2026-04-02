@@ -29,22 +29,53 @@ const {
 
 Object.assign(global, { apiKey, accessToken, imsOrgId, env })
 
-/** @private */
+/**
+ * Finds the SDK code for a given SDK name from the services registry.
+ *
+ * @param {string} sdkName - The display name of the SDK service to look up.
+ * @returns {string|null} The SDK code if found, or null if no matching service exists.
+ */
 global.findSDKCode = function findSDKCode (sdkName) {
   const service = services.find(service => service.name === sdkName)
   return service ? service.code : null
 }
 
+/**
+ * Asserts that a response represents a successful HTTP 200 OK result.
+ *
+ * @param {object} res - The response object returned by the SDK client.
+ * @param {string} expectedBodyType - The expected typeof value for `res.body` (e.g. `'object'`, `'string'`).
+ */
 /* eslint-disable jest/no-standalone-expect */
-global.expectOkResponse = function expectOkResponse (res) {
+global.expectOkResponse = function expectOkResponse (res, expectedBodyType) {
   expect(res.ok).toBe(true)
   expect(res.status).toBe(200)
   expect(res.statusText).toBe('OK')
-  expect(typeof res.body).toBe('object')
+  expect(typeof res.body).toBe(expectedBodyType)
 }
 /* eslint-enable jest/no-standalone-expect */
 
-/** @private */
+/**
+ * Asserts that a response represents a successful HTTP 201 Created result.
+ *
+ * @param {object} res - The response object returned by the SDK client.
+ * @param {string} expectedBodyType - The expected typeof value for `res.body` (e.g. `'object'`, `'string'`).
+ */
+/* eslint-disable jest/no-standalone-expect */
+global.expectCreatedResponse = function expectCreatedResponse (res, expectedBodyType) {
+  expect(res.ok).toBe(true)
+  expect(res.status).toBe(201)
+  expect(res.statusText).toBe('Created')
+  expect(typeof res.body).toBe(expectedBodyType)
+}
+/* eslint-enable jest/no-standalone-expect */
+
+/**
+ * Initializes the SDK client and resolves the organization ID for the configured IMS org.
+ * Runs once before all tests via `beforeAll`.
+ *
+ * @returns {Promise<void>}
+ */
 async function init () {
   global.sdkClient = await sdk.init(accessToken, apiKey, env)
   console.log(`Initialized SDK client with env ${env} and API key ${apiKey}`)
