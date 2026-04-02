@@ -17,24 +17,12 @@ governing permissions and limitations under the License.
 // The trailing/leading spaces tests for project/workspace names and titles - tickets are pending (to define exact behavior)
 
 const sdk = require('../src')
-const path = require('path')
-const services = require('../services.json')
-
-// load .env values in the e2e folder, if any
-require('dotenv').config({ path: path.join(__dirname, '.env') })
 
 // VARS ////////////////////////////
 
-let sdkClient = {}
-const {
-  CONSOLE_API_API_KEY: apiKey,
-  CONSOLE_API_ACCESS_TOKEN: accessToken,
-  CONSOLE_API_IMS_ORG_ID: imsOrgId,
-  CONSOLE_API_ENV: env = 'prod'
-} = process.env
-
 // these ids will be assigned when creating the project and workspace dynamically for the test
-let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, orgId, fireflyWorkspaceId
+// const { sdkClient, orgId, apiKey, accessToken, env, findSDKCode } = global
+let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
 const projectName = 'PN' + ts
@@ -54,28 +42,18 @@ const modifiedDefaultProjectTitle = 'mod' + defaultProjectTitle
 
 // LIFECYCLE ////////////////////////////
 
-beforeAll(async () => {
-  const missingEnvVars = ['CONSOLE_API_API_KEY', 'CONSOLE_API_ACCESS_TOKEN', 'CONSOLE_API_IMS_ORG_ID']
-    .filter(v => !process.env[v]?.trim())
-  if (missingEnvVars.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`)
-  }
-
-  sdkClient = await sdk.init(accessToken, apiKey, env)
-})
-
 afterAll(async () => {
   // Best-effort cleanup: delete projects created during the test run.
   // These deletes are also performed in the final describe block, but this
   // ensures cleanup even if the suite aborts before reaching those tests.
   const deleteIfDefined = async (projectId, label) => {
-    if (!projectId || !orgId) {
+    if (!projectId || !global.orgId) {
       return
     }
 
     try {
       console.log(`Cleaning up ${label} with id ${projectId}...`)
-      await sdkClient.deleteProject(orgId, projectId)
+      await global.sdkClient.deleteProject(global.orgId, projectId)
       console.log(`Project ${label} deleted.`)
     } catch (e) {
       console.log(`Project ${label}(${projectId}) was not deleted (best effort basis).`)
@@ -85,39 +63,24 @@ afterAll(async () => {
   await deleteIfDefined(fireflyProjectId, 'firefly project')
 })
 
-// HELPERS ////////////////////////////
-
-/** @private */
-function findSDKCode (sdkName) {
-  const service = services.find(service => service.name === sdkName)
-  return service ? service.code : null
-}
-
-/** @private */
-function expectOkResponse (res) {
-  expect(res.ok).toBe(true)
-  expect(res.status).toBe(200)
-  expect(res.statusText).toBe('OK')
-  expect(typeof res.body).toBe('object')
-}
-
 // TESTS ////////////////////////////
 
 describe('init and input checks', () => {
   test('sdk init test', async () => {
-    expect(sdkClient.apiKey).toBe(apiKey)
-    expect(sdkClient.accessToken).toBe(accessToken)
-    expect(['prod', 'stage']).toContain(sdkClient.env)
+    expect(global.sdkClient).toBeDefined()
+    expect(global.sdkClient.apiKey).toBe(global.apiKey)
+    expect(global.sdkClient.accessToken).toBe(global.accessToken)
+    expect(['prod', 'stage']).toContain(global.sdkClient.env)
   })
 
   test('bad access token', async () => {
-    const _sdkClient = await sdk.init('bad_access_token', apiKey, env)
+    const _sdkClient = await sdk.init('bad_access_token', global.apiKey, global.sdkClient.env)
     const promise = _sdkClient.getOrganizations()
     return expect(promise).rejects.toThrow('401')
   })
 
   test('bad api key', async () => {
-    const _sdkClient = await sdk.init(accessToken, 'bad_api_key', env)
+    const _sdkClient = await sdk.init(global.accessToken, 'bad_api_key', global.env)
     const promise = _sdkClient.getOrganizations()
     return expect(promise).rejects.toThrow('403')
   })
@@ -125,22 +88,16 @@ describe('init and input checks', () => {
 
 describe('organizations', () => {
   test('getOrganizations API', async () => {
-    const res = await sdkClient.getOrganizations()
+    const res = await global.sdkClient.getOrganizations()
     expect(res.ok).toBe(true)
     expect(Array.isArray(res.body)).toBe(true)
     expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'roles', 'type', 'description', 'id']))
-
-    // get org id from ims org id
-    const org = res.body.find(item => item.code === imsOrgId)
-    if (org) {
-      orgId = org.id
-    }
   })
 
   test('getProjectsForOrg API', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
 
-    const res = await sdkClient.getProjectsForOrg(orgId)
+    const res = await global.sdkClient.getProjectsForOrg(global.orgId)
     expect(res.ok).toBe(true)
     expect(Array.isArray(res.body)).toBe(true)
     expect(Object.keys(res.body[0])).toEqual(expect.arrayContaining(['name', 'org_id', 'who_created', 'description', 'id']))
@@ -151,9 +108,9 @@ describe('create, edit, get', () => {
   let fireflyAppId
 
   test('createFireflyProject API', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
 
-    const res = await sdkClient.createFireflyProject(orgId, { name: fireflyProjectName, title: fireflyProjectTitle, description: projectDescription })
+    const res = await global.sdkClient.createFireflyProject(global.orgId, { name: fireflyProjectName, title: fireflyProjectTitle, description: projectDescription })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
@@ -166,10 +123,10 @@ describe('create, edit, get', () => {
   })
 
   test('createProject API (default project type)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
 
     const projectType = 'default'
-    const res = await sdkClient.createProject(orgId, { name: projectName, title: defaultProjectTitle, description: projectDescription, type: projectType })
+    const res = await global.sdkClient.createProject(global.orgId, { name: projectName, title: defaultProjectTitle, description: projectDescription, type: projectType })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
@@ -183,48 +140,48 @@ describe('create, edit, get', () => {
   })
 
   test('editProject API (default project type)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
-    const res = await sdkClient.editProject(orgId, projectId, { name: projectName, description: modifiedProjectDescription, title: modifiedDefaultProjectTitle, type: 'default' })
-    expectOkResponse(res)
+    const res = await global.sdkClient.editProject(global.orgId, projectId, { name: projectName, description: modifiedProjectDescription, title: modifiedDefaultProjectTitle, type: 'default' })
+    global.expectOkResponse(res)
     expect(res.body.description).toEqual(modifiedProjectDescription)
     expect(res.body.title).toEqual(modifiedDefaultProjectTitle)
     expect(res.body.id).toEqual(projectId)
   })
 
   test('editProject API for firefly project', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
 
-    const res = await sdkClient.editProject(
-      orgId,
+    const res = await global.sdkClient.editProject(
+      global.orgId,
       fireflyProjectId,
       { name: fireflyProjectName, description: modifiedProjectDescription, title: modifiedFireflyProjectTitle, type: 'jaeger' }
     )
-    expectOkResponse(res)
+    global.expectOkResponse(res)
     expect(res.body.description).toEqual(modifiedProjectDescription)
     expect(res.body.title).toEqual(modifiedFireflyProjectTitle)
     expect(res.body.id).toEqual(fireflyProjectId)
   })
 
   test('getProject API (default type)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
-    const res = await sdkClient.getProject(orgId, projectId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getProject(global.orgId, projectId)
+    global.expectOkResponse(res)
     expect(res.body.name).toEqual(projectName)
     expect(res.body.appId).toBeFalsy()
     expect(res.body.id).toEqual(projectId)
   })
 
   test('getProject API (firefly project type)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
 
-    const res = await sdkClient.getProject(orgId, fireflyProjectId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getProject(global.orgId, fireflyProjectId)
+    global.expectOkResponse(res)
     expect(res.body.name).toEqual(fireflyProjectName)
     expect(res.body.appId).toBeTruthy()
     expect(res.body.id).toEqual(fireflyProjectId)
@@ -233,41 +190,41 @@ describe('create, edit, get', () => {
   })
 
   test('getApplicationExtensions', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyAppId).toBeDefined()
 
-    const res = await sdkClient.getApplicationExtensions(orgId, fireflyAppId)
+    const res = await global.sdkClient.getApplicationExtensions(global.orgId, fireflyAppId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
 
   test('createWorkspace API for default project type - should fail because only one is allowed for a default project', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
 
-    const res = sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
+    const res = global.sdkClient.createWorkspace(global.orgId, projectId, { name: workspaceName, description: workspaceDescription })
     await expect(res).rejects.toThrow('Only one workspace allowed for project type default')
   })
 
   /*  This is required because "Only one workspace allowed for project type default" */
   test('deleteWorkspace API for default project type (to delete the default workspace)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(defaultWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.deleteWorkspace(orgId, projectId, defaultWorkspaceId)
+    const res = await global.sdkClient.deleteWorkspace(global.orgId, projectId, defaultWorkspaceId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
   })
 
   test('createWorkspace API for default project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
 
-    const res = await sdkClient.createWorkspace(orgId, projectId, { name: workspaceName, description: workspaceDescription })
-    expectOkResponse(res)
+    const res = await global.sdkClient.createWorkspace(global.orgId, projectId, { name: workspaceName, description: workspaceDescription })
+    global.expectOkResponse(res)
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'workspaceId']))
     expect(res.body.projectId).toEqual(projectId)
     workspaceId = res.body.workspaceId
@@ -275,10 +232,10 @@ describe('create, edit, get', () => {
   })
 
   test('createWorkspace API for firefly project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
-    const res = await sdkClient.createWorkspace(orgId, fireflyProjectId, { name: fireflyWorkspaceName, title: 'workspace title', description: workspaceDescription })
-    expectOkResponse(res)
+    const res = await global.sdkClient.createWorkspace(global.orgId, fireflyProjectId, { name: fireflyWorkspaceName, title: 'workspace title', description: workspaceDescription })
+    global.expectOkResponse(res)
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['projectId', 'workspaceId']))
     expect(res.body.projectId).toEqual(fireflyProjectId)
     fireflyWorkspaceId = res.body.workspaceId
@@ -286,7 +243,7 @@ describe('create, edit, get', () => {
   })
 
   test('update endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
@@ -299,27 +256,27 @@ describe('create, edit, get', () => {
         }
       }
     }
-    const res = await sdkClient.updateEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId, endpoints)
+    const res = await global.sdkClient.updateEndPointsInWorkspace(global.orgId, fireflyProjectId, fireflyWorkspaceId, endpoints)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
 
   test('get endpoints for workspace API', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.getEndPointsInWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
+    const res = await global.sdkClient.getEndPointsInWorkspace(global.orgId, fireflyProjectId, fireflyWorkspaceId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
 
   test('getWorkspacesForProject API for firefly project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.getWorkspacesForProject(orgId, fireflyProjectId)
+    const res = await global.sdkClient.getWorkspacesForProject(global.orgId, fireflyProjectId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
@@ -331,11 +288,11 @@ describe('create, edit, get', () => {
   })
 
   test('getWorkspacesForProject API for default project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.getWorkspacesForProject(orgId, projectId)
+    const res = await global.sdkClient.getWorkspacesForProject(global.orgId, projectId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
@@ -346,11 +303,11 @@ describe('create, edit, get', () => {
   })
 
   test('editWorkspace API for default project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.editWorkspace(orgId, projectId, workspaceId, { name: workspaceName, title: defaultProjectTitle, description: modifiedWorkspaceDescription })
+    const res = await global.sdkClient.editWorkspace(global.orgId, projectId, workspaceId, { name: workspaceName, title: defaultProjectTitle, description: modifiedWorkspaceDescription })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
@@ -358,11 +315,11 @@ describe('create, edit, get', () => {
   })
 
   test('editWorkspace API for firefly project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.editWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId, { name: fireflyWorkspaceName, title: fireflyProjectTitle, description: modifiedWorkspaceDescription })
+    const res = await global.sdkClient.editWorkspace(global.orgId, fireflyProjectId, fireflyWorkspaceId, { name: fireflyWorkspaceName, title: fireflyProjectTitle, description: modifiedWorkspaceDescription })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
@@ -370,45 +327,45 @@ describe('create, edit, get', () => {
   })
 
   test('getWorkspace API for default project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.getWorkspace(orgId, projectId, workspaceId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getWorkspace(global.orgId, projectId, workspaceId)
+    global.expectOkResponse(res)
     expect(res.body.description).toEqual(modifiedWorkspaceDescription)
     expect(res.body.id).toEqual(workspaceId)
   })
 
   test('getWorkspace API for firefly project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.getWorkspace(orgId, fireflyProjectId, fireflyWorkspaceId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getWorkspace(global.orgId, fireflyProjectId, fireflyWorkspaceId)
+    global.expectOkResponse(res)
     expect(res.body.description).toEqual(modifiedWorkspaceDescription)
     expect(res.body.id).toEqual(fireflyWorkspaceId)
   })
 
   test('getProjectForWorkspace API for default project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.getProjectForWorkspace(orgId, workspaceId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getProjectForWorkspace(global.orgId, workspaceId)
+    global.expectOkResponse(res)
     expect(res.body.projectId).toEqual(projectId)
     expect(res.body.workspaceId).toEqual(workspaceId)
   })
 
   test('getProjectForWorkspace API for firefly project type', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(fireflyWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.getProjectForWorkspace(orgId, fireflyWorkspaceId)
-    expectOkResponse(res)
+    const res = await global.sdkClient.getProjectForWorkspace(global.orgId, fireflyWorkspaceId)
+    global.expectOkResponse(res)
     expect(res.body.projectId).toEqual(fireflyProjectId)
     expect(res.body.workspaceId).toEqual(fireflyWorkspaceId)
   })
@@ -419,11 +376,11 @@ describe('Workspace credential test', () => {
     let credentialId
 
     test('createAdobeIdCredential API', async () => {
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createAdobeIdCredential(orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'WebApp', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
+      const res = await global.sdkClient.createAdobeIdCredential(global.orgId, projectId, workspaceId, { name: credentialNameAdobeId, description: 'testing ng console api', platform: 'WebApp', redirectUriList: ['https://google.com'], defaultRedirectUri: 'https://google.com' })
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof (res.body)).toBe('object')
@@ -434,11 +391,11 @@ describe('Workspace credential test', () => {
 
     test('getCredentials API (oauthweb)', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.getCredentials(orgId, projectId, workspaceId)
+      const res = await global.sdkClient.getCredentials(global.orgId, projectId, workspaceId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.statusText).toBe('OK')
@@ -451,12 +408,12 @@ describe('Workspace credential test', () => {
 
     test('getWorkspaceForCredential API', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.getWorkspaceForCredential(orgId, credentialId)
-      expectOkResponse(res)
+      const res = await global.sdkClient.getWorkspaceForCredential(global.orgId, credentialId)
+      global.expectOkResponse(res)
       expect(res.body.projectId).toEqual(projectId)
       expect(res.body.workspaceId).toEqual(workspaceId)
     })
@@ -464,20 +421,20 @@ describe('Workspace credential test', () => {
     // organization integration APIs on workspace credentials
     test('getIntegration API', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
-      expect(orgId).toBeDefined()
-      const res = await sdkClient.getIntegration(orgId, credentialId)
+      expect(global.orgId).toBeDefined()
+      const res = await global.sdkClient.getIntegration(global.orgId, credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.body.id).toEqual(credentialId)
-      expect(res.body.orgId).toEqual(orgId)
+      expect(res.body.orgId).toEqual(global.orgId)
       expect(res.body.name).toEqual(credentialNameAdobeId)
       expect(res.body.type).toEqual('adobeid')
     })
 
     test('getIntegrationSecrets API', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
-      expect(orgId).toBeDefined()
-      const res = await sdkClient.getIntegrationSecrets(orgId, credentialId)
+      expect(global.orgId).toBeDefined()
+      const res = await global.sdkClient.getIntegrationSecrets(global.orgId, credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof res.body).toBe('object')
@@ -488,11 +445,11 @@ describe('Workspace credential test', () => {
     // delete
     test('deleteCredential API (integrationType: adobeid)', async () => {
       expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.deleteCredential(orgId, projectId, workspaceId, 'adobeid', credentialId)
+      const res = await global.sdkClient.deleteCredential(global.orgId, projectId, workspaceId, 'adobeid', credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.statusText).toBe('OK')
@@ -503,11 +460,11 @@ describe('Workspace credential test', () => {
     let credentialId
 
     test('createOAuthServerToServerCredential API', async () => {
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.createOAuthServerToServerCredential(orgId, projectId, workspaceId, credentialNameOAuthS2S, 'just a desc')
+      const res = await global.sdkClient.createOAuthServerToServerCredential(global.orgId, projectId, workspaceId, credentialNameOAuthS2S, 'just a desc')
       expect(typeof (res.body)).toBe('object')
       expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'apiKey', 'orgId']))
       credentialId = res.body.id
@@ -516,11 +473,11 @@ describe('Workspace credential test', () => {
 
     test('getCredentials API (service)', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.getCredentials(orgId, projectId, workspaceId)
+      const res = await global.sdkClient.getCredentials(global.orgId, projectId, workspaceId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.statusText).toBe('OK')
@@ -533,10 +490,10 @@ describe('Workspace credential test', () => {
 
     test('subscribeOAuthServerToServerIntegrationToServices API (AdobeIOManagementAPISDK)', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
 
-      const sdkCode = findSDKCode('I/O Management API')
-      const res = await sdkClient.subscribeOAuthServerToServerIntegrationToServices(orgId, credentialId, [
+      const sdkCode = global.findSDKCode('I/O Management API')
+      const res = await global.sdkClient.subscribeOAuthServerToServerIntegrationToServices(global.orgId, credentialId, [
         {
           sdkCode,
           licenseConfigs: null,
@@ -552,12 +509,12 @@ describe('Workspace credential test', () => {
 
     test('downloadWorkspaceJson API', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.downloadWorkspaceJson(orgId, projectId, workspaceId)
-      expectOkResponse(res)
+      const res = await global.sdkClient.downloadWorkspaceJson(global.orgId, projectId, workspaceId)
+      global.expectOkResponse(res)
       expect(res.body.project.id).toEqual(projectId)
       expect(res.body.project.workspace.id).toEqual(workspaceId)
       expect(Array.isArray(res.body.project.workspace.details.credentials)).toBe(true)
@@ -571,20 +528,20 @@ describe('Workspace credential test', () => {
 
     test('getIntegration API', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
-      const res = await sdkClient.getIntegration(orgId, credentialId)
+      expect(global.orgId).toBeDefined()
+      const res = await global.sdkClient.getIntegration(global.orgId, credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.body.id).toEqual(credentialId)
-      expect(res.body.orgId).toEqual(orgId)
+      expect(res.body.orgId).toEqual(global.orgId)
       expect(res.body.name).toEqual(credentialNameOAuthS2S)
       expect(res.body.type).toEqual('entp')
     })
 
     test('getIntegrationSecrets API', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
-      const res = await sdkClient.getIntegrationSecrets(orgId, credentialId)
+      expect(global.orgId).toBeDefined()
+      const res = await global.sdkClient.getIntegrationSecrets(global.orgId, credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(typeof res.body).toBe('object')
@@ -595,11 +552,11 @@ describe('Workspace credential test', () => {
     // delete
     test('deleteCredential API (integrationType: oauth_server_to_server)', async () => {
       expect(credentialId).toBeDefined() // if not, createOAuthServerToServerCredential test failed
-      expect(orgId).toBeDefined()
+      expect(global.orgId).toBeDefined()
       expect(projectId).toBeDefined()
       expect(workspaceId).toBeDefined()
 
-      const res = await sdkClient.deleteCredentialById(orgId, projectId, workspaceId, credentialId)
+      const res = await global.sdkClient.deleteCredentialById(global.orgId, projectId, workspaceId, credentialId)
       expect(res.ok).toBe(true)
       expect(res.status).toBe(200)
       expect(res.statusText).toBe('OK')
@@ -611,8 +568,8 @@ describe('Workspace credential test', () => {
 
 describe('Extension API tests', () => {
   test('getAllExtensionPoints', async () => {
-    expect(orgId).toBeDefined()
-    const res = await sdkClient.getAllExtensionPoints(orgId, 'firefly')
+    expect(global.orgId).toBeDefined()
+    const res = await global.sdkClient.getAllExtensionPoints(global.orgId, 'firefly')
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
   })
@@ -620,22 +577,22 @@ describe('Extension API tests', () => {
 
 describe('dev terms', () => {
   test('get dev terms', async () => {
-    const res = await sdkClient.getDevTerms()
+    const res = await global.sdkClient.getDevTerms()
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
   })
   test('check dev terms', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
 
-    const res = await sdkClient.checkOrgDevTerms(orgId)
+    const res = await global.sdkClient.checkOrgDevTerms(global.orgId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
   })
   test('accept dev terms', async () => {
-    expect(orgId).toBeDefined()
-    const res = await sdkClient.acceptOrgDevTerms(orgId)
+    expect(global.orgId).toBeDefined()
+    const res = await global.sdkClient.acceptOrgDevTerms(global.orgId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
@@ -648,13 +605,13 @@ describe('create, edit, get, delete: test trailing spaces', () => {
   const trailingWorkspaceName = 't' + fireflyWorkspaceName
 
   test('trailing spaces for firefly project', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
 
     const projectDescriptionWithTrailingSpaces = ` ${projectDescription} `
     const projectTitle = fireflyProjectTitle
     const projectTitleWithTrailingSpaces = ` ${projectTitle} `
 
-    const res = await sdkClient.createFireflyProject(orgId, { name: trailingProjectName, title: projectTitleWithTrailingSpaces, description: projectDescriptionWithTrailingSpaces })
+    const res = await global.sdkClient.createFireflyProject(global.orgId, { name: trailingProjectName, title: projectTitleWithTrailingSpaces, description: projectDescriptionWithTrailingSpaces })
     expect(res.ok).toBe(true)
     expect(res.status).toBe(201)
     expect(res.statusText).toBe('Created')
@@ -667,14 +624,14 @@ describe('create, edit, get, delete: test trailing spaces', () => {
   })
 
   test('trailing spaces for firefly workspace', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(trailingProjectId).toBeDefined()
 
     const workspaceTitle = fireflyWorkspaceName
     const workspaceTitleWithTrailingSpaces = ` ${workspaceTitle} `
     const workspaceDescriptionWithTrailingSpaces = ` ${workspaceDescription} `
 
-    let res = await sdkClient.createWorkspace(orgId, trailingProjectId, { name: trailingWorkspaceName, title: workspaceTitleWithTrailingSpaces, description: workspaceDescriptionWithTrailingSpaces })
+    let res = await global.sdkClient.createWorkspace(global.orgId, trailingProjectId, { name: trailingWorkspaceName, title: workspaceTitleWithTrailingSpaces, description: workspaceDescriptionWithTrailingSpaces })
     expect(res.ok).toBe(true)
     // TODO: decide if it should be 200 or 201 for create workspace api and align with that in sdk and tests
     expect(res.status).toBe(200)
@@ -689,49 +646,49 @@ describe('create, edit, get, delete: test trailing spaces', () => {
 
     // ! trailing spaces are not removed when get or edit
 
-    res = await sdkClient.getWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    res = await global.sdkClient.getWorkspace(global.orgId, trailingProjectId, trailingWorkspaceId)
     expect(res.body.title).toEqual(workspaceTitleWithTrailingSpaces)
     expect(res.body.description).toEqual(workspaceDescriptionWithTrailingSpaces)
 
     const titleWithTrailingSpaces = ' some other title '
-    res = await sdkClient.editWorkspace(orgId, trailingProjectId, trailingWorkspaceId, { name: trailingWorkspaceName, title: titleWithTrailingSpaces, description: ` ${modifiedWorkspaceDescription} ` })
+    res = await global.sdkClient.editWorkspace(global.orgId, trailingProjectId, trailingWorkspaceId, { name: trailingWorkspaceName, title: titleWithTrailingSpaces, description: ` ${modifiedWorkspaceDescription} ` })
     expect(res.body.title).toEqual(titleWithTrailingSpaces)
     expect(res.body.description).toEqual(` ${modifiedWorkspaceDescription} `)
   })
 
   test('delete project and workspace with trailing spaces', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(trailingProjectId).toBeDefined()
     expect(trailingWorkspaceId).toBeDefined()
 
-    const res = await sdkClient.deleteWorkspace(orgId, trailingProjectId, trailingWorkspaceId)
+    const res = await global.sdkClient.deleteWorkspace(global.orgId, trailingProjectId, trailingWorkspaceId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
 
-    const prjRes = await sdkClient.deleteProject(orgId, trailingProjectId)
+    const prjRes = await global.sdkClient.deleteProject(global.orgId, trailingProjectId)
     expect(prjRes.ok).toBe(true)
     expect(prjRes.status).toBe(200)
     expect(prjRes.statusText).toBe('OK')
   })
 
   test('deleteProject API (default type)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const res = await sdkClient.deleteProject(orgId, projectId)
+    const res = await global.sdkClient.deleteProject(global.orgId, projectId)
     expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
     expect(res.statusText).toBe('OK')
   })
 
   test('deleteProject API (firefly project template)', async () => {
-    expect(orgId).toBeDefined()
+    expect(global.orgId).toBeDefined()
     expect(fireflyProjectId).toBeDefined()
     expect(workspaceId).toBeDefined()
 
-    const prjRes = await sdkClient.deleteProject(orgId, fireflyProjectId)
+    const prjRes = await global.sdkClient.deleteProject(global.orgId, fireflyProjectId)
     expect(prjRes.ok).toBe(true)
     expect(prjRes.status).toBe(200)
     expect(prjRes.statusText).toBe('OK')
