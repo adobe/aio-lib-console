@@ -85,6 +85,8 @@ async function init () {
   if (org) {
     global.orgId = org.id
     console.log(`Found organization with ID ${global.orgId}`)
+  } else {
+    throw new Error(`Organization with IMS org ID ${imsOrgId} not found in response from getOrganizations`)
   }
 }
 
