@@ -195,4 +195,24 @@ describe('createCredentialDirect', () => {
     expect(fetchSpy).toHaveBeenCalled()
     expect(ret).toEqual({ ok: true, status: 200 })
   })
+  test('throws on non-2xx response', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      text: jest.fn().mockResolvedValue('{"error":"unauthorized"}'),
+      headers: new Headers({ 'x-request-id': 'req-123' })
+    })
+    const certStream = stream.Readable.from(Buffer.from('cert-data'))
+    await expect(helpers.createCredentialDirect('mockurl', 'mockToken', 'mockKey', certStream, 'mockName', 'mock description'))
+      .rejects.toMatchObject({
+        message: '401 Unauthorized',
+        response: {
+          status: 401,
+          statusText: 'Unauthorized',
+          body: '{"error":"unauthorized"}',
+          headers: { 'x-request-id': 'req-123' }
+        }
+      })
+  })
 })

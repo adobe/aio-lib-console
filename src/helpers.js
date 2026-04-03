@@ -132,11 +132,11 @@ async function createCredentialDirect (url, accessToken, apiKey, certificate, na
     chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
   }
   const data = new FormData()
-  data.append('certificate', new Blob([Buffer.concat(chunks)]))
+  data.append('certificate', new Blob([Buffer.concat(chunks)]), 'certificate')
   data.append('name', name)
   data.append('description', description)
 
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + accessToken,
@@ -144,6 +144,13 @@ async function createCredentialDirect (url, accessToken, apiKey, certificate, na
     },
     body: data
   })
+  if (!res.ok) {
+    const body = await res.text()
+    const err = new Error(`${res.status} ${res.statusText}`)
+    err.response = { status: res.status, statusText: res.statusText, body, headers: Object.fromEntries(res.headers) }
+    throw err
+  }
+  return res
 }
 
 module.exports = {
