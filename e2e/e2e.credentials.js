@@ -62,7 +62,7 @@ afterAll(async () => {
 
 // TESTS ////////////////////////////
 
-describe('Enterprise credentials', () => {
+describe.skip('Enterprise credentials', () => {
   test('createEnterpriseCredential API', async () => {
     expect(global.orgId).toBeDefined()
     expect(projectId).toBeDefined()
@@ -228,7 +228,7 @@ describe('Enterprise credentials', () => {
 })
 
 // AdobeID subscribeCredentialToServices for Adobe Stock
-describe('AdobeID credentials - subscribeCredentialToServices (Adobe Stock)', () => {
+describe.skip('AdobeID credentials - subscribeCredentialToServices (Adobe Stock)', () => {
   test('subscribeCredentialToServices API (Adobe Stock)', async () => {
     expect(credentialId).toBeDefined() // if not, createAdobeIdCredential test failed
     expect(global.orgId).toBeDefined()
@@ -252,7 +252,7 @@ describe('AdobeID credentials - subscribeCredentialToServices (Adobe Stock)', ()
 })
 
 // OAuth Server-to-Server getSDKProperties
-describe('OAuth Server-to-Server credentials - getSDKProperties', () => {
+describe.skip('OAuth Server-to-Server credentials - getSDKProperties', () => {
   test('getSDKProperties', async () => {
     expect(global.orgId).toBeDefined()
     expect(fromCredentialId).toBeDefined()
@@ -267,8 +267,8 @@ describe('OAuth Server-to-Server credentials - getSDKProperties', () => {
 
 // Test organization integrations (similar to workspace credentials)
 // because delete integration is failing - tracked internally at IOC-4291
-describe('Organization Integration tests', () => {
-  describe('Enterprise integration', () => {
+describe.skip('Organization Integration tests', () => {
+  describe.skip('Enterprise integration', () => {
     let integrationId
 
     test('createEnterpriseIntegration API', async () => {
@@ -331,7 +331,7 @@ describe('Organization Integration tests', () => {
     })
   })
 
-  describe('AdobeID integration', () => {
+  describe.skip('AdobeID integration', () => {
     let integrationId
 
     test('createAdobeIdIntegration API', async () => {

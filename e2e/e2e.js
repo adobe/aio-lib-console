@@ -555,6 +555,7 @@ describe('dev terms', () => {
   })
 })
 
+// See IOC-10075, IOC-10076, IOC-10077, IOC-10078 for trailing spaces issues that affect these tests
 describe('create, edit, get, delete: test trailing spaces', () => {
   let trailingProjectId, trailingWorkspaceId
   const trailingProjectName = 't' + fireflyProjectName

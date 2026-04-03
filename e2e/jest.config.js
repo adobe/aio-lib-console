@@ -4,5 +4,5 @@ module.exports = {
   setupFilesAfterEnv: [
     './jest.setup.js'
   ],
-  testRegex: 'e2e/e2e\\.js$'
+  testRegex: 'e2e/e2e.*\\.js$'
 }
