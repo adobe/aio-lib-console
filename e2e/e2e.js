@@ -21,7 +21,6 @@ const sdk = require('../src')
 // VARS ////////////////////////////
 
 // these ids will be assigned when creating the project and workspace dynamically for the test
-// const { sdkClient, orgId, apiKey, accessToken, env, findSDKCode } = global
 let fireflyProjectId, projectId, defaultWorkspaceId, workspaceId, fireflyWorkspaceId
 
 const ts = new Date().getTime()
