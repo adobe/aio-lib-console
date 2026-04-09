@@ -181,7 +181,7 @@ test('getProjectNextAvailableIdentifiers - default (includeName=true)', async ()
     apiParameters,
     apiOptions,
     sdkArgs,
-    ErrorClass: codes.ERROR_GET_PROJECTS_BY_ORG_ID
+    ErrorClass: codes.ERROR_GET_PROJECT_NEXT_AVAILABLE_IDENTIFIERS
   })
 })
 
@@ -196,7 +196,7 @@ test('getProjectNextAvailableIdentifiers - includeName=false', async () => {
     apiParameters,
     apiOptions,
     sdkArgs,
-    ErrorClass: codes.ERROR_GET_PROJECTS_BY_ORG_ID
+    ErrorClass: codes.ERROR_GET_PROJECT_NEXT_AVAILABLE_IDENTIFIERS
   })
 })
 

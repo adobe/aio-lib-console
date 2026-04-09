@@ -306,6 +306,13 @@ declare class CoreConsoleAPI {
      */
     getProjectsForOrg(organizationId: string): Promise<Response>;
     /**
+     * Get next available project name and title identifiers
+     * @param organizationId - Organization AMS ID
+     * @param [includeName] - If true, includes the auto-generated alphanumeric name in the response
+     * @returns the response, body contains { title } and includes { name } when includeName is true
+     */
+    getProjectNextAvailableIdentifiers(organizationId: string, includeName?: boolean): Promise<Response>;
+    /**
      * Create a new App Builder Project (from template) in an Organization
      * @param organizationId - Organization AMS ID
      * @param projectDetails - Project details including name, title, who_created, description and type

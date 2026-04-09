@@ -136,6 +136,7 @@ with valid values for apiKey and accessToken
 * [CoreConsoleAPI](#CoreConsoleAPI)
     * [.init(accessToken, apiKey, env, swaggerSpec)](#CoreConsoleAPI+init) ⇒ [<code>Promise.&lt;CoreConsoleAPI&gt;</code>](#CoreConsoleAPI)
     * [.getProjectsForOrg(organizationId)](#CoreConsoleAPI+getProjectsForOrg) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+    * [.getProjectNextAvailableIdentifiers(organizationId, [includeName])](#CoreConsoleAPI+getProjectNextAvailableIdentifiers) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createFireflyProject(organizationId, projectDetails)](#CoreConsoleAPI+createFireflyProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.createProject(organizationId, projectDetails)](#CoreConsoleAPI+createProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
     * [.getWorkspacesForProject(organizationId, projectId)](#CoreConsoleAPI+getWorkspacesForProject) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
@@ -216,6 +217,19 @@ Get all Projects in an Organization
 | Param | Type | Description |
 | --- | --- | --- |
 | organizationId | <code>string</code> | Organization AMS ID |
+
+<a name="CoreConsoleAPI+getProjectNextAvailableIdentifiers"></a>
+
+### coreConsoleAPI.getProjectNextAvailableIdentifiers(organizationId, [includeName]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#Response)
+Get next available project name and title identifiers
+
+**Kind**: instance method of [<code>CoreConsoleAPI</code>](#CoreConsoleAPI)  
+**Returns**: [<code>Promise.&lt;Response&gt;</code>](#Response) - the response, body contains { title } and includes { name } when includeName is true  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| organizationId | <code>string</code> | | Organization AMS ID |
+| [includeName] | <code>boolean</code> | <code>true</code> | If true, includes the auto-generated alphanumeric name in the response |
 
 <a name="CoreConsoleAPI+createFireflyProject"></a>
 

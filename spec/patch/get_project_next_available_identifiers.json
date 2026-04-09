@@ -26,7 +26,7 @@
         },
         {
           "name": "Authorization",
-          "description": "Authorization",
+          "description": "Access token",
           "in": "header",
           "required": true,
           "schema": {
@@ -64,6 +64,12 @@
               }
             }
           }
+        },
+        "400": {
+          "description": "Bad Request"
+        },
+        "500": {
+          "description": "Internal Server Error"
         }
       }
     }
