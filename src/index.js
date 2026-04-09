@@ -284,7 +284,7 @@ class CoreConsoleAPI {
       const res = await this.sdk.apis.projects.get_console_organizations__orgId__projects_next_available_identifiers(...this.__createRequestOptions(parameters))
       return res
     } catch (err) {
-      throw new codes.ERROR_GET_PROJECTS_BY_ORG_ID({ sdkDetails, messageValues: reduceError(err) })
+      throw new codes.ERROR_GET_PROJECT_NEXT_AVAILABLE_IDENTIFIERS({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
