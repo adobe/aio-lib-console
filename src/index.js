@@ -270,6 +270,25 @@ class CoreConsoleAPI {
   }
 
   /**
+   * Get next available project name and title identifiers
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @param {boolean} [includeName] If true, includes the auto-generated alphanumeric name (e.g. '280TomatoGull')
+   * @returns {Promise<Response>} the response, body contains { name, title }
+   */
+  async getProjectNextAvailableIdentifiers (organizationId, includeName = true) {
+    const parameters = { orgId: organizationId, includeName }
+    const sdkDetails = { parameters }
+
+    try {
+      const res = await this.sdk.apis.projects.get_console_organizations__orgId__projects_next_available_identifiers(...this.__createRequestOptions(parameters))
+      return res
+    } catch (err) {
+      throw new codes.ERROR_GET_PROJECTS_BY_ORG_ID({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
    * Create a new App Builder Project (from template) in an Organization
    *
    * @param {string} organizationId Organization AMS ID

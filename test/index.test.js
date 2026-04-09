@@ -170,6 +170,36 @@ test('getProjectsForOrg', async () => {
   })
 })
 
+test('getProjectNextAvailableIdentifiers - default (includeName=true)', async () => {
+  const sdkArgs = ['organizationId']
+  const apiParameters = { orgId: 'organizationId', includeName: true }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'projects.get_console_organizations__orgId__projects_next_available_identifiers',
+    sdkFunctionName: 'getProjectNextAvailableIdentifiers',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_PROJECTS_BY_ORG_ID
+  })
+})
+
+test('getProjectNextAvailableIdentifiers - includeName=false', async () => {
+  const sdkArgs = ['organizationId', false]
+  const apiParameters = { orgId: 'organizationId', includeName: false }
+  const apiOptions = createSwaggerOptions()
+
+  await standardTest({
+    fullyQualifiedApiName: 'projects.get_console_organizations__orgId__projects_next_available_identifiers',
+    sdkFunctionName: 'getProjectNextAvailableIdentifiers',
+    apiParameters,
+    apiOptions,
+    sdkArgs,
+    ErrorClass: codes.ERROR_GET_PROJECTS_BY_ORG_ID
+  })
+})
+
 test('createProject', async () => {
   const sdkArgs = ['organizationId', {}]
   const apiParameters = { orgId: 'organizationId' }

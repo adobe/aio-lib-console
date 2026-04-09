@@ -1,0 +1,71 @@
+{
+  "/console/organizations/{orgId}/projects/next-available-identifiers": {
+    "get": {
+      "summary": "Get next available project name and title identifiers",
+      "tags": [
+        "projects"
+      ],
+      "parameters": [
+        {
+          "name": "orgId",
+          "description": "AMS Organization ID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "includeName",
+          "description": "If true, includes the auto-generated alphanumeric name (e.g. '280TomatoGull') in the response",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Authorization",
+          "description": "Authorization",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "x-api-key",
+          "description": "API key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Auto-generated alphanumeric project name, e.g. '280TomatoGull' (only present when includeName=true)"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Auto-generated project title, e.g. 'Project 289'"
+                  }
+                },
+                "required": ["title"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
