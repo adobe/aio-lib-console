@@ -308,7 +308,7 @@ declare class CoreConsoleAPI {
     /**
      * Get next available project name and title identifiers
      * @param organizationId - Organization AMS ID
-     * @param [includeName] - If true, includes the auto-generated alphanumeric name in the response
+     * @param [includeName] - If true, includes the auto-generated alphanumeric name in the response (default: true)
      * @returns the response, body contains { title } and includes { name } when includeName is true
      */
     getProjectNextAvailableIdentifiers(organizationId: string, includeName?: boolean): Promise<Response>;
