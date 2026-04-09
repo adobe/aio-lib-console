@@ -274,7 +274,7 @@ class CoreConsoleAPI {
    *
    * @param {string} organizationId Organization AMS ID
    * @param {boolean} [includeName] If true, includes the auto-generated alphanumeric name (e.g. '280TomatoGull')
-   * @returns {Promise<Response>} the response, body contains { name, title }
+   * @returns {Promise<Response>} the response, body contains { title } and includes { name } when includeName is true
    */
   async getProjectNextAvailableIdentifiers (organizationId, includeName = true) {
     const parameters = { orgId: organizationId, includeName }
