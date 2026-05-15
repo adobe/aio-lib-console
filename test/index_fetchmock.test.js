@@ -107,3 +107,77 @@ describe('getApplicationExtensions (xr api)', () => {
     expect(Array.isArray(res.data)).toBe(true)
   })
 })
+
+describe('getOrganizationFeatures', () => {
+  /** @private */
+  function mockFeaturesResponse ({ ok = true, status = 200, statusText = 'OK', body = [] } = {}) {
+    mockFetch.mockReset()
+    mockFetch.mockResolvedValueOnce({
+      ok,
+      status,
+      statusText,
+      headers: new Map(),
+      json: () => Promise.resolve(body),
+      text: () => Promise.resolve(typeof body === 'string' ? body : JSON.stringify(body))
+    })
+  }
+
+  test('returns the features for an org (prod)', async () => {
+    const sdkClient = await sdk.init('accesstoken', 'apiKey')
+    mockFeaturesResponse({ body: [{ name: 'RUNTIME', description: 'OpenWhisk runtime' }] })
+
+    const res = await sdkClient.getOrganizationFeatures('304327')
+    expect(res.ok).toBe(true)
+    expect(res.body).toEqual([{ name: 'RUNTIME', description: 'OpenWhisk runtime' }])
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://developer.adobe.com/console/api/organizations/304327/features',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          accept: 'application/json',
+          authorization: 'Bearer accesstoken',
+          'x-api-key': 'apiKey'
+        })
+      })
+    )
+  })
+
+  test('uses the stage host when env=stage', async () => {
+    const { STAGE_ENV } = jest.requireActual('@adobe/aio-lib-env')
+    const sdkClient = await sdk.init('accesstoken', 'apiKey', STAGE_ENV)
+    mockFeaturesResponse({ body: [] })
+
+    await sdkClient.getOrganizationFeatures('304327')
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://developer-stage.adobe.com/console/api/organizations/304327/features',
+      expect.any(Object)
+    )
+  })
+
+  test('uses the prod host when env is unknown (init normalises it to prod)', async () => {
+    const sdkClient = await sdk.init('accesstoken', 'apiKey', 'gibberish')
+    mockFeaturesResponse({ body: [] })
+
+    await sdkClient.getOrganizationFeatures('304327')
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://developer.adobe.com/console/api/organizations/304327/features',
+      expect.any(Object)
+    )
+  })
+
+  test('throws ERROR_GET_ORGANIZATION_FEATURES on non-ok response', async () => {
+    const sdkClient = await sdk.init('accesstoken', 'apiKey')
+    mockFeaturesResponse({ ok: false, status: 500, statusText: 'Server Error', body: 'boom' })
+
+    await expect(sdkClient.getOrganizationFeatures('304327'))
+      .rejects.toThrow(/ERROR_GET_ORGANIZATION_FEATURES/)
+  })
+
+  test('throws ERROR_GET_ORGANIZATION_FEATURES on network error', async () => {
+    const sdkClient = await sdk.init('accesstoken', 'apiKey')
+    mockFetch.mockReset()
+    mockFetch.mockRejectedValueOnce(new Error('network down'))
+
+    await expect(sdkClient.getOrganizationFeatures('304327'))
+      .rejects.toThrow(/ERROR_GET_ORGANIZATION_FEATURES/)
+  })
+})

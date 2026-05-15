@@ -162,6 +162,14 @@ const API_HOST = {
   stage: 'developers-stage.adobe.io'
 }
 
+// Console BFF host. Used by endpoints that are not exposed through the
+// public Console API gateway (`API_HOST`) but only through the Console UI's
+// backend-for-frontend (e.g. organization feature flags).
+const CONSOLE_UI_HOST = {
+  prod: 'developer.adobe.com',
+  stage: 'developer-stage.adobe.com'
+}
+
 /**
  * Returns a Promise that resolves with a new CoreConsoleAPI object
  *
@@ -785,6 +793,54 @@ class CoreConsoleAPI {
       return res
     } catch (err) {
       throw new codes.ERROR_GET_ORGANIZATIONS({ sdkDetails, messageValues: reduceError(err) })
+    }
+  }
+
+  /**
+   * Get the enabled feature flags for an Organization.
+   *
+   * Note: this endpoint is served by the Console UI backend
+   * (`developer.adobe.com`), not the public Console API gateway, so it does
+   * not go through the swagger client.
+   *
+   * @param {string} organizationId Organization AMS ID
+   * @returns {Promise<Response>} the response, with `body` set to the feature
+   *          array (e.g. `[{ name: 'RUNTIME', description: '...' }]`)
+   */
+  async getOrganizationFeatures (organizationId) {
+    const parameters = { orgId: organizationId }
+    const sdkDetails = { parameters }
+
+    // `this.env` is normalized by `init` to a known value (`prod` or `stage`),
+    // so a direct lookup is safe here.
+    const host = CONSOLE_UI_HOST[this.env]
+    const url = `https://${host}/console/api/organizations/${organizationId}/features`
+
+    try {
+      const res = await fetchWithRetry(url, {
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${this.accessToken}`,
+          'x-api-key': this.apiKey
+        }
+      })
+      if (!res.ok) {
+        const body = await res.text()
+        const err = new Error(`${res.status} ${res.statusText}`)
+        err.response = {
+          status: res.status,
+          statusText: res.statusText,
+          body,
+          headers: Object.fromEntries(res.headers)
+        }
+        throw err
+      }
+      const body = await res.json()
+      // shape the result like the swagger-client responses do, so callers
+      // can treat this consistently with the rest of the SDK
+      return { ok: true, status: res.status, statusText: res.statusText, body, data: body }
+    } catch (err) {
+      throw new codes.ERROR_GET_ORGANIZATION_FEATURES({ sdkDetails, messageValues: reduceError(err) })
     }
   }
 
